@@ -21,8 +21,8 @@ module.exports = {
                 tags: ['api', 'homepage'] 
             },
             handler: function (request, h) {
-                
-                return h.view('home');
+                return 'bienvenue'
+               // return h.view('home');
             }
         });
 
@@ -39,8 +39,8 @@ module.exports = {
                 tags: ['api', 'concept']
             },
             handler: (request, h) => {
-    
-                return h.view('concept');
+                return `tout ceci est fort conceptuel`
+               // return h.view('concept');
             }
         });
     }

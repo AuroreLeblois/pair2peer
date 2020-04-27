@@ -46,6 +46,8 @@ const db = require('./app/models/db');
             }
         }, {
             plugin: require('./app/routes/_homePage')
+        }, {
+            plugin: require('./app/routes/_filtredPage')
         },
     ]);
 
