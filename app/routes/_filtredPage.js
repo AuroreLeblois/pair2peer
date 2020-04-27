@@ -19,11 +19,11 @@ module.exports = {
             method: 'GET',
             path: '/search',
             options: {
-                auth: {
-                    strategy: 'base',
-                    mode: 'required',
-                    scope: ['user', 'admin']
-                },
+                // auth: {
+                //     strategy: 'base',
+                //     mode: 'required',
+                //     scope: ['user', 'admin']
+                // },
                 description: 'Filter to search matches',
                 tags: ['api', 'filter']
             },
@@ -37,11 +37,11 @@ module.exports = {
             method: 'POST',
             path: '/search',
             options: {
-                auth: {
-                    strategy: 'base',
-                    mode: 'required',
-                    scope: ['user', 'admin']
-                },
+                // auth: {
+                //     strategy: 'base',
+                //     mode: 'required',
+                //     scope: ['user', 'admin']
+                // },
                 description: 'Target of the filter, find all matches',
                 tags: ['api', 'filter'],
                 validate: {
