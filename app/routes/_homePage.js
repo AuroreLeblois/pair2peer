@@ -21,8 +21,8 @@ module.exports = {
                 tags: ['api', 'homepage'] 
             },
             handler: function (request, h) {
-                
-                return h.view('home');
+                return 'bienvenue'
+               // return h.view('home');
             }
         });
 
@@ -30,17 +30,17 @@ module.exports = {
             method: 'GET',
             path: '/concept',
             options: {
-                auth: {
-                    strategy: 'base',
-                    mode: 'required',
-                    scope: ['user', 'admin']
-                },
+                // auth: {
+                    // strategy: 'base',
+                    // mode: 'required',
+                   // scope: ['user', 'admin']
+                // },
                 description: 'Example : restricted page for users authentified',
                 tags: ['api', 'concept']
             },
             handler: (request, h) => {
-    
-                return h.view('concept');
+                return `tout ceci est fort conceptuel`
+               // return h.view('concept');
             }
         });
     }
