@@ -6,7 +6,10 @@ const db = require('./app/models/db');
 
 (async () => {
     const server = Hapi.server({
-        port: 3000
+        port: 3000,
+        routes: {
+            cors: true
+        }
     });
 
     // pour éviter d'écrire les identifiants en dur, je les passerai en variables d'environnement
