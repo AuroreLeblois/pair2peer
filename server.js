@@ -35,17 +35,19 @@ const db = require('./app/models/db');
     });
 
 
-    // await server.register ([
-    //     {
-    //         plugin: require('hapi-swagger'),
-    //         options: {
-    //             info: {
-    //                 title: 'Apotest API Documentation',
-    //                 version: package.version
-    //             }
-    //         }
-    //     }, 
-    // ]);
+    await server.register ([
+        {
+            plugin: require('hapi-swagger'),
+            options: {
+                info: {
+                    title: 'Apotest API Documentation',
+                    version: package.version
+                }
+            }
+        }, {
+            plugin: require('./app/routes/_homePage')
+        },
+    ]);
 
     server.auth.default({ strategy: 'base', mode: 'try' });
     
