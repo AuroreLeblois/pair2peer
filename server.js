@@ -1,7 +1,7 @@
 const Hapi = require('@hapi/hapi');
 const HapiAuthCookie = require('@hapi/cookie');
 const package = require('./package');
-const db = require('./models/db');
+const db = require('./app/models/db');
 
 
 (async () => {
@@ -35,27 +35,17 @@ const db = require('./models/db');
     });
 
 
-    await server.register ([
-        // {
-        //     plugin: require('@hapi/yar'),
-        //     options: {
-        //         cookieOptions: {
-        //             password: 'Td2sXhE4Eghk8MBA3X96hgMqd66k8r2P',
-        //             isSecure: false,
-        //             ttl: 1000*60*20
-        //         }
-        //     }
-        // }, 
-        {
-            plugin: require('hapi-swagger'),
-            options: {
-                info: {
-                    title: 'Apotest API Documentation',
-                    version: package.version
-                }
-            }
-        }, 
-    ]);
+    // await server.register ([
+    //     {
+    //         plugin: require('hapi-swagger'),
+    //         options: {
+    //             info: {
+    //                 title: 'Apotest API Documentation',
+    //                 version: package.version
+    //             }
+    //         }
+    //     }, 
+    // ]);
 
     server.auth.default({ strategy: 'base', mode: 'try' });
     
