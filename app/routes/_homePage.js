@@ -1,16 +1,17 @@
 const vision = require('@hapi/vision');
 const inert = require('@hapi/inert');
+const react= require('react');
 
 module.exports = {
     name: 'home pages',
     register: async (server) => {
         await server.register([vision, inert]);
 
-        server.views({
-            relativeTo: __dirname + '/..',
-            path: 'templates',
-            engines : { react },
-        });
+        // server.views({
+        //     relativeTo: __dirname + '/..',
+        //     path: 'templates',
+        //     engines : { react },
+        // });
 
         server.route({
             method: 'GET',
