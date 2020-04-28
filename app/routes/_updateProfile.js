@@ -82,7 +82,7 @@ module.exports = {
                 
                 //si l'utisateur change des infos=> update user table
                 //le speudo
-                if(pseudo!== undefined||pseudo!== null||pseudo.lenght>0){
+                if(pseudo!== undefined||pseudo!== null||pseudo.length>0){
                     //oui mais le speudo doit être unique
                     pseudoExists= await db.query(`SELECT speudo FROM usr WHERE speudo=${speudo}`);
                     if(!speudoExists.rows[0]){
@@ -96,9 +96,9 @@ module.exports = {
                 //le mot de passe
                 //on compare le mdp avec la validation si mdp changé
                 //déjà est ce que le user a rentré un mdp?
-                if(password!== null||password!== undefined||password.lenght>0){
+                if(password!== null||password!== undefined||password.length>0){
                     //est ce que le mdp fait bien 8 caractères au moins?
-                    if(password.lenght>=8){
+                    if(password.length>=8){
                         //est ce que le mdp ===  validation?
                         if(password===validatePassword){
                             await db.query(`UPDATE usr
@@ -113,7 +113,7 @@ module.exports = {
                 };
                 //l'email
                 //est-ce que le champs email est rempli et différent du cookie?
-                if(changeMyEmail!== null||changeMyEmail!== undefined||changeMyEmail.lenght>0||changeMyEmail!==email){
+                if(changeMyEmail!== null||changeMyEmail!== undefined||changeMyEmail.length>0||changeMyEmail!==email){
                     //ok mais c'est un email?
                     if(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(changeMyEmail)===true){
                     //dans ce cas on va update le profil
@@ -166,7 +166,7 @@ module.exports = {
 
 
                 //si l'utilisateur rentre une langue (insert user knows lang)
-                if(selectedLang.lenght >0){
+                if(selectedLang.length >0){
                     for (let lang of selectedLang){
                         const langID= await db.query(`SELECT id 
                                                       FROM lang
@@ -183,7 +183,7 @@ module.exports = {
                     
                 };
                 //si l'utilisateur entre un it langage => insert//update user knows it lang
-                if(itLangs.lenght>0){
+                if(itLangs.length>0){
                     for (let itLang of itLangs){
                     
                         const itLangID = await db.query(`SELECT id 
@@ -208,9 +208,16 @@ module.exports = {
                         }
                     }
                 }
+                //si il y a des erreurs
+                if(error.length>0){
+                    return error
+                }
+                else{
+                    const user= result.rows[0];
+                    return  user;
+                }
                 //si le champs est vide=> ne rien faire
-                const user= result.rows[0];
-                return  user;
+                
          
             }
         });
