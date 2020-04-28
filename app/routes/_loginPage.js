@@ -74,8 +74,9 @@ module.exports = {
                 // if the process passed all the verifications, it will set a cookie for the authentification (server.js)
                 request.cookieAuth.set({email});
 
-                return `trouvéééé`
-                // return h.redirect('/concept');
+                // send all informations about the user logged for the front in react
+                const userInfos = await db.query(`SELECT * FROM usr_profile WHERE email = $1`, [email]) 
+                return userInfos.rows[0];
             }
         });
 
