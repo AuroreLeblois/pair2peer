@@ -50,8 +50,19 @@ const db = require('./app/models/db');
         }, {
             plugin: require('./app/routes/_homePage')
         }, {
-            plugin: require('./app/routes/_filtredPage')
+            plugin: require('./app/routes/_loginPage')
         },
+        //  {
+        //     plugin: require('./app/routes/_profilePage')
+        // },
+         {
+            plugin: require('./app/routes/_filtredPage')
+        }, {
+            plugin: require('./app/routes/_updateProfile')
+         },
+         {
+            plugin: require('./app/routes/_teamPage')
+        }
     ]);
 
     server.auth.default({ strategy: 'base', mode: 'try' });
