@@ -165,7 +165,7 @@ module.exports = {
 
                 const hashPassword = bcrypt.hashSync(password, 10);
 
-                const newRegistered = await db.query('SELECT * FROM add_user($1, $2, $3, $4, $5, $6)',
+                const newRegistered = await db.query('SELECT * FROM add_user($1, $2, $3, $4 ,$5 ,$6)',
                 [email, pseudo, hashPassword, country, city, JSON.parse(remote)]);
 
                 console.log(newRegistered.rows[0]);
