@@ -10,7 +10,6 @@ export const headers = {
 // == Actions types
 export const actions = {
   SYNC_LOGIN: 'action/SYNC_LOGIN',
-  GET_USER: 'actions/GET_USER',
   SUBMIT_LOGIN: 'actions/SUBMIT_LOGIN',
   GET_AUTHENTIFIED: 'actions/GET_AUTHENTIFIED'
 }
