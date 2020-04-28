@@ -60,9 +60,9 @@ const db = require('./app/models/db');
         }, {
             plugin: require('./app/routes/_updateProfile')
          },
-         //{
-        //     plugin: require('./app/routes/_creatorPage')
-        // }
+         {
+            plugin: require('./app/routes/_teamPage')
+        }
     ]);
 
     server.auth.default({ strategy: 'base', mode: 'try' });
