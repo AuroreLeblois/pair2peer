@@ -74,7 +74,7 @@ module.exports = {
                 let description= request.payload.description;
                 let validatePassword= request.payload.validatePassword;
                 let changeMyEmail= request.payload.email;
-                let pseudo= request.payload.speudo;
+                let pseudo= request.payload.pseudo;
                 let selectedLang= [request.payload.languages];
                 let itlangs = [request.payload.itLanguages];
                 let itLevel= [request.payload.itLanguages.itLevels];
@@ -128,29 +128,37 @@ module.exports = {
                 };
                 
                 //si l'user change son détail=> usr_detail
-                //avant on vérifie que les input sont conformes
-                if(city!==null&& country!==null && remote!==null){
-                //si le detail n'existe pas encore il faut les créer
+                //avant on vérifie que les input "required" sont conformes
+                if(city!==null&& country!==null && remote!==null||city!== undefined&& country!== undefined&& remote!== undefined){
+                    //si le detail n'existe pas encore il faut les créer
                     const detailExist= await db.query(`SELECT * FROM usr_detail WHERE usr_id=${userID}`);
-                //il n'existe pas=> on insert
+                    //il n'existe pas=> on insert
                      if(!detailExist.rows[0]){
                          await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id)
                                         VALUES (${city}, ${country}, ${remote}, ${userID})`)
                 }
                 //sinon on update
-            }
+                else{
+                    await db.query(`UPDATE usr_detail
+                                    SET "city"=${city}, 
+                                    "country"=${country},
+                                    "remote"=${remote}
+                                    WHERE usr_id=${userID}`);
+                };
+                }
             //sinon on dit ce qu'il manque à l'utilisateur
-            else{
-                if(city===null||city===undefined){
-                    error.push(`Il vous faut définir votre ville`)
+                else{
+                    if(city===null||city===undefined){
+                        error.push(`Il vous faut définir votre ville`);
+                    }
+                    if(country===null||country===undefined){
+                        error.push(`Merci de définir votre pays`);
+                    }
+                    if(remote===null||remote===undefined){
+                        error.push(`Merci de nous dire si vous souhaitez travailler en remote`);
+                    }
                 }
-                if(country===null||country===undefined){
-                    error.push(`Merci de définir votre pays`)
-                }
-                if(remote===null||remote===undefined){
-                    error.push(`Merci de nous dire si vous souhaitez travailler en remote`)
-                }
-            }
+            
 
 
                 //si l'utilisateur rentre une langue (insert user knows lang)
@@ -198,7 +206,7 @@ module.exports = {
                 }
                 //si le champs est vide=> ne rien faire
                 const user= result.rows[0];
-                return  {user};
+                return  user;
          
             }
         });
