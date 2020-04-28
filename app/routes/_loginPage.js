@@ -59,8 +59,7 @@ module.exports = {
                 request.cookieAuth.set({email});
                 // request.yar.set({email});
                 // console.log(request.yar.get('email'))
-                return `trouvéééé`
-                // return h.redirect('/concept');
+                 return h.redirect('/concept');
             }
         });
 
