@@ -47,19 +47,35 @@ module.exports = {
     
                 const { email, password } = request.payload;
                 
+                // test if the email exist
                 const visitor = await db.query(`SELECT * FROM usr WHERE email = $1`, [email]);
-    
                 const user = visitor.rows[0];
     
-                if (!user ||
-                    !await bcrypt.compare(password, user.password)) {
-                    return h.view('login', { error: true });
+                // build a formated object error message like native Hapi
+                const errorList = {
+                    statusCode: 400,
+                    error: 'Bad Request',
+                    message: {}
+                };
+
+                // create specific error message depend on the data
+                if (!user) {
+                    errorList.message.errorEmail = 'Cet email n\'existe pas';
+                    errorList.message.errorPassword = 'Mauvais mot de passe';
+                };
+                if (user && !await bcrypt.compare(password, user.password)) {
+                    errorList.message.errorPassword = 'Mauvais mot de passe';
+                };
+                
+                // return error message if exists 
+                if (errorList.message.errorEmail || errorList.message.errorPassword) {
+                    return h.response(errorList).code(400);
                 }
-    
+                // if the process passed all the verifications, it will set a cookie for the authentification (server.js)
                 request.cookieAuth.set({email});
-                // request.yar.set({email});
-                // console.log(request.yar.get('email'))
-                 return h.redirect('/concept');
+
+                return `trouvéééé`
+                // return h.redirect('/concept');
             }
         });
 
@@ -73,7 +89,6 @@ module.exports = {
             handler: (request, h) => {
                 
                 request.cookieAuth.clear()
-                // request.yar.reset();
                 return h.redirect('/');
             }
         });
@@ -86,6 +101,7 @@ module.exports = {
                 tags: ['api', 'signup']
             },
             handler: (request, h) => {
+
                 return h.view('signup');
             }
         });
@@ -108,19 +124,24 @@ module.exports = {
                         role: Joi.string().required()
                     }),
                     options: {
+                        // false mean I go through each key (payload) even if one error appears
+                        // true mean the code throw directly an error starting from the first error and doesn't check other key
                         abortEarly: false
                     },
+                    // if the joi validate failed, have to declare failAction to custom error messages
                     failAction: (request, h, err) => {
 
+                        // errors object will be the object who contains all the error messages (in french)
                         const errors = {};
                         const details = err.details;
                         
+                        // depend on each error, it will write a specific error message
                         for (let index = 0; index < details.length; index++) {
 
                             let path = details[index].path[0];
                             let typeError = details[index].type;
 
-                            // pas besoin de faire des messages explicites si l'input est vide car c'est une contrainte du front (required)
+                            // no need to write a specific error message if the input is empty because the constraint is set on the front side
                             if (path === 'email' && typeError === 'string.email') {
                                 errors[path] = 'L\'email n\'est pas un email valide';
                             } else if (path === 'password' && typeError === 'string.min') {
@@ -137,18 +158,18 @@ module.exports = {
             },
             handler: async (request, h) => {
 
-                // node -e "console.log(require('bcrypt').hashSync('azertyui', 10));"
-
                 const { email, pseudo, password, country, city, remote } = request.payload;
                 const registered = await db.query('SELECT pseudo FROM usr WHERE email = $1', [email]);
                 const nameRegistered = await db.query('SELECT pseudo FROM usr');
 
+                // build an error object who will contain all the specific error messages based on Hapi native error message
                 const errorList = {
                     statusCode: 400,
                     error: 'Bad Request',
                     message: {}
                 };
 
+                // check the errors that I cannot verify inside the failAction 
                 if (registered.rows[0]) {
                     errorList.message.emailUsed = 'Cet email existe déjà';
                 } 
@@ -163,14 +184,17 @@ module.exports = {
                     return h.response(errorList).code(400);
                 } 
 
+                // hash the password and add salt to prevent hacking
                 const hashPassword = bcrypt.hashSync(password, 10);
 
-                const newRegistered = await db.query('SELECT * FROM add_user($1, $2, $3, $4, $5, $6)',
-                [email, pseudo, hashPassword, country, city, JSON.parse(remote)]);
+                // create a new user
+                const newRegistered = await db.query('SELECT * FROM add_usr($1, $2, $3)',
+                [email, pseudo, hashPassword]);
+
+                // link some descriptions to the new user
+                const newRegisteredDetail = await db.query('SELECT * FROM add_usr_detail($1, $2, $3, $4)', [newRegistered.rows[0].id, country, city, remote]);
 
                 console.log(newRegistered.rows[0]);
-
-                // request.cookieAuth.set({ email: newRegistered.rows[0].email });
 
                 return h.redirect('/login');
             }
