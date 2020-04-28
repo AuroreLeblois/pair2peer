@@ -57,56 +57,68 @@ module.exports = {
             },
             handler: async (request, h) => {
                 let query = request.payload
-                console.log(query)
 
-                // 1er filtre, si une clé n'a pas de valeur, elle sera enlevée de l'objet
+                // first filter, if key doesn't have any value, the pair key-value will be remove of the object
                 for (let item in query) {
                     if (!query[item]) {
                         delete query[item]
                     }
+                } 
+
+                filterQuery = [];
+                levelQuery = [];
+
+                const keys = Object.keys(query);
+                const values = Object.values(query);
+                
+                const regex = /[*;$><&|?@="]/g;
+                
+                // it will build the SQL query filter from the query into filterQuery
+                for (let index = 0; index < keys.length; index++) {
+                    // it will replace all special characters to struggle against SQL injection
+                    let value = values[index].toString();
+                    value = value.replace(regex, '%20');
+
+                    if (keys[index] === 'language') {
+                        // example : "language" ? 'français'
+                        filterQuery.push(`"${keys[index]}" ? '${value}' `);
+                    } else if (keys[index] === 'it_language') {
+                        // example : it_language @> '[{ "name": "javascript", "search": true }]'
+                        // the IT language must have search 'true' to be findable, it mean the user want to pair programming with this
+                        filterQuery.push(`${keys[index]} @> '[{"name":"${value}", "search":true}]' `);
+                    } else if (keys[index] === 'level') {
+                        // it will build specific format filter to match level input and higher
+                        for (let levelIndex = value; levelIndex <= 10; levelIndex++) {
+                            levelQuery.push(`it_language @> '[{"name":"${query.it_language}", "level":${levelIndex}}]' `);
+                        }
+                    } else if (keys[index] === 'remote') {
+                        // example : remote = true/ false
+                        filterQuery.push(`${keys[index]} = ${value} `);
+                    } else {
+                        // it will build the query from other input like country, city etc
+                        filterQuery.push(`${keys[index]} = '${value}' `);
+                    }
+                }    
+
+                // it will merge the arrays to string
+                // specific filter for level
+                if (levelQuery.length > 0) {
+                    levelQuery = '(' + levelQuery.join('OR ') + ')';
+                    filterQuery.push(levelQuery);
                 }
+                // specific filter for other informations
+                const finalFilter = filterQuery.join('AND ');
 
-                const result = await db.query(`SELECT * FROM usr_map`);
-
-                const dataFiltered = result.rows.filter(item => {
-                    for (let key in query) {
-
-                        if (key === 'remote') {
-                            // si dans remote, la valeur n'est pas la même quand dans la query, on l'écarte
-                            // la valeur de la clé remote est une string (n'accepte pas de value booléen dans le radio) 
-                            // => item[key].toString()
-                            // autre version, passage de la string ("true", "false") en json donc booléen 
-                            // => JSON.parse(query[key])
-                            if (JSON.parse(query[key]) !== item[key]) {
-                                return false;
-                            };
-                        } else if (key === 'language') {
-                            // si dans le tableau language, la langue n'est pas présente, on l'écarte
-                            if (!item[key].includes(query[key])) {
-                                return false;
-                            };
-                        } else if (key === 'it_language') { 
-                            // si dans chaque tableau it_language, le langage n'est pas présent, on l'écarte (grâce à find + ! (booléen))
-                            // search true => si la personne souhaite apprendre ce langage
-                            if (!item[key].find(element => element.name === query[key] && element.search === true)) {
-                                return false;
-                            };
-                        } else if (key === 'level') {
-                            // si dans chaque tableau it_language, le nom n'est pas présent et que le niveau est inférieur à la query, on l'écarte
-                            if (!item['it_language'].find(element => element.name === query.it_language && element.level >= query[key])) {
-                                return false;
-                            };
-                        } else if (!query[key].includes(item[key])) {
-                            // si la valeur "simple" (pseudo, country, city) n'est pas présente, on l'écarte
-                            return false;
-                        };
-                    };
-                    return true
-                });
-               
-                return dataFiltered;
-           
+                // depend to the filter, it will send the informations
+                if (!finalFilter) {
+                    const resultat = await db.query(`SELECT * FROM usr_map`);
+                    return resultat.rows;
+                } else {
+                    const resultat = await db.query(`SELECT * FROM usr_map WHERE ` + finalFilter);
+                    return resultat.rows;
+                }          
             }
+
         });
     }
 }

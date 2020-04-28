@@ -191,8 +191,10 @@ module.exports = {
                 const newRegistered = await db.query('SELECT * FROM add_usr($1, $2, $3)',
                 [email, pseudo, hashPassword]);
 
+
                 // link some descriptions to the new user
                 const newRegisteredDetail = await db.query('SELECT * FROM add_usr_detail($1, $2, $3, $4)', [newRegistered.rows[0].id, country, city, remote]);
+
 
                 console.log(newRegistered.rows[0]);
                 return 'ok enregistré'
