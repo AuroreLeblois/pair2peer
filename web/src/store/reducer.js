@@ -15,7 +15,7 @@ export default (state = initialState, action = {}) => {
         [action.name]: action.value
       }
     }
-    case actions.GET_USER: {
+    case actions.GET_AUTHENTIFIED: {
       return {
         ...state,
         user: action.data
