@@ -74,7 +74,7 @@ module.exports = {
                 let description= request.payload.description;
                 let validatePassword= request.payload.validatePassword;
                 let changeMyEmail= request.payload.email;
-                let speudo= request.payload.speudo;
+                let pseudo= request.payload.speudo;
                 let selectedLang= [request.payload.languages];
                 let itlangs = [request.payload.itLanguages];
                 let itLevel= [request.payload.itLanguages.itLevels];
@@ -82,9 +82,9 @@ module.exports = {
                 
                 //si l'utisateur change des infos=> update user table
                 //le speudo
-                if(speudo!== undefined||speudo!== null||speudo.lenght>0){
+                if(pseudo!== undefined||pseudo!== null||pseudo.lenght>0){
                     //oui mais le speudo doit être unique
-                    speudoExists= await db.query(`SELECT speudo FROM usr WHERE speudo=${speudo}`);
+                    pseudoExists= await db.query(`SELECT speudo FROM usr WHERE speudo=${speudo}`);
                     if(!speudoExists.rows[0]){
                     await db.query(`UPDATE usr SET speudo= ${speudo} WHERE usr.id=${userID}`);
                     }
