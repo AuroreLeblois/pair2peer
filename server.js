@@ -6,7 +6,10 @@ const db = require('./app/models/db');
 
 (async () => {
     const server = Hapi.server({
-        port: 3000
+        port: 3000,
+        routes: {
+            cors: true
+        }
     });
 
     // pour éviter d'écrire les identifiants en dur, je les passerai en variables d'environnement
@@ -26,26 +29,41 @@ const db = require('./app/models/db');
 
             const user = visitor.rows[0];
             
-            if (user.role === 'user') { 
-                return { valid: user !== undefined, credentials: {scope: 'user'} };
-            } else if (user.role === 'admin') {
-                return { valid: user !== undefined, credentials: {scope: 'admin'} };
-            };
+            // if (user.role === 'user') { 
+            //     return { valid: user !== undefined, credentials: {scope: 'user'} };
+            // } else if (user.role === 'admin') {
+            //     return { valid: user !== undefined, credentials: {scope: 'admin'} };
+            // };
         }
     });
 
 
-    // await server.register ([
-    //     {
-    //         plugin: require('hapi-swagger'),
-    //         options: {
-    //             info: {
-    //                 title: 'Apotest API Documentation',
-    //                 version: package.version
-    //             }
-    //         }
-    //     }, 
-    // ]);
+    await server.register ([
+        {
+            plugin: require('hapi-swagger'),
+            options: {
+                info: {
+                    title: 'Apotest API Documentation',
+                    version: package.version
+                }
+            }
+        }, {
+            plugin: require('./app/routes/_homePage')
+        }, {
+            plugin: require('./app/routes/_loginPage')
+        },
+        //  {
+        //     plugin: require('./app/routes/_profilePage')
+        // },
+         {
+            plugin: require('./app/routes/_filtredPage')
+        }, {
+            plugin: require('./app/routes/_updateProfile')
+         },
+         {
+            plugin: require('./app/routes/_teamPage')
+        }
+    ]);
 
     server.auth.default({ strategy: 'base', mode: 'try' });
     
