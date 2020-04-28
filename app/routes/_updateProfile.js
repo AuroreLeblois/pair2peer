@@ -134,17 +134,21 @@ module.exports = {
                     const detailExist= await db.query(`SELECT * FROM usr_detail WHERE usr_id=${userID}`);
                     //il n'existe pas=> on insert
                      if(!detailExist.rows[0]){
-                         await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id)
-                                        VALUES (${city}, ${country}, ${remote}, ${userID})`)
+                         await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id,birthyear, picture, decription, experience)
+                                        VALUES (${city}, ${country}, ${remote}, ${userID}, ${birthyear}, ${picture}, ${description}, ${experience})`)
                 }
                 //sinon on update
-                else{
-                    await db.query(`UPDATE usr_detail
-                                    SET "city"=${city}, 
-                                    "country"=${country},
-                                    "remote"=${remote}
-                                    WHERE usr_id=${userID}`);
-                };
+                        else{
+                            await db.query(`UPDATE usr_detail
+                                            SET "city"=${city}, 
+                                            "country"=${country},
+                                            "remote"=${remote},
+                                            birthyear=${birthyear},
+                                            picture= ${picture},
+                                            description=${description},
+                                            experience=${experience}
+                                            WHERE usr_id=${userID}`);
+                        };
                 }
             //sinon on dit ce qu'il manque à l'utilisateur
                 else{
