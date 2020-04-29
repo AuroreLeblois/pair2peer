@@ -9,6 +9,7 @@ import Profile from 'src/components/Profile';
 import Signup from 'src/components/Signup';
 import './styles.css';
 
+// Ajout d'une route /signup
 
 // == Composant
 const App = () => {
