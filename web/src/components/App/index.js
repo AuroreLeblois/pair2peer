@@ -2,11 +2,13 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
+
 // == Import
 import Login from 'src/components/Login';
 import Profile from 'src/components/Profile';
 import Signup from 'src/components/Signup';
 import './styles.css';
+
 
 // == Composant
 const App = () => {
@@ -18,6 +20,9 @@ const App = () => {
         </Route>
         <Route exact path="/profile">
           <Profile />
+        </Route>
+        <Route exact path="/signup">
+          <Signup />
         </Route>
       </Switch>
     </div>
