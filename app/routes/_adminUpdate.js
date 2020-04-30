@@ -21,7 +21,7 @@ module.exports = {
                     tags: ['api', 'profile', 'get profile']
                 },
                 handler: async (request, h) => {
-                    if(scope==='admin'){
+                   
                     const pseudo= request.params.speudo;
                     const result = await db.query(`SELECT * FROM usr WHERE pseudo = $1`, [pseudo]);
                     if(!result.rows[0]){
@@ -30,10 +30,8 @@ module.exports = {
                     const user= result.rows[0];
                     return  user;
                     }
-                    else{
-                        return 403
-                    }
-                }
+                
+                
             });
             server.route({
                 method: 'PATCH',
