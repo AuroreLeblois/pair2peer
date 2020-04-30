@@ -280,5 +280,29 @@ module.exports = {
                     }
                 });
         
+                route.get({
+                    method: 'GET',
+                    path: '/update/profile/{speudo}',
+                    options: {
+                        auth: {
+                            strategy: 'base',
+                            mode: 'required',
+                            scope: ['admin']
+                        },
+                        description: 'User\'s profile update page for admin',
+                        tags: ['api', 'profile', 'get profile']
+                    },
+                    handler: async (request, h) => {
+                        if(scope==='admin'){
+                        const pseudo= request.params.speudo;
+                        const result = await db.query(`SELECT * FROM usr WHERE pseudo = $1`, [pseudo]);
+                        const user= result.rows[0];
+                       return  user;
+                        }
+                        else{
+                            return 403
+                        }
+                    }
+                })
             }
         }
