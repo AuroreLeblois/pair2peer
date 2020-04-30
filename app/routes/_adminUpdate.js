@@ -24,6 +24,9 @@ module.exports = {
                     if(scope==='admin'){
                     const pseudo= request.params.speudo;
                     const result = await db.query(`SELECT * FROM usr WHERE pseudo = $1`, [pseudo]);
+                    if(!result.rows[0]){
+                        return 404
+                    }
                     const user= result.rows[0];
                     return  user;
                     }
@@ -58,7 +61,7 @@ module.exports = {
                             if(userRole!=='user'){
                                 await db.query(`UPDATE usr
                                                 SET role= 'user'
-                                                WHERE "id"=${userID}`)
+                                                WHERE "id"=$1`,[userID])
                             }
                         }
                         //si le payload dit admin
@@ -66,7 +69,7 @@ module.exports = {
                             if(userRole!=='admin'){
                                 await db.query(`UPDATE usr
                                                 SET role= 'admin'
-                                                WHERE "id"=${userID}`)
+                                                WHERE "id"=$1`,[userID])
                             }
                         }
                         //si on veux bannir quelqu'un
@@ -74,10 +77,10 @@ module.exports = {
                             if(userRole!=='banned'){
                                 await db.query(`UPDATE usr
                                                 SET role= 'banned'
-                                                WHERE "id"=${userID}`)
+                                                WHERE "id"=$1`,[userID])
                             }
                         }
-                        user= await db.query(`SELECT * FROM usr WHERE "id"=${userID}`)
+                        user= await db.query(`SELECT * FROM usr WHERE "id"=$1`,[userID])
                         return  user.rows[0].role;
                         }
                     else{
