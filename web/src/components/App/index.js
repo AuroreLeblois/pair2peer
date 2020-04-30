@@ -23,7 +23,7 @@ const App = () => {
           <Profile />
         </Route>
         <Route exact path="/signup">
-          <C value="php" handleChange={() => {}} />
+          <C />
         </Route>
       </Switch>
     </div>

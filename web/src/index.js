@@ -6,6 +6,9 @@ import { render } from 'react-dom'; // couche 2
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+// Semantic-ui
+import 'semantic-ui-css/semantic.min.css';
+
 // == Import : local
 // Composants
 import App from 'src/components/App';
