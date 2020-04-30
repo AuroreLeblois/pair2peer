@@ -6,7 +6,7 @@ import { Route, Switch } from 'react-router-dom';
 // == Import
 import Login from 'src/components/Login';
 import Profile from 'src/components/Profile';
-import Signup from 'src/components/Signup';
+import C from 'src/components/Signup';
 import './styles.css';
 
 // Ajout d'une route /signup
@@ -23,7 +23,7 @@ const App = () => {
           <Profile />
         </Route>
         <Route exact path="/signup">
-          <Signup />
+          <C value="php" handleChange={() => {}} />
         </Route>
       </Switch>
     </div>
