@@ -109,7 +109,7 @@ module.exports = {
                     return h.response.code(400);
                 }
                 else{
-                    await db.query(`DELETE * FROM usr
+                    await db.query(`DELETE FROM usr
                                     WHERE "id"=$1`, [userID]);
                     return `Profil de ${pseudo} supprimé`
                 }
