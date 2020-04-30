@@ -25,7 +25,7 @@ module.exports = {
                     const pseudo= request.params.speudo;
                     const result = await db.query(`SELECT * FROM usr WHERE pseudo = $1`, [pseudo]);
                     if(!result.rows[0]){
-                        return 404
+                        return h.responde.code(400);
                     }
                     const user= result.rows[0];
                     return  user;
@@ -81,7 +81,7 @@ module.exports = {
                             }
                         }
                         user= await db.query(`SELECT * FROM usr WHERE "id"=$1`,[userID]);
-                        return  user.rows[0].role;
+                        return  user;
                         }
       
                 
