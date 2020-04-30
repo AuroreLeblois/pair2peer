@@ -293,7 +293,5 @@ module.exports = {
 
             }
         }
-    }
-    
-}
+
 
