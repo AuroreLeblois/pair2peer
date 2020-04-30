@@ -36,7 +36,7 @@ module.exports = {
                 const itLang = await db.query('SELECT * FROM all_it_language');
                 
                 const maxUser = await db.query('SELECT COUNT(*) AS count FROM usr_profile');
-                const maxPage = await db.query(`SELECT CEILING(COUNT(*)/${user_nb}::float) AS count FROM usr_profile`);
+                const maxPage = await db.query(`SELECT CEILING(COUNT(*)/$1::float) AS count FROM usr_profile`, [user_nb]);
 
                 const user = await db.query(`
                     SELECT *
@@ -44,9 +44,10 @@ module.exports = {
                             ROW_NUMBER() OVER (ORDER BY "id"),
                             *
                         FROM usr_profile) as byrow
-                    WHERE "row_number" > ${user_nb}*(${page_nb}-1)
+                    WHERE "row_number" > $1 * ($2 - 1)
                     ORDER BY "row_number" ASC
-                    LIMIT ${user_nb}`
+                    LIMIT $1`,
+                    [user_nb, page_nb]
                 );
                 
                 const info = {};
@@ -139,7 +140,7 @@ module.exports = {
                 // depend to the filter, it will send the informations
                 if (!finalFilter) {
                     const maxUser = await db.query('SELECT COUNT(*) AS count FROM usr_profile');
-                    const maxPage = await db.query(`SELECT CEILING(COUNT(*)/${user_nb}::float) AS count FROM usr_profile`);
+                    const maxPage = await db.query(`SELECT CEILING(COUNT(*)/$1::float) AS count FROM usr_profile`, [user_nb]);
 
                     const user = await db.query(`
                         SELECT *
@@ -147,9 +148,10 @@ module.exports = {
                                 ROW_NUMBER() OVER (ORDER BY "id"),
                                 *
                             FROM usr_profile) as byrow
-                        WHERE "row_number" > ${user_nb}*(${page_nb}-1)
+                        WHERE "row_number" > $1 * ($2 - 1)
                         ORDER BY "row_number" ASC
-                        LIMIT ${user_nb}`
+                        LIMIT $1`,
+                        [user_nb, page_nb]
                     );
 
                     info.maxUser = maxUser.rows[0];
@@ -166,10 +168,11 @@ module.exports = {
                     );
 
                     const maxPage = await db.query(`
-                        SELECT CEILING(COUNT(*)/${user_nb}::float) AS count FROM (
+                        SELECT CEILING(COUNT(*)/$1::float) AS count FROM (
                             SELECT ROW_NUMBER() OVER (ORDER BY "id"), * FROM usr_profile 
                             WHERE ${finalFilter}
-                        ) as count_max_page;`
+                        ) as count_max_page;`,
+                        [user_nb]
                     );
 
                     const user = await db.query(`
@@ -179,9 +182,10 @@ module.exports = {
                                 *
                             FROM usr_profile
                             WHERE ${finalFilter}) as byrow
-                        WHERE "row_number" > ${user_nb}*(${page_nb}-1)
+                        WHERE "row_number" > $1 * ($2 - 1)
                         ORDER BY "row_number" ASC
-                        LIMIT ${user_nb}`
+                        LIMIT $1`,
+                        [user_nb, page_nb]
                     );
 
                     info.maxUser = maxUser.rows[0];
