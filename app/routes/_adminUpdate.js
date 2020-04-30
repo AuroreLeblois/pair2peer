@@ -48,7 +48,7 @@ module.exports = {
                     tags: ['api', 'profile', 'patch profile']
                 },
                 handler: async (request, h) => {
-                    if(scope==='admin'){
+                    
                         const pseudo= request.params.speudo;
                         const result = await db.query(`SELECT * FROM usr 
                                                         WHERE pseudo = $1`, [pseudo]);
@@ -80,12 +80,39 @@ module.exports = {
                                                 WHERE "id"=$1`,[userID])
                             }
                         }
-                        user= await db.query(`SELECT * FROM usr WHERE "id"=$1`,[userID])
+                        user= await db.query(`SELECT * FROM usr WHERE "id"=$1`,[userID]);
                         return  user.rows[0].role;
                         }
-                    else{
-                        return 403
-                    }
+      
+                
+            });
+
+            server.route({
+                method: 'DELETE',
+                path: '/delete/profile/{speudo}',
+                options: {
+                    auth: {
+                        strategy: 'base',
+                        mode: 'required',
+                        scope: ['admin']
+                    },
+                    description: 'DELETE User\'s profile update page for admin',
+                    tags: ['api', 'profile', 'delete profile']
+                },
+                handler: async (request, h) => {
+                const pseudo= request.params.pseudo;
+                const result = await db.query(`SELECT * FROM usr 
+                                                        WHERE pseudo = $1`, [pseudo]);
+                const user= result.rows[0];
+                const userID= result.rows[0].id;
+                if(!user){
+                    return h.response.code(400);
+                }
+                else{
+                    await db.query(`DELETE * FROM usr
+                                    WHERE "id"=$1`, [userID]);
+                    return `Profil de ${pseudo} supprimé`
+                }
                 }
             });
         }
