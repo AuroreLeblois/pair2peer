@@ -93,7 +93,7 @@ module.exports = {
                 console.log(request.payload);
                 //si l'utisateur change des infos=> update user table
                 //le speudo
-                if(pseudo!== undefined||pseudo!== null||pseudo.length>0){
+                if(pseudo!== undefined||pseudo!== null||pseudo.length>0 && pseudo!==result.rows[0].speudo){
                     //oui mais le speudo doit être unique
                     pseudoExists= await db.query(`SELECT speudo FROM usr WHERE speudo=${speudo}`);
                     if(!speudoExists.rows[0]){
@@ -210,7 +210,7 @@ module.exports = {
                                                            WHERE user_id = ${userID} 
                                                            AND it_lang_id= ${itLangID}`);
                         //si pas de résultat
-                        if(!userKnowsIt){
+                        if(!userKnowsIt.rows[0]){
                             await db.query(`INSERT INTO usr_knows_it_lang (usr_id, it_lang_id, "level", search) 
                             VALUES (${userID}, ${itLangID}, ${itLevel}, ${searchMe})`);
                         }
@@ -249,13 +249,15 @@ module.exports = {
                             }
                         }
                     }
-                    //et si aucune case n'est coché=> user ne veut plus faire de session donc... plus dispo
+                    //et si aucune case n'est cochée=> user ne veut plus faire de session donc... plus dispo
                 }else{
+                    //on select les rows du user
                     const dispoExists= await db.query(`SELECT * 
                                                     FROM disponibility
                                                     WHERE usr_id=${userID}
                                                     `);
-                    if(dispoExists){
+                    //si on trouve des correspondances on les supprime
+                    if(dispoExists.rows[0]){
                         await db.query(`DELETE * 
                                         FROM disponibility
                                         WHERE usr_id=${userID}`)
@@ -267,9 +269,12 @@ module.exports = {
                         if(error.length>0){
                             return error
                         }
+                        //sinon on renvoie les nouvelles infos
                         else{
-                            const user= result.rows[0];
-                            return  user;
+                            const newResult = await db.query(`SELECT * FROM usr WHERE id = ${userID}`);
+                            const newProfile= await db.query(`SELECT * FROM usr_profile WHERE usr.pseudo=${newResult.rows[0].pseudo}`);
+                            const newPlace= await db.query(`SELECT * FROM usr_map WHERE usr.pseudo=${newResult.rows[0].pseudo}`)
+                            return  {newPlace, newProfile};
                         }
                         //si le champs est vide=> ne rien faire
                     }
