@@ -1,9 +1,16 @@
 .app {
-  width: 500px;
+  width: 70%;
   margin: 1em auto;
   text-align: center;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
 .app img {
   max-width: 150px;
+}
+
+.content {
+  flex: 1;
 }
