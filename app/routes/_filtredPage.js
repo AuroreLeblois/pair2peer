@@ -28,8 +28,36 @@ module.exports = {
                 tags: ['api', 'filter']
             },
             handler: async (request, h) => {
-                return 'coucou je suis la page de filtre'
-                //return h.view('search');
+                
+                const { page_nb, user_nb } = request.query;
+
+                const lang = await db.query('SELECT * FROM all_language');
+                const localisation = await db.query('SELECT * FROM all_country_city');
+                const itLang = await db.query('SELECT * FROM all_it_language');
+                
+                const maxUser = await db.query('SELECT COUNT(*) AS count FROM usr_profile');
+                const maxPage = await db.query(`SELECT CEILING(COUNT(*)/${user_nb}::float) AS count FROM usr_profile`);
+
+                const user = await db.query(`
+                    SELECT *
+                    FROM (SELECT
+                            ROW_NUMBER() OVER (ORDER BY "id"),
+                            *
+                        FROM usr_profile) as byrow
+                    WHERE "row_number" > ${user_nb}*(${page_nb}-1)
+                    ORDER BY "row_number" ASC
+                    LIMIT ${user_nb}`
+                );
+                
+                const info = {};
+                info.language = lang.rows[0];
+                info.localisation = localisation.rows;
+                info.it_language = itLang.rows[0];
+                info.maxUser = maxUser.rows[0];
+                info.maxPage = maxPage.rows[0];
+                info.users = user.rows
+
+                return info
             }
         });
 
@@ -56,7 +84,10 @@ module.exports = {
                 }
             },
             handler: async (request, h) => {
-                let query = request.payload
+
+                const query = request.payload;
+                const { page_nb, user_nb } = request.query;
+
 
                 // first filter, if key doesn't have any value, the pair key-value will be remove of the object
                 for (let item in query) {
@@ -66,7 +97,6 @@ module.exports = {
                 } 
 
                 filterQuery = [];
-                levelQuery = [];
 
                 const keys = Object.keys(query);
                 const values = Object.values(query);
@@ -87,10 +117,10 @@ module.exports = {
                         // the IT language must have search 'true' to be findable, it mean the user want to pair programming with this
                         filterQuery.push(`${keys[index]} @> '[{"name":"${value}", "search":true}]' `);
                     } else if (keys[index] === 'level') {
-                        // it will build specific format filter to match level input and higher
-                        for (let levelIndex = value; levelIndex <= 10; levelIndex++) {
-                            levelQuery.push(`it_language @> '[{"name":"${query.it_language}", "level":${levelIndex}}]' `);
-                        }
+                        // exemple : it_language @> '[{ "name": "previous it_language.name", "level": 1 }]'
+                        // add specific security to itName because values[index -1] doesn't have any protection
+                        let itName = values[index -1].toString().replace(regex, '%20');
+                        filterQuery.push(`it_language @> '[{"name":"${itName}", "level":${value}}]' `);
                     } else if (keys[index] === 'remote') {
                         // example : remote = true/ false
                         filterQuery.push(`${keys[index]} = ${value} `);
@@ -100,22 +130,65 @@ module.exports = {
                     }
                 }    
 
-                // it will merge the arrays to string
-                // specific filter for level
-                if (levelQuery.length > 0) {
-                    levelQuery = '(' + levelQuery.join('OR ') + ')';
-                    filterQuery.push(levelQuery);
-                }
                 // specific filter for other informations
                 const finalFilter = filterQuery.join('AND ');
 
+                // it will be the object response to the front
+                const info = {};
+                
                 // depend to the filter, it will send the informations
                 if (!finalFilter) {
-                    const resultat = await db.query(`SELECT * FROM usr_map`);
-                    return resultat.rows;
+                    const maxUser = await db.query('SELECT COUNT(*) AS count FROM usr_profile');
+                    const maxPage = await db.query(`SELECT CEILING(COUNT(*)/${user_nb}::float) AS count FROM usr_profile`);
+
+                    const user = await db.query(`
+                        SELECT *
+                        FROM (SELECT
+                                ROW_NUMBER() OVER (ORDER BY "id"),
+                                *
+                            FROM usr_profile) as byrow
+                        WHERE "row_number" > ${user_nb}*(${page_nb}-1)
+                        ORDER BY "row_number" ASC
+                        LIMIT ${user_nb}`
+                    );
+
+                    info.maxUser = maxUser.rows[0];
+                    info.maxPage = maxPage.rows[0];
+                    info.users = user.rows;
+
+                    return info;
                 } else {
-                    const resultat = await db.query(`SELECT * FROM usr_map WHERE ` + finalFilter);
-                    return resultat.rows;
+                    const maxUser = await db.query(`
+                        SELECT COUNT(*) AS count FROM (
+                            SELECT ROW_NUMBER() OVER (ORDER BY "id"), * FROM usr_profile 
+                            WHERE ${finalFilter}
+                        ) as count_user;`
+                    );
+
+                    const maxPage = await db.query(`
+                        SELECT CEILING(COUNT(*)/${user_nb}::float) AS count FROM (
+                            SELECT ROW_NUMBER() OVER (ORDER BY "id"), * FROM usr_profile 
+                            WHERE ${finalFilter}
+                        ) as count_max_page;`
+                    );
+
+                    const user = await db.query(`
+                        SELECT *
+                        FROM (SELECT
+                                ROW_NUMBER() OVER (ORDER BY "id"),
+                                *
+                            FROM usr_profile
+                            WHERE ${finalFilter}) as byrow
+                        WHERE "row_number" > ${user_nb}*(${page_nb}-1)
+                        ORDER BY "row_number" ASC
+                        LIMIT ${user_nb}`
+                    );
+
+                    info.maxUser = maxUser.rows[0];
+                    info.maxPage = maxPage.rows[0];
+                    info.users = user.rows;
+
+                    return info;
                 }          
             }
 
