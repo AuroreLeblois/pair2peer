@@ -8,6 +8,7 @@ import Login from 'src/components/Login';
 import Profile from 'src/components/Profile';
 import Signup from 'src/components/Signup';
 import Header from 'src/components/Header';
+import Footer from 'src/components/Footer';
 import './styles.css';
 
 // Ajout d'une route /signup
@@ -17,6 +18,7 @@ const App = () => {
   return (
     <div className="app">
       <Header />
+      <div className="content"> 
       <Switch>
         <Route exact path="/login">
           <Login />
@@ -28,6 +30,8 @@ const App = () => {
           <Signup />
         </Route>
       </Switch>
+      </div>
+      <Footer />
     </div>
   );
 };

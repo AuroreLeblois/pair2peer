@@ -11,8 +11,8 @@ const Header = () => {
   return (
     <Menu secondary stackable inverted>
       <Menu.Item className="logo2">
-        <Icon name='code branch' />
-        <span className="logo">Pair2Peer</span>
+        <Icon color="yellow" name='code branch' />
+        <span className="logo primary">Pair2Peer</span>
       </Menu.Item>
 
       <Menu.Menu position="right">
