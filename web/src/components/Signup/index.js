@@ -40,23 +40,21 @@ const Signup = () => {
   });
   return (
     <form onSubmit={formik.handleSubmit}>
-      <label htmlFor="nom">Nom</label>
+      <label htmlFor="name">Nom :</label>
       <input
-        id="nom"
-        name="nom"
-        type="nom"
+        id="name"
+        type="text"
         onChange={formik.handleChange}
         value={formik.values.nom}
       />
-      <label htmlFor="prenom">Prenom</label>
+      <label htmlFor="firstName">Prenom :</label>
       <input
-        id="prenom"
-        name="prenom"
-        type="prenom"
+        id="firstName"
+        type="text"
         onChange={formik.handleChange}
         value={formik.values.prenom}
       />
-      <label htmlFor="email">Email</label>
+      <label htmlFor="email">Email :</label>
       <input
         id="email"
         name="email"
@@ -64,7 +62,7 @@ const Signup = () => {
         onChange={formik.handleChange}
         value={formik.values.email}
       />
-      <label htmlFor="password">Password</label>
+      <label htmlFor="password">Password :</label>
       <input
         id="password"
         name="password"
