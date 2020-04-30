@@ -23,6 +23,7 @@ CREATE TABLE usr_detail (
     experience TEXT,
     "description" TEXT,
     usr_id INT NOT NULL REFERENCES usr(id)
+    ON DELETE CASCADE
 );
 
 CREATE TABLE lang (
@@ -37,8 +38,8 @@ CREATE TABLE it_lang (
 
 CREATE TABLE usr_speaks_lang (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    usr_id INT NOT NULL REFERENCES usr(id),
-    lang_id INT NOT NULL REFERENCES lang(id),
+    usr_id INT NOT NULL REFERENCES usr(id) ON DELETE CASCADE,
+    lang_id INT NOT NULL REFERENCES lang(id) ON DELETE CASCADE,
     UNIQUE (usr_id, lang_id)
 );
 
@@ -46,8 +47,8 @@ CREATE TABLE usr_knows_it_lang (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "level" INT NOT NULL CHECK("level" >= 0 AND "level" <= 10),
     "search" BOOLEAN NOT NULL default false,
-    usr_id INT NOT NULL REFERENCES usr(id),
-    it_lang_id INT NOT NULL REFERENCES it_lang(id),
+    usr_id INT NOT NULL REFERENCES usr(id) ON DELETE CASCADE,
+    it_lang_id INT NOT NULL REFERENCES it_lang(id) ON DELETE CASCADE,
     UNIQUE (usr_id, it_lang_id)
 );
 
@@ -56,7 +57,7 @@ CREATE TABLE disponibility (
     day TEXT NOT NULL,
     start_session TIME NOT NULL,
     duration_session interval not null,
-    usr_id INT NOT NULL REFERENCES usr(id)
+    usr_id INT NOT NULL REFERENCES usr(id) ON DELETE CASCADE
 );
 
 CREATE TABLE chat (
@@ -67,8 +68,8 @@ CREATE TABLE usr_message_chat (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     script TEXT,
     "date" TIMESTAMPTZ NOT NULL,
-    usr_id INT NOT NULL REFERENCES usr(id),
-    chat_id INT NOT NULL REFERENCES chat(id)
+    usr_id INT NOT NULL REFERENCES usr(id) ON DELETE CASCADE,
+    chat_id INT NOT NULL REFERENCES chat(id) ON DELETE CASCADE
 );
 
 COMMIT;
