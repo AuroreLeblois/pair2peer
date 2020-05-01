@@ -66,6 +66,9 @@ const db = require('./app/models/db');
         {
             plugin: require('./app/routes/_adminUpdate')
          },
+         {
+            plugin: require('./app/routes/_chatRoom')
+         },
     ]);
 
     server.auth.default({ strategy: 'base', mode: 'try' });
