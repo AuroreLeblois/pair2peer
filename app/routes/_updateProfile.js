@@ -239,10 +239,10 @@ module.exports = {
                         //si résultat
                         else{
                             await db.query(`UPDATE usr_knows_it_lang 
-                            SET "level"= $1, search= $2)
-                            WHERE usr_id=$1
-                            AND it_lang_id =$2`,
-                            [itLevel,searchMe, userID,itLangID ]);
+                                            SET "level"= $1, search= $2
+                                            WHERE usr_id=$1
+                                            AND it_lang_id =$2`,
+                                            [itLevel,searchMe, userID,itLangID]);
                         }
                     }
                     };
