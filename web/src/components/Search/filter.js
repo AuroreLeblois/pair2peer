@@ -13,34 +13,46 @@ const Filter = () => {
   ]
 
   return (
-    <Grid.Column width={5}>
-      <Form>
-        <Input
-          placeholder='Pseudo'
-        />
-        <Select
-          options={options}
-          placeholder='Language'
-        />
-        <Select
-          options={options}
-          placeholder='Niveau'
-        />
-        <Input
-          placeholder='Pays'
-        />
-        <Input
-          placeholder='Ville'
-        />
-        <Checkbox
-        toggle
-        label='Remote'
-        />
-        <Checkbox
-        toggle
-        label='IRL'
-        />
-        <Button type='submit'>Filtrer</Button>
+    <Grid.Column width={4}>
+      <Form size="mini" inverted>
+        <Form.Field>
+          <Input
+            placeholder="Pseudo"
+          />
+        </Form.Field>
+        <Form.Field>
+          <Select
+            options={options}
+            placeholder="Language"
+          />
+        </Form.Field>
+        <Form.Field>
+          <Select
+            options={options}
+            placeholder="Niveau"
+          />
+        </Form.Field>
+        <Form.Field>
+          <Input
+            placeholder="Pays"
+          />
+        </Form.Field>
+        <Form.Field>
+          <Input
+            placeholder="Ville"
+          />
+        </Form.Field>
+        <Form.Field>
+          <Checkbox
+            label="Remote"
+          />
+        </Form.Field>
+        <Form.Field>
+          <Checkbox
+            label="IRL"
+          />
+        </Form.Field>
+        <Button type="submit">Filtrer</Button>
       </Form>
     </Grid.Column>
   );
