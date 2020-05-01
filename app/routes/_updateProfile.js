@@ -64,6 +64,9 @@ module.exports = {
                 //on retrouve l'user de suite pour ne pas avoir à le refaire plus tard
                 const result = await db.query(`SELECT * FROM usr WHERE email = $1`, [email]);
                 const userID= result.rows[0].id;
+                const userDetails= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
+                const userCountry= userDetails.rows[0].country;
+                const userCity=userDetails.rows[0].city;
                 //les données du formulaire:
                 //les données utilisateur brutes
                 let password= request.payload.password;
@@ -146,32 +149,39 @@ module.exports = {
                 //si l'user change son détail=> usr_detail
                 //avant on vérifie que les input "required" sont conformes
                 if(city!==null&& country!==null && remote!==null||city!== undefined&& country!== undefined&& remote!== undefined){
-                    //si le detail n'existe pas encore il faut les créer
-                    const api= await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}
-                    &apiKey=${APIKEY}`,{
-                        json:true
-                    });
-                    const detailExist= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
-                    //il n'existe pas=> on insert
-                     if(!detailExist.rows[0]){
-                         await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id,birthyear, picture, decription, experience)
-                                        VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7, $8)`
-                                        ,[city, country, remote, userID, birthyear, picture, description,experience])
-                }
-                //sinon on update
-                        else{
-                            await db.query(`UPDATE usr_detail
-                                            SET "city"=$1 , 
-                                            "country"=$2 ,
-                                            "remote"=$3 ,
-                                            birthyear=$4 ,
-                                            picture= $5 ,
-                                            description=$6 ,
-                                            experience=$7 
-                                            WHERE usr_id=$1`,
-                                            [city, country, remote, birthyear,
-                                             picture, description, experience,userID]);
-                        };
+                    //ensuite on vérifie si ce qui a été saisie diffère des données existantes
+                    if(city!==userCity &&country!==userCountry||country==userCountry&& city!==userCity||city==userCity&&country!==userCountry){
+                        const api= await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}
+                        &apiKey=${APIKEY}`,{
+                            json:true
+                        });
+                    
+                        const detailExist= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
+                        //il n'existe pas=> on insert
+                         if(!detailExist.rows[0]){
+                             await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id,birthyear, picture, decription, experience)
+                                            VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7, $8)`
+                                            ,[city, country, remote, userID, birthyear, picture, description,experience])
+                    }
+                    //sinon on update
+                            else{
+                                await db.query(`UPDATE usr_detail
+                                                SET "city"=$1 , 
+                                                "country"=$2 ,
+                                                "remote"=$3 ,
+                                                birthyear=$4 ,
+                                                picture= $5 ,
+                                                description=$6 ,
+                                                experience=$7 
+                                                WHERE usr_id=$1`,
+                                                [city, country, remote, birthyear,
+                                                 picture, description, experience,userID]);
+                            };
+                    
+                    }
+                  
+                   
+                    
                 }
             //sinon on dit ce qu'il manque à l'utilisateur
                 else{
