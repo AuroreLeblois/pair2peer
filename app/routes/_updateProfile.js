@@ -23,9 +23,11 @@ module.exports = {
             },
             handler: async (request, h) => {
                 const email= request.state.cookie.email;
+                const itLangs= await db.query(`SELECT * FROM all_it_language`);
+                const Langs= await db.query(`SELECT * FROM all_language`);
                 const result = await db.query(`SELECT * FROM usr WHERE email = $1`, [email]);
                 const user= result.rows[0];
-               return  user;
+               return  {user, itLangs, Langs};
             }
         });
         
