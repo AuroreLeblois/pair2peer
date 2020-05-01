@@ -8,7 +8,9 @@ CREATE VIEW usr_map AS
         usr.id,
         usr.pseudo, 
         usr_detail.country,
-        usr_detail.city, 
+        usr_detail.city,
+        usr_detail.latitude,
+        usr_detail.longitude,
         usr_detail.remote,
         usr_detail.description, 
         usr_detail.picture,
@@ -30,7 +32,9 @@ CREATE VIEW usr_map AS
 		usr_detail.city,
 		usr_detail.remote,
 		usr_detail.description,
-		usr_detail.picture;
+		usr_detail.picture,
+        usr_detail.latitude,
+        usr_detail.longitude;
 
 
 CREATE VIEW usr_profile AS
@@ -71,5 +75,21 @@ CREATE VIEW usr_profile AS
         usr_detail.latitude,
         usr_detail.longitude;
 
+
+CREATE VIEW all_it_language AS (
+	SELECT jsonb_agg(DISTINCT "name") AS "name"
+	FROM it_lang
+);
+
+CREATE VIEW all_language AS (
+	SELECT jsonb_agg(DISTINCT "name") AS "name"
+	FROM lang
+);
+
+CREATE VIEW all_country_city AS (
+	SELECT DISTINCT country, jsonb_agg(DISTINCT city) AS city
+	FROM usr_detail
+	GROUP BY country
+);
 
 COMMIT;

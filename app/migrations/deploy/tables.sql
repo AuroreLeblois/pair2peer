@@ -22,7 +22,8 @@ CREATE TABLE usr_detail (
     "remote" BOOLEAN NOT NULL,
     experience TEXT,
     "description" TEXT,
-    usr_id INT NOT NULL REFERENCES usr(id) ON DELETE CASCADE
+    usr_id INT NOT NULL REFERENCES usr(id)
+    ON DELETE CASCADE
 );
 
 CREATE TABLE lang (
@@ -46,8 +47,8 @@ CREATE TABLE usr_knows_it_lang (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "level" INT NOT NULL CHECK("level" >= 0 AND "level" <= 10),
     "search" BOOLEAN NOT NULL default false,
-    usr_id INT NOT NULL REFERENCES usr(id),
-    it_lang_id INT NOT NULL REFERENCES it_lang(id),
+    usr_id INT NOT NULL REFERENCES usr(id) ON DELETE CASCADE,
+    it_lang_id INT NOT NULL REFERENCES it_lang(id) ON DELETE CASCADE,
     UNIQUE (usr_id, it_lang_id)
 );
 

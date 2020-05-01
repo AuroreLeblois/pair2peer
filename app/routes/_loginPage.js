@@ -208,7 +208,9 @@ module.exports = {
                 // bind some descriptions to the new user
                 const newRegisteredDetail = await db.query('SELECT * FROM add_usr_detail($1, $2, $3, $4, $5, $6)', [newRegistered.rows[0].id, address.countryName, address.city, position.lat, position.lng, remote]);
 
-                return h.redirect('/login');
+                console.log(newRegistered.rows[0]);
+                return 'ok enregistré'
+                // return h.redirect('/login');
             }
         })
     }

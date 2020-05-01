@@ -3,7 +3,7 @@ const Hapi = require('@hapi/hapi');
 const HapiAuthCookie = require('@hapi/cookie');
 const package = require('./package');
 const db = require('./app/models/db');
-
+require('dotenv').config();
 
 (async () => {
     const server = Hapi.server({
@@ -63,7 +63,13 @@ const db = require('./app/models/db');
          },
          {
             plugin: require('./app/routes/_teamPage')
-        }
+        },
+        {
+            plugin: require('./app/routes/_adminUpdate')
+         },
+         {
+            plugin: require('./app/routes/_chatRoom')
+         },
     ]);
 
     server.auth.default({ strategy: 'base', mode: 'try' });

@@ -32,7 +32,7 @@ module.exports = {
                 // console.log(JSON.parse("true"))
 
                 const email = request.state.cookie.email;
-                const result = await db.query(`SELECT * FROM usr WHERE email = $1`, [email]);
+                const result = await db.query(`SELECT * FROM usr_map WHERE email = $1`, [email]);
                 const user = result.rows[0];
                 return  {user};
             }
