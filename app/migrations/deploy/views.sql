@@ -5,6 +5,7 @@ BEGIN;
 -- XXX Add DDLs here.
 CREATE VIEW usr_map AS	
     SELECT
+        usr.id,
         usr.pseudo, 
         usr_detail.country,
         usr_detail.city, 
@@ -34,11 +35,14 @@ CREATE VIEW usr_map AS
 
 CREATE VIEW usr_profile AS
     SELECT
+        usr.id,
         usr.pseudo, 
 		usr.email,
 		usr_detail.picture,
 		usr_detail.country,
-		usr_detail.city, 
+		usr_detail.city,
+        usr_detail.latitude,
+        usr_detail.longitude,
 		usr_detail.remote,
 		usr_detail.birthyear,
 		usr_detail.experience,
@@ -63,7 +67,9 @@ CREATE VIEW usr_profile AS
 		usr_detail.description,
 		usr_detail.picture,
 		usr_detail.birthyear,
-		usr_detail.experience;
+		usr_detail.experience,
+        usr_detail.latitude,
+        usr_detail.longitude;
 
 
 COMMIT;
