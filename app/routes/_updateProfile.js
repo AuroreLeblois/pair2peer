@@ -155,27 +155,29 @@ module.exports = {
                         &apiKey=${APIKEY}`,{
                             json:true
                         });
-                    
+                        const latitude= api.payload.items[0].position.lat;
+                        const longitude= api.payload.items[0].position.lng;
                         const detailExist= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
                         //il n'existe pas=> on insert
                          if(!detailExist.rows[0]){
-                             await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id,birthyear, picture, decription, experience)
-                                            VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7, $8)`
-                                            ,[city, country, remote, userID, birthyear, picture, description,experience])
-                    }
-                    //sinon on update
-                            else{
-                                await db.query(`UPDATE usr_detail
-                                                SET "city"=$1 , 
-                                                "country"=$2 ,
-                                                "remote"=$3 ,
-                                                birthyear=$4 ,
-                                                picture= $5 ,
-                                                description=$6 ,
-                                                experience=$7 
-                                                WHERE usr_id=$1`,
-                                                [city, country, remote, birthyear,
-                                                 picture, description, experience,userID]);
+                             await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id,birthyear, picture, decription, experience, latitude, longitude)
+                                            VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7, $8, $9, $10)`
+                                            ,[city, country, remote, userID, birthyear, picture, description,experience, latitude, longitude])
+                    }//sinon on update
+                         else{
+                             await db.query(`UPDATE usr_detail
+                                            SET "city"=$1 , 
+                                            "country"=$2 ,
+                                            "remote"=$3 ,
+                                            birthyear=$4 ,
+                                            picture= $5 ,
+                                            description=$6 ,
+                                            experience=$7,
+                                            latitude=$8,
+                                            longitude=$9 
+                                            WHERE usr_id=$1`,
+                                            [city, country, remote, birthyear,
+                                            picture, description, experience, latitude, longitude,userID]);
                             };
                     
                     }
