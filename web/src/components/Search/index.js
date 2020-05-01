@@ -1,11 +1,11 @@
 // == Import npm
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Grid } from 'semantic-ui-react'
+import { Grid, Divider } from 'semantic-ui-react';
 
 // == Import
 import Filter from './filter';
-import Results from './results'
+import Results from './results';
 
 // == Composant
 const Search = () => {
