@@ -24,10 +24,12 @@ module.exports = {
             handler: async (request, h) => {
                 const email= request.state.cookie.email;
                 const itLangs= await db.query(`SELECT * FROM all_it_language`);
+                const itLang= itLangs.rows;
                 const Langs= await db.query(`SELECT * FROM all_language`);
+                const Lang= Langs.rows;
                 const result = await db.query(`SELECT * FROM usr WHERE email = $1`, [email]);
                 const user= result.rows[0];
-               return  {user, itLangs, Langs};
+               return  {user, itLang, Lang};
             }
         });
         
@@ -52,6 +54,7 @@ module.exports = {
                         country: Joi.string().required(),
                         birthyear: Joi.number(),
                         description: Joi.string(),
+                        experience: Joi.number(),
                     })
                 },
                 description: 'handle update user profile',
