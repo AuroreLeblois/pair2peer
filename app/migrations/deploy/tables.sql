@@ -17,6 +17,8 @@ CREATE TABLE usr_detail (
     birthyear DATE,
     country TEXT NOT NULL,
     city TEXT NOT NULL,
+    latitude DOUBLE PRECISION,
+    longitude DOUBLE PRECISION,
     "remote" BOOLEAN NOT NULL,
     experience TEXT,
     "description" TEXT,

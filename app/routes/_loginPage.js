@@ -1,9 +1,9 @@
 const vision = require('@hapi/vision');
 const inert = require('@hapi/inert');
 const bcrypt = require('bcrypt');
-const emailValidator = require('email-validator');
 const db = require('../models/db');
 const Joi = require('@hapi/joi');
+const Wreck = require('@hapi/wreck');
 
 
 module.exports = {
@@ -74,8 +74,9 @@ module.exports = {
                 // if the process passed all the verifications, it will set a cookie for the authentification (server.js)
                 request.cookieAuth.set({email});
 
-                return `trouvéééé`
-                // return h.redirect('/concept');
+                // send all informations about the user logged for the front in react
+                const userInfos = await db.query(`SELECT * FROM usr_profile WHERE email = $1`, [email]) 
+                return userInfos.rows[0];
             }
         });
 
@@ -162,6 +163,10 @@ module.exports = {
                 const registered = await db.query('SELECT pseudo FROM usr WHERE email = $1', [email]);
                 const nameRegistered = await db.query('SELECT pseudo FROM usr');
 
+                const api = await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}&apiKey=${process.env.APIKEY}`, {
+                    json: true
+                });
+
                 // build an error object who will contain all the specific error messages based on Hapi native error message
                 const errorList = {
                     statusCode: 400,
@@ -169,32 +174,39 @@ module.exports = {
                     message: {}
                 };
 
+                // check if the address'input goes wrong
+                if (!api.payload.items[0]) {
+                    errorList.message.wrongAddress = 'Le pays ou la ville n\'existe pas';
+                };
+
                 // check the errors that I cannot verify inside the failAction 
                 if (registered.rows[0]) {
                     errorList.message.emailUsed = 'Cet email existe déjà';
-                } 
+                };
 
                 for (let registered of nameRegistered.rows) {
                     if (pseudo.toLowerCase() === registered.pseudo.toLowerCase()) {
                         errorList.message.usernameUsed = 'Ce nom d\'utilisateur existe déjà';
                     }
-                }
+                };
 
-                if (errorList.message.usernameUsed || errorList.message.emailUsed) {
+                if (errorList.message.usernameUsed
+                    || errorList.message.emailUsed
+                    || errorList.message.wrongAddress) {
                     return h.response(errorList).code(400);
-                } 
+                };
+
+                // collect the address and coordinates through the API
+                const { address, position } = api.payload.items[0];
 
                 // hash the password and add salt to prevent hacking
                 const hashPassword = bcrypt.hashSync(password, 10);
 
                 // create a new user
-                const newRegistered = await db.query('SELECT * FROM add_usr($1, $2, $3)',
-                [email, pseudo, hashPassword]);
+                const newRegistered = await db.query('SELECT * FROM add_usr($1, $2, $3)', [email, pseudo, hashPassword]);
 
-
-                // link some descriptions to the new user
-                const newRegisteredDetail = await db.query('SELECT * FROM add_usr_detail($1, $2, $3, $4)', [newRegistered.rows[0].id, country, city, remote]);
-
+                // bind some descriptions to the new user
+                const newRegisteredDetail = await db.query('SELECT * FROM add_usr_detail($1, $2, $3, $4, $5, $6)', [newRegistered.rows[0].id, address.countryName, address.city, position.lat, position.lng, remote]);
 
                 console.log(newRegistered.rows[0]);
                 return 'ok enregistré'

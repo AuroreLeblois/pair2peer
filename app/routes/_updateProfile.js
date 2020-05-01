@@ -85,7 +85,7 @@ module.exports = {
                 let selectedLang= [request.payload.languages];
                 //les it
                 let itlangs = [request.payload.itLanguages];
-                let itLevel= [request.payload.itLanguages.itLevels];
+                let itLevel= [request.payload.itLevels];
                 //on peut me trouver via le filtre?
                 let searchMe= request.payload.searchable;
                 //les dispo
@@ -243,6 +243,7 @@ module.exports = {
                                             WHERE usr_id=$1
                                             AND it_lang_id =$2`,
                                             [itLevel,searchMe, userID,itLangID]);
+
                         }
                     }
                     };
@@ -289,6 +290,7 @@ module.exports = {
                     }
                 }
                 
+
 
                         //si il y a des erreurs
                         if(error.length>0){
