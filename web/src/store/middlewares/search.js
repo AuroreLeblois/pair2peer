@@ -1,6 +1,6 @@
 /* eslint-disable no-fallthrough */
 import axios from 'axios';
-import { actions, API_URI, getFiltersList } from 'src/store/actions';
+import { actions, API_URI, getFiltersList, getUsersList } from 'src/store/actions';
 import { getFiltersData } from 'src/store/utils';
 
 export default (store) => (next) => (action) => {
@@ -15,10 +15,9 @@ export default (store) => (next) => (action) => {
         ),
       ])
         .then(axios.spread((postRes, getRes) => {
-          // console.log(postRes);
           const filters = getFiltersData(getRes.data);
           store.dispatch(getFiltersList(filters));
-          console.log(filters);
+          store.dispatch(getUsersList(postRes.data));
         }))
         .catch((err) => {
           console.log(err.response);

@@ -13,10 +13,9 @@ const initialState = {
     level: '',
   },
   filters: {
-    it_languages: '',
-    language: '',
-    country: '',
-    city: '',
+    it_language: [],
+    language: [],
+    localisation: [],
   },
   users: {},
 };
@@ -36,10 +35,10 @@ export default (state = initialState, action = {}) => {
         user: action.data,
       };
     }
-    case actions.GET_USERS: {
+    case actions.GET_USERS_LIST: {
       return {
         ...state,
-        users: actions.users,
+        users: action.users,
       };
     }
     case actions.GET_FILTERS_LIST: {

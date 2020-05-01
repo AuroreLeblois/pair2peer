@@ -7,7 +7,7 @@ export const actions = {
   SUBMIT_LOGIN: 'actions/SUBMIT_LOGIN',
   GET_AUTHENTIFIED: 'actions/GET_AUTHENTIFIED',
   POST_SEARCH: 'actions/POST_SEARCH',
-  GET_USERS: 'actions/GET_USERS',
+  GET_USERS_LIST: 'actions/GET_USERS_LIST',
   GET_FILTERS_LIST: 'actions/GET_FILTERS_LIST',
 };
 
@@ -31,4 +31,8 @@ export const getUsers = () => (
 
 export const getFiltersList = (filters) => (
   { type: actions.GET_FILTERS_LIST, filters }
+);
+
+export const getUsersList = (users) => (
+  { type: actions.GET_USERS_LIST, users }
 );
