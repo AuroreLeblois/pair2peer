@@ -2,7 +2,7 @@ const Hapi = require('@hapi/hapi');
 const HapiAuthCookie = require('@hapi/cookie');
 const package = require('./package');
 const db = require('./app/models/db');
-
+require('dotenv').config();
 
 (async () => {
     const server = Hapi.server({
