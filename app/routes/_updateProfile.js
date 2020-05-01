@@ -2,7 +2,8 @@ const vision = require('@hapi/vision');
 const inert = require('@hapi/inert');
 const db = require('../models/db');
 const Joi = require('@hapi/joi');
-
+const Wreck= require('@hapi/wreck');
+const APIKEY= process.env.APIKEY;
 module.exports = {
     name: 'profile pages',
     register: async (server) => {
@@ -146,6 +147,10 @@ module.exports = {
                 //avant on vérifie que les input "required" sont conformes
                 if(city!==null&& country!==null && remote!==null||city!== undefined&& country!== undefined&& remote!== undefined){
                     //si le detail n'existe pas encore il faut les créer
+                    const api= await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}
+                    &apiKey=${APIKEY}`,{
+                        json:true
+                    });
                     const detailExist= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
                     //il n'existe pas=> on insert
                      if(!detailExist.rows[0]){
