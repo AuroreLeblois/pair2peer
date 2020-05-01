@@ -61,7 +61,9 @@ CREATE TABLE disponibility (
 );
 
 CREATE TABLE chat (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    chat_serial TEXT NOT NULL,
+    "name" TEXT
 );
 
 CREATE TABLE usr_message_chat (
