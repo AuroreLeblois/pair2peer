@@ -2,6 +2,6 @@
 
 BEGIN;
 
--- XXX Add DDLs here.
+DROP SEQUENCE chat_room_seq CASCADE;
 
 COMMIT;
