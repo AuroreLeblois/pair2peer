@@ -50,7 +50,7 @@
     "axios": "^0.19.2",
     "formik": "^2.1.4",
     "prop-types": "*",
-    "react": "*",
+    "react": "^16.13.1",
     "react-dom": "*",
     "react-google-recaptcha": "^2.0.1",
     "react-redux": "^7.2.0",
@@ -58,6 +58,7 @@
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.5",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.2"
+    "semantic-ui-react": "^0.88.2",
+    "yup": "^0.28.5"
   }
 }

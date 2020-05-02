@@ -9,6 +9,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 // Semantic-ui
 import 'semantic-ui-css/semantic.min.css';
 
+
 // == Import : local
 // Composants
 import App from 'src/components/App';
@@ -28,3 +29,4 @@ const rootReactElement = (
 const target = document.getElementById('root');
 // 3. Déclenchement du rendu de React (virtuel) => DOM (page web)
 render(rootReactElement, target);
+

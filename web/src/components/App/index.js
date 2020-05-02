@@ -6,10 +6,17 @@ import { Route, Switch } from 'react-router-dom';
 // == Import
 import Login from 'src/components/Login';
 import Profile from 'src/components/Profile';
-import C from 'src/components/Signup';
-import './styles.css';
 
 // Ajout d'une route /signup
+import Signup from 'src/components/Signup';
+import './styles.css';
+
+
+// ReCAPTCHA
+// import { loadReCaptcha } from 'react-recaptcha-google';
+  
+
+
 
 // == Composant
 const App = () => {
@@ -23,7 +30,7 @@ const App = () => {
           <Profile />
         </Route>
         <Route exact path="/signup">
-          <C />
+          <Signup />
         </Route>
       </Switch>
     </div>

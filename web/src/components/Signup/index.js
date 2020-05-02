@@ -3,70 +3,74 @@
 import React from 'react';
 // import ReactDOM from 'react-dom';
 // import PropTypes from 'prop-types';
-import { Form, Input, TextArea, Button, Select } from 'semantic-ui-react';
+// import { Form, Input, Button, Select } from 'semantic-ui-react';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+// import de Yup
+import * as Yup from 'yup';
 
+// Validation === On preferera utiliser Yup
+/** 
+const validate = values => {
+  const errors = {};
+  if (!values.firstName) {
+    errors.firstName = 'Required';
+  } else if (values.firstName.length > 15) {
+    errors.firstName = 'Must be 15 characters or less';
+  }
 
-// Pour le genre
+  if (!values.lastName) {
+    errors.lastName = 'Required';
+  } else if (values.lastName.length > 20) {
+    errors.lastName = 'Must be 20 characters or less';
+  }
 
-const genderOptions = [
-  { key: 'm', text: 'Male', value: 'male' },
-  { key: 'f', text: 'Female', value: 'female' },
-  { key: 'o', text: 'Other', value: 'other' },
-]
+  if (!values.email) {
+    errors.email = 'Required';
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = 'Invalid email address';
+  }
 
-
-// == Composant
-const C = () => {
-
-  return (
-  <Form>
-    <Form.Group widths='equal'>
-      <Form.Field
-        id='form-input-control-first-name'
-        control={Input}
-        label='First name'
-        placeholder='First name'
-      />
-      <Form.Field
-        id='form-input-control-last-name'
-        control={Input}
-        label='Last name'
-        placeholder='Last name'
-      />
-      <Form.Field
-        control={Select}
-        options={genderOptions}
-        label={{ children: 'Gender', htmlFor: 'form-select-control-gender' }}
-        placeholder='Gender'
-        search
-        searchInput={{ id: 'form-select-control-gender' }}
-      />
-    </Form.Group>
-    <Form.Field
-      id='form-input-control-error-email'
-      control={Input}
-      label='Email'
-      placeholder='joe@schmoe.com'
-      error={{
-        content: 'Please enter a valid email address',
-        pointing: 'below',
-      }}
-    />
-    <Form.Field
-      id='form-button-control-public'
-      control={Button}
-      content="S'inscrire"
-    />
-  </Form>
-  );
-};
-
-/**
-C.propTypes = {
-  value: PropTypes.func.isRequired,
-  handleChange: PropTypes.func.isRequired,
+  return errors;
 };
 */
 
+const SignupForm = () => {
+  return (
+    <Formik
+      initialValues={{ firstName: '', lastName: '', email: '' }}
+      validationSchema={Yup.object({
+        firstName: Yup.string()
+          .max(15, 'Must be 15 characters or less')
+          .required('Required'),
+        lastName: Yup.string()
+          .max(20, 'Must be 20 characters or less')
+          .required('Required'),
+        email: Yup.string()
+          .email('Invalid email address')
+          .required('Required'),
+      })}
+      onSubmit={(values, { setSubmitting }) => {
+        setTimeout(() => {
+          alert(JSON.stringify(values, null, 2));
+          setSubmitting(false);
+        }, 400);
+      }}
+    >
+      <Form>
+        <label htmlFor="firstName">First Name</label>
+        <Field name="firstName" type="text" />
+        <ErrorMessage name="firstName" />
+        <label htmlFor="lastName">Last Name</label>
+        <Field name="lastName" type="text" />
+        <ErrorMessage name="lastName" />
+        <label htmlFor="email">Email Address</label>
+        <Field name="email" type="email" />
+        <ErrorMessage name="email" />
+        <button type="submit">Submit</button>
+      </Form>
+    </Formik>
+  );
+};
+
 // == Export
-export default C;
+export default SignupForm;
