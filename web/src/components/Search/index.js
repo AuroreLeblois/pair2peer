@@ -1,6 +1,6 @@
 // == Import npm
 import React from 'react';
-import { Grid, Divider } from 'semantic-ui-react';
+import { Grid, Divider, Pagination } from 'semantic-ui-react';
 
 
 // == Import
@@ -11,8 +11,10 @@ import Results from './results';
 const Search = () => {
   return (
     <Grid>
-      <Filter />
-      <Results />
+      <Grid.Row>
+        <Filter />
+        <Results />
+      </Grid.Row>
     </Grid>
   );
 };

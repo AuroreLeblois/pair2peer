@@ -1,10 +1,13 @@
 // == Import npm
 import React, { useEffect } from 'react';
-import { Grid, Image, Card, Icon } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { API_URI, buildSearchData } from 'src/store/utils';
 import { getSearchData } from 'src/store/actions';
 import axios from 'axios';
+import { Grid, Card, Pagination, Container } from 'semantic-ui-react';
+
+// == Import component
+import Cards from './cards';
 
 // == Composant
 const Results = () => {
@@ -27,36 +30,32 @@ const Results = () => {
 
   useEffect(getUsersData, []);
 
-  const Cards = () => {
-    if (!users) {
-      return null;
-    }
-    return users.map((user) => (
-      <Card>
-        <Image src="https://react.semantic-ui.com/images/avatar/large/daniel.jpg" wrapped ui={false} />
-        <Card.Content>
-          <Card.Header>Daniel</Card.Header>
-          <Card.Meta>Joined in 2016</Card.Meta>
-          <Card.Description>
-            Daniel is a comedian living in Nashville.
-          </Card.Description>
-        </Card.Content>
-        <Card.Content extra>
-          <a>
-            <Icon name="user" />
-            10 Friends
-          </a>
-        </Card.Content>
-      </Card>
-    ));
-  };
-
+  const PaginationComponent = () => (
+    <Pagination
+      boundaryRange={0}
+      defaultActivePage={1}
+      ellipsisItem={null}
+      firstItem={null}
+      lastItem={null}
+      siblingRange={1}
+      totalPages={10}
+    />
+  );
 
   return (
     <Grid.Column width={12}>
-      <Card.Group itemsPerRow={3}>
-        <Cards />
-      </Card.Group>
+      <Grid>
+        <Grid.Row>
+          <Card.Group itemsPerRow={3}>
+            <Cards users={users} />
+          </Card.Group>
+        </Grid.Row>
+        <Grid.Row textAlign="right">
+          <Grid.Column>
+            <PaginationComponent />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     </Grid.Column>
   );
 };

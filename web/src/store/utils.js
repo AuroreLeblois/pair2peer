@@ -1,6 +1,4 @@
 /* eslint-disable import/prefer-default-export */
-import axios from 'axios';
-
 // == URI from server
 export const API_URI = 'http://localhost:3000';
 
@@ -15,3 +13,7 @@ export const buildSearchData = (data) => {
   users.users = data.users;
   return { filters, users };
 };
+
+export const firstLetterToUppercase = (string) => (
+  string.charAt(0).toUpperCase() + string.slice(1)
+);
