@@ -1,7 +1,7 @@
 // == Import npm
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Grid, Divider } from 'semantic-ui-react';
+
 
 // == Import
 import Filter from './filter';

@@ -19,16 +19,17 @@ import './styles.css';
 const App = () => {
   const user = useSelector((state) => state.user);
   const loginCheck = useCallback(() => {
-    if (user === '') {
+    if (!user) {
       return <Redirect to="/login" />;
     }
+    return <Search />;
   }, [user]);
 
 
   return (
     <div className="app">
       <Header />
-      <div className="content">
+      <div className="container">
         <Switch>
           <Route exact path="/login">
             <Login />
@@ -39,9 +40,7 @@ const App = () => {
           <Route exact path="/profile">
             <Profile />
           </Route>
-          <Route exact path="/search" render={loginCheck}>
-            <Search />
-          </Route>
+          <Route exact path="/search" render={loginCheck} />
         </Switch>
       </div>
       <Footer />

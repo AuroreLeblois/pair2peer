@@ -7,8 +7,8 @@ export const actions = {
   SUBMIT_LOGIN: 'actions/SUBMIT_LOGIN',
   GET_AUTHENTIFIED: 'actions/GET_AUTHENTIFIED',
   POST_SEARCH: 'actions/POST_SEARCH',
-  GET_USERS: 'actions/GET_USERS',
-  GET_FILTERS_LIST: 'actions/GET_FILTERS_LIST',
+  GET_USERS_LIST: 'actions/GET_USERS_LIST',
+  GET_SEARCH_DATA: 'actions/GET_SEARCH_DATA',
 };
 
 // == Actions creator
@@ -29,6 +29,10 @@ export const getUsers = () => (
   { type: actions.GET_USERS }
 );
 
-export const getFiltersList = (filters) => (
-  { type: actions.GET_FILTERS_LIST, filters }
+export const getSearchData = (filters, users) => {
+  return { type: actions.GET_SEARCH_DATA, filters, users };
+};
+
+export const getUsersList = (users) => (
+  { type: actions.GET_USERS_LIST, users }
 );
