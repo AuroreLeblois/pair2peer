@@ -1,6 +1,7 @@
 /* eslint-disable no-fallthrough */
 import axios from 'axios';
-import { actions, getAuthentified, syncLogin, API_URI } from 'src/store/actions';
+import { actions, getAuthentified, syncLogin } from 'src/store/actions';
+import { API_URI } from 'src/store/utils';
 
 export default (store) => (next) => (action) => {
   switch (action.type) {
@@ -12,7 +13,6 @@ export default (store) => (next) => (action) => {
         }, { withCredentials: true },
       )
         .then((res) => {
-          console.log(res);
           store.dispatch(getAuthentified(action.history, res.data));
           store.dispatch(syncLogin('password', ''));
         })

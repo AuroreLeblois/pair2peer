@@ -29,7 +29,7 @@
     "eslint-plugin-import": "*",
     "eslint-plugin-jsx-a11y": "*",
     "eslint-plugin-react": "*",
-    "eslint-plugin-react-hooks": "*",
+    "eslint-plugin-react-hooks": "^4.0.0",
     "file-loader": "*",
     "html-webpack-plugin": "*",
     "mini-css-extract-plugin": "*",

@@ -1,9 +1,8 @@
 import { actions } from 'src/store/actions';
 
 const initialState = {
-  email: '',
-  password: '',
-  user: {},
+  email: 'tony0@gmail.com',
+  password: 'azertyui',
   search: {
     remote: '',
     language: '',
@@ -17,7 +16,7 @@ const initialState = {
     language: [],
     localisation: [],
   },
-  users: {},
+  usersData: {},
 };
 
 
@@ -38,13 +37,14 @@ export default (state = initialState, action = {}) => {
     case actions.GET_USERS_LIST: {
       return {
         ...state,
-        users: action.users,
+        usersData: action.users,
       };
     }
-    case actions.GET_FILTERS_LIST: {
+    case actions.GET_SEARCH_DATA: {
       return {
         ...state,
         filters: action.filters,
+        usersData: action.users,
       };
     }
     default: {

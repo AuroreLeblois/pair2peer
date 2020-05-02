@@ -4,7 +4,13 @@
   "env": {
     "browser": true
   },
+  "plugins": [
+    // ...
+    "react-hooks"
+  ],
   "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
     "brace-style": ["error", "stroustrup"],
     "no-param-reassign": [
       "error",
