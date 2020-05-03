@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Card, Icon, Image, Label } from 'semantic-ui-react';
 import { firstLetterToUppercase } from 'src/store/utils';
 
@@ -8,13 +9,9 @@ const Cards = ({ users }) => {
   }
 
   return users.map((user) => (
-    <Card color="yellow" key={user.id}>
+    <Card fluid color="yellow" key={user.id}>
+      <Image src="http://fr.web.img4.acsta.net/r_640_360/newsv7/19/01/27/15/43/1278026.jpg" />
       <Card.Content>
-        <Image
-          floated="right"
-          size="mini"
-          src={user.picture}
-        />
         <Card.Header>{firstLetterToUppercase(user.pseudo)}</Card.Header>
         <Card.Meta>
           <span className="date"><Icon name="map marker" />{firstLetterToUppercase(user.city)}, {firstLetterToUppercase(user.country)}</span>
@@ -24,7 +21,7 @@ const Cards = ({ users }) => {
       <Card.Content extra>
         <Label.Group size="mini">
           {user.it_language.map((label) => (
-            <Label size="mini">{label.name}</Label>
+            <Label key={label.name} size="mini">{label.name}</Label>
           ))}
         </Label.Group>
       </Card.Content>

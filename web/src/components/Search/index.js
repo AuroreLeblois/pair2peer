@@ -13,6 +13,8 @@ const Search = () => {
     <Grid>
       <Grid.Row>
         <Filter />
+      </Grid.Row>
+      <Grid.Row>
         <Results />
       </Grid.Row>
     </Grid>
