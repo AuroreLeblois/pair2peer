@@ -89,7 +89,6 @@ module.exports = {
                 const query = request.payload;
                 const { page_nb, user_nb } = request.query;
 
-
                 // first filter, if key doesn't have any value, the pair key-value will be remove of the object
                 for (let item in query) {
                     if (!query[item]) {
@@ -97,48 +96,47 @@ module.exports = {
                     }
                 } 
 
-                filterQuery = [];
-
                 const keys = Object.keys(query);
                 const values = Object.values(query);
                 
+                // it will replace all special characters to struggle against SQL injection
                 const regex = /[*;$><&|?@="]/g;
+                protec = (value) => {
+                    return value.toString().replace(regex, "%20");
+                };
                 
-                // it will build the SQL query filter from the query into filterQuery
-                for (let index = 0; index < keys.length; index++) {
-                    // it will replace all special characters to struggle against SQL injection
-                    let value = values[index].toString();
-                    value = value.replace(regex, '%20');
-
+                // it will build the SQL query filter
+                let filter = values.map(( value, index ) => {
+                    value = protec(value);
                     if (keys[index] === 'language') {
                         // example : "language" ? 'français'
-                        filterQuery.push(`"${keys[index]}" ? '${value}' `);
+                        return `"${keys[index]}" ? '${value}' `;
                     } else if (keys[index] === 'it_language') {
                         // example : it_language @> '[{ "name": "javascript", "search": true }]'
-                        // the IT language must have search 'true' to be findable, it mean the user want to pair programming with this
-                        filterQuery.push(`${keys[index]} @> '[{"name":"${value}", "search":true}]' `);
+                        return `${keys[index]} @> '[{"name":"${value}", "search":true}]' `;
                     } else if (keys[index] === 'level') {
                         // exemple : it_language @> '[{ "name": "previous it_language.name", "level": 1 }]'
                         // add specific security to itName because values[index -1] doesn't have any protection
-                        let itName = values[index -1].toString().replace(regex, '%20');
-                        filterQuery.push(`it_language @> '[{"name":"${itName}", "level":${value}}]' `);
+                        return `it_language @> '[{"name":"${protec(values[index - 1])}", "level":${value}}]' `;
                     } else if (keys[index] === 'remote') {
                         // example : remote = true/ false
-                        filterQuery.push(`${keys[index]} = ${value} `);
+                        return `${keys[index]} = ${value} `;
                     } else {
                         // it will build the query from other input like country, city etc
-                        filterQuery.push(`${keys[index]} = '${value}' `);
+                        return `${keys[index]} = '${value}' `;
                     }
-                }    
-
-                // specific filter for other informations
-                const finalFilter = filterQuery.join('AND ');
+                }).join('AND ');    
 
                 // it will be the object response to the front
                 const info = {};
+                infoDetail = (maxUser, maxPage, user) => {
+                    info.maxUser = maxUser.rows[0];
+                    info.maxPage = maxPage.rows[0];
+                    info.users = user.rows;
+                }
                 
                 // depend to the filter, it will send the informations
-                if (!finalFilter) {
+                if (!filter) {
                     const maxUser = await db.query('SELECT COUNT(*) AS count FROM usr_profile');
                     const maxPage = await db.query(`SELECT CEILING(COUNT(*)/$1::float) AS count FROM usr_profile`, [user_nb]);
 
@@ -154,23 +152,20 @@ module.exports = {
                         [user_nb, page_nb]
                     );
 
-                    info.maxUser = maxUser.rows[0];
-                    info.maxPage = maxPage.rows[0];
-                    info.users = user.rows;
-
+                    infoDetail(maxUser, maxPage, user);
                     return info;
                 } else {
                     const maxUser = await db.query(`
                         SELECT COUNT(*) AS count FROM (
                             SELECT ROW_NUMBER() OVER (ORDER BY "id"), * FROM usr_profile 
-                            WHERE ${finalFilter}
+                            WHERE ${filter}
                         ) as count_user;`
                     );
 
                     const maxPage = await db.query(`
                         SELECT CEILING(COUNT(*)/$1::float) AS count FROM (
                             SELECT ROW_NUMBER() OVER (ORDER BY "id"), * FROM usr_profile 
-                            WHERE ${finalFilter}
+                            WHERE ${filter}
                         ) as count_max_page;`,
                         [user_nb]
                     );
@@ -181,17 +176,14 @@ module.exports = {
                                 ROW_NUMBER() OVER (ORDER BY "id"),
                                 *
                             FROM usr_profile
-                            WHERE ${finalFilter}) as byrow
+                            WHERE ${filter}) as byrow
                         WHERE "row_number" > $1 * ($2 - 1)
                         ORDER BY "row_number" ASC
                         LIMIT $1`,
                         [user_nb, page_nb]
                     );
 
-                    info.maxUser = maxUser.rows[0];
-                    info.maxPage = maxPage.rows[0];
-                    info.users = user.rows;
-
+                    infoDetail(maxUser, maxPage, user);
                     return info;
                 }          
             }
