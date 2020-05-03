@@ -1,19 +1,9 @@
-const vision = require('@hapi/vision');
-const inert = require('@hapi/inert');
 const db = require('../models/db');
 const Joi = require('@hapi/joi');
 
 module.exports = {
     name: 'filtered pages',
-    
     register: async (server) => {
-        await server.register([vision, inert]);
-
-        // server.views({
-        //     relativeTo: __dirname + '/..',
-        //     path: 'templates',
-        //     engines : { pug },
-        // });
 
         server.route({
             method: 'GET',
@@ -34,9 +24,6 @@ module.exports = {
                 const lang = await db.query('SELECT * FROM all_language');
                 const localisation = await db.query('SELECT * FROM all_country_city');
                 const itLang = await db.query('SELECT * FROM all_it_language');
-                
-                const maxUser = await db.query('SELECT COUNT(*) AS count FROM usr_profile');
-                const maxPage = await db.query(`SELECT CEILING(COUNT(*)/$1::float) AS count FROM usr_profile`, [user_nb]);
 
                 const user = await db.query(`
                     SELECT *
@@ -50,12 +37,11 @@ module.exports = {
                     [user_nb, page_nb]
                 );
                 
+                // build the response to the front
                 const info = {};
-                info.language = lang.rows[0];
+                info.language = lang.rows[0].name;
                 info.localisation = localisation.rows;
-                info.it_language = itLang.rows[0];
-                info.maxUser = maxUser.rows[0];
-                info.maxPage = maxPage.rows[0];
+                info.it_language = itLang.rows[0].name;
                 info.users = user.rows
 
                 return info
@@ -130,8 +116,8 @@ module.exports = {
                 // it will be the object response to the front
                 const info = {};
                 infoDetail = (maxUser, maxPage, user) => {
-                    info.maxUser = maxUser.rows[0];
-                    info.maxPage = maxPage.rows[0];
+                    info.maxUser = maxUser.rows[0].count;
+                    info.maxPage = maxPage.rows[0].count;
                     info.users = user.rows;
                 }
                 

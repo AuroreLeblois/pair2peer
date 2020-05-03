@@ -1,23 +1,19 @@
-const vision = require('@hapi/vision');
-const inert = require('@hapi/inert');
-const pug = require('pug');
 const db = require('../models/db');
+const Joi = require('@hapi/joi');
 
 module.exports = {
     name: 'admin pages',
     register: async (server) => {
-        await server.register([vision, inert]);
-
 
         server.route({
             method: 'GET',
             path: '/admin',
             options: {
-                auth: {
-                    strategy: 'base',
-                    mode: 'required',
-                    scope: 'admin'
-                },
+                // auth: {
+                //     strategy: 'base',
+                //     mode: 'required',
+                //     scope: 'admin'
+                // },
                 description: 'Admin\'s page',
                 tags: ['api', 'admin']
             },
@@ -39,11 +35,11 @@ module.exports = {
             method : 'POST',
             path: '/admin',
             options: {
-                auth: {
-                    strategy: 'base',
-                    mode: 'required',
-                    scope: 'admin'
-                },
+                // auth: {
+                //     strategy: 'base',
+                //     mode: 'required',
+                //     scope: 'admin'
+                // },
                 description: 'Target\'s admin page to add language or it_language',
                 tags: ['api', 'admin'],
                 validate: {

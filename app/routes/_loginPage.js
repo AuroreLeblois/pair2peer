@@ -1,21 +1,11 @@
-const vision = require('@hapi/vision');
-const inert = require('@hapi/inert');
 const bcrypt = require('bcrypt');
 const db = require('../models/db');
 const Joi = require('@hapi/joi');
 const Wreck = require('@hapi/wreck');
 
-
 module.exports = {
     name: 'logs pages',
     register: async (server) => {
-        await server.register([vision, inert]);
-
-        // server.views({
-        //     relativeTo: __dirname + '/..',
-        //     path: 'templates',
-        //     engines : { pug }
-        // });
 
         server.route({
             method: 'GET',
@@ -26,7 +16,7 @@ module.exports = {
             },
             handler: function (request, h) {
     
-                return h.view('login');
+                return 'à définir';
             }
         });
 
@@ -103,7 +93,7 @@ module.exports = {
             },
             handler: (request, h) => {
 
-                return h.view('signup');
+                return 'à définir';
             }
         });
 
