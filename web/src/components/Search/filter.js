@@ -3,23 +3,26 @@
 import React from 'react';
 import { Button, Checkbox, Form, Input, Select, Grid } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
+import { firstLetterToUppercase } from 'src/store/utils';
 
 // == Import
 
 // == Composant
 const Filter = () => {
+  // Key to increment for select inputs
   let key = 1;
+
   const { filters } = useSelector((state) => state);
 
   const itOptions = () => (filters.it_language.map((language) => ({
     key: key++,
-    text: language,
+    text: firstLetterToUppercase(language),
     value: language,
   })));
 
   const langOptions = () => (filters.language.map((language) => ({
     key: key++,
-    text: language,
+    text: firstLetterToUppercase(language),
     value: language,
   })));
 
@@ -34,6 +37,11 @@ const Filter = () => {
     { key: '8', text: '8', value: '8' },
     { key: '9', text: '9', value: '9' },
     { key: '10', text: '10', value: '10' },
+  ];
+
+  const remoteOptions = [
+    { key: '1', text: 'Remote', value: 'true' },
+    { key: '2', text: 'Rencontre', value: 'false' },
   ];
 
   return (
@@ -73,14 +81,10 @@ const Filter = () => {
           />
         </Form.Field>
         <Form.Field>
-          <Checkbox
+          <Select
             name="remote"
-            label="Remote"
-          />
-        </Form.Field>
-        <Form.Field>
-          <Checkbox
-            label="IRL"
+            options={remoteOptions}
+            placeholder="Remote"
           />
         </Form.Field>
         <Button type="submit">Filtrer</Button>

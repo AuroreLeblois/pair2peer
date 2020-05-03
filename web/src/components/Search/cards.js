@@ -8,7 +8,7 @@ const Cards = ({ users }) => {
   }
 
   return users.map((user) => (
-    <Card color="yellow" key={user.id}>
+    <Card fluid color="yellow" key={user.id}>
       <Card.Content>
         <Image
           floated="right"
@@ -24,7 +24,7 @@ const Cards = ({ users }) => {
       <Card.Content extra>
         <Label.Group size="mini">
           {user.it_language.map((label) => (
-            <Label size="mini">{label.name}</Label>
+            <Label key={label.name} size="mini">{label.name}</Label>
           ))}
         </Label.Group>
       </Card.Content>

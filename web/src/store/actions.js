@@ -29,9 +29,9 @@ export const getUsers = () => (
   { type: actions.GET_USERS }
 );
 
-export const getSearchData = (filters, users) => {
-  return { type: actions.GET_SEARCH_DATA, filters, users };
-};
+export const getSearchData = (filters, users) => (
+  { type: actions.GET_SEARCH_DATA, filters, users }
+);
 
 export const getUsersList = (users) => (
   { type: actions.GET_USERS_LIST, users }

@@ -18,11 +18,11 @@ import './styles.css';
 // == Composant
 const App = () => {
   const user = useSelector((state) => state.user);
-  const loginCheck = useCallback(() => {
+  const loginCheck = useCallback((path, component) => {
     if (!user) {
-      return <Redirect to="/login" />;
+      return <Redirect to={path} />;
     }
-    return <Search />;
+    return component;
   }, [user]);
 
 
@@ -40,7 +40,7 @@ const App = () => {
           <Route exact path="/profile">
             <Profile />
           </Route>
-          <Route exact path="/search" render={loginCheck} />
+          <Route exact path="/search" render={() => loginCheck('/login', <Search />)} />
         </Switch>
       </div>
       <Footer />
