@@ -1,20 +1,45 @@
 // == Import npm
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Menu, Icon, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { actions } from 'src/store/actions';
 
 // == Import
 import './styles.css';
 
 // == Composant
 const Header = () => {
-  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state);
 
-  const handleClickSearch = () => {
-    dispatch({ type: actions.POST_SEARCH });
-  };
+  const NoUser = () => (
+    <>
+      <Menu.Item>
+        <Link to="/signup">
+          <Button color="red" content="S'inscrire" />
+        </Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to="/login">
+          <Button content="Se Connecter" />
+        </Link>
+      </Menu.Item>
+    </>
+  )
+
+  const UserConnected = () => (
+    <>
+      <Menu.Item>
+        <Link to="/profile">
+          <Button content="Profile" />
+        </Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to="/logout">
+          <Button color="red" content="Déconnexion" />
+        </Link>
+      </Menu.Item>
+    </>
+  );
 
   return (
     <Menu stackable secondary inverted>
@@ -31,20 +56,11 @@ const Header = () => {
         <Menu.Item name="about">A Propos</Menu.Item>
         <Menu.Item name="contact">Contact</Menu.Item>
         <Menu.Item name="search">
-          <Link to="/search" onClick={handleClickSearch}>
+          <Link to="/search">
             Search
           </Link>
         </Menu.Item>
-        <Menu.Item>
-          <Link to="/signup">
-            <Button color="red" content="S'inscrire" />
-          </Link>
-        </Menu.Item>
-        <Menu.Item>
-          <Link to="/login">
-            <Button content="Se Connecter" />
-          </Link>
-        </Menu.Item>
+        {(user) ? <UserConnected /> : <NoUser />}
       </Menu.Menu>
     </Menu>
   );

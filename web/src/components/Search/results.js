@@ -2,11 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { Grid, Card, Pagination } from 'semantic-ui-react';
+import { Grid, Card, Pagination, Message } from 'semantic-ui-react';
 
 // == import utils/actions
-import { API_URI, buildSearchData } from 'src/store/utils';
-import { getSearchData } from 'src/store/actions';
+import { API_URI } from 'src/store/utils';
+import { getUsersList } from 'src/store/actions';
 
 // == Import component
 import Cards from './cards';
@@ -14,9 +14,11 @@ import Cards from './cards';
 // == Composant
 const Results = () => {
   const [activePage, setActivePage] = useState(1);
+  // pending MaxPage waiting from axios
   const [pendingMaxPage, setPendingMaxPage] = useState(10);
 
-  const users = useSelector((state) => state.usersData.users);
+  const { usersData, search } = useSelector((state) => state);
+
   const maxPage = useSelector((state) => {
     if (!state.usersData.maxPage) {
       return pendingMaxPage;
@@ -31,20 +33,25 @@ const Results = () => {
   };
 
   const getUsersData = () => {
-    axios.get(
+    axios.post(
       `${API_URI}/search?page_nb=${activePage}&user_nb=12`,
+      search,
       { withCredentials: true },
     )
       .then((res) => {
-        const data = buildSearchData(res.data);
-        dispatch(getSearchData(data.filters, data.users));
+        const data = res.data
+        const usersData = {};
+        usersData.maxPage = data.maxPage.count;
+        usersData.maxUsers = data.maxUser.count;
+        usersData.users = data.users;
+        dispatch(getUsersList(usersData));
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  useEffect(getUsersData, [activePage]);
+  useEffect(getUsersData, [activePage, search]);
 
   const PaginationComponent = () => (
     <Pagination
@@ -60,20 +67,21 @@ const Results = () => {
   );
 
   return (
-    <Grid.Column width={12}>
-      <Grid>
-        <Grid.Row>
-          <Card.Group itemsPerRow={3}>
-            <Cards users={users} />
-          </Card.Group>
-        </Grid.Row>
-        <Grid.Row textAlign="right">
-          <Grid.Column>
-            <PaginationComponent />
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </Grid.Column>
+    <Grid>
+      <Grid.Row centered>
+        <Message attached color="black">{usersData.maxUsers} développeurs disponibles</Message>
+      </Grid.Row>
+      <Grid.Row>
+        <Card.Group itemsPerRow={4}>
+          <Cards users={usersData.users} />
+        </Card.Group>
+      </Grid.Row>
+      <Grid.Row textAlign="right">
+        <Grid.Column>
+          <PaginationComponent />
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
   );
 };
 

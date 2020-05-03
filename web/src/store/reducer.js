@@ -40,11 +40,25 @@ export default (state = initialState, action = {}) => {
         usersData: action.users,
       };
     }
-    case actions.GET_SEARCH_DATA: {
+    case actions.GET_FILTERS_LIST: {
       return {
         ...state,
         filters: action.filters,
-        usersData: action.users,
+      };
+    }
+    case actions.SUBMIT_FILTERS_SEARCH: {
+      return {
+        ...state,
+        usersData: actions.users,
+      };
+    }
+    case actions.SYNC_SEARCH_INPUTS: {
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          [action.name]: action.value,
+        },
       };
     }
     default: {
