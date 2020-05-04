@@ -4,7 +4,13 @@
   "description": "programing with friends",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:web": "cd web/ && yarn start",
+
+    "start": "PGDATABASE=apotest PGPASSWORD=apotest PGUSER=apotest node-dev server.js",
+
+    "startBis": "PGDATABASE=apotheosePP PGPASSWORD=js4life node server.js"
+
   },
   "repository": {
     "type": "git",
@@ -21,6 +27,10 @@
     "@hapi/hapi": "^19.1.1",
     "@hapi/inert": "^6.0.1",
     "@hapi/vision": "^6.0.0",
+    "@hapi/wreck": "^17.0.0",
+    "bcrypt": "^4.0.1",
+    "dotenv": "^8.2.0",
+    "email-validator": "^2.0.4",
     "hapi-swagger": "^13.0.0",
     "pg": "^8.0.3",
     "react": "^16.13.1"
