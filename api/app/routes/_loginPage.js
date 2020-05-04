@@ -193,14 +193,18 @@ module.exports = {
                 const hashPassword = bcrypt.hashSync(password, 10);
 
                 // create a new user
-                const newRegistered = await db.query('SELECT * FROM add_usr($1, $2, $3)', [email, pseudo, hashPassword]);
+                const newRegistered = await db.query('SELECT * FROM add_usr($1, $2, $3)', [email, pseudo.toLowerCase(), hashPassword]);
+
+                const userId = newRegistered.rows[0].id;
 
                 // bind some descriptions to the new user
-                const newRegisteredDetail = await db.query('SELECT * FROM add_usr_detail($1, $2, $3, $4, $5, $6)', [newRegistered.rows[0].id, address.countryName.toLowerCase(), address.city.toLowerCase(), position.lat, position.lng, remote]);
+                const newRegisteredDetail = await db.query('SELECT * FROM add_usr_detail($1, $2, $3, $4, $5, $6)', [userId, address.countryName.toLowerCase(), address.city.toLowerCase(), position.lat, position.lng, remote]);
 
-                console.log(newRegistered.rows[0]);
-                return 'ok enregistré'
-                // return h.redirect('/login');
+                // collect user informations to send to the front
+                const newUser = await db.query('SELECT * FROM usr_profile WHERE id = $1', [userId]);
+
+                const newUserProfile = newUser.rows[0]
+                return newUserProfile;
             }
         })
     }
