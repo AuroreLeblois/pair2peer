@@ -103,11 +103,11 @@ module.exports = {
                 //le pseudo
                 if(pseudo!== undefined
                     ||pseudo!== null
-                    ||pseudo.length>0 && pseudo!==result.rows[0].pseudo){
+                    ||pseudo.length>0 && pseudo.toLowerCase()!==result.rows[0].pseudo){
                     //oui mais le pseudo doit être unique
-                    pseudoExists= await db.query(`SELECT pseudo FROM usr WHERE pseudo= $1;` ,[pseudo]);
+                    pseudoExists= await db.query(`SELECT pseudo FROM usr WHERE pseudo= $1;` ,[pseudo.toLowerCase()]);
                     if(!pseudoExists.rows[0]){
-                    await db.query(`UPDATE usr SET pseudo= ${pseudo} WHERE usr.id= $1;`[userID]);
+                    await db.query(`UPDATE usr SET pseudo= ${pseudo.toLowerCase()} WHERE usr.id= $1;`[userID]);
                     }
                     //si le pseudo existe=> on le dit à l'utilisateur
                     else{
@@ -127,8 +127,9 @@ module.exports = {
                         //est ce que le mdp ===  validation?
                         if(password===validatePassword){
                             console.log('le mdp est le meme que la validation')
+                            const hashPassword = bcrypt.hashSync(password, 10);
                             await db.query(`UPDATE usr
-                                            SET "password"= ${password} 
+                                            SET "password"= ${hashPassword} 
                                             WHERE "id"=${userID}`);
                         }
                         else{
