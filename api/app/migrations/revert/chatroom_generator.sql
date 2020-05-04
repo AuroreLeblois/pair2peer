@@ -2,6 +2,6 @@
 
 BEGIN;
 
-DROP SEQUENCE chat_room_seq CASCADE;
+DROP SEQUENCE chat_room_seq;
 
 COMMIT;

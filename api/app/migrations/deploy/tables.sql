@@ -22,6 +22,7 @@ CREATE TABLE usr_detail (
     "remote" BOOLEAN NOT NULL,
     experience TEXT,
     "description" TEXT,
+    disponibility INT DEFAULT 0,
     usr_id INT NOT NULL REFERENCES usr(id)
     ON DELETE CASCADE
 );

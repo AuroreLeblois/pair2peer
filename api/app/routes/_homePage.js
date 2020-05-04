@@ -1,17 +1,9 @@
-const vision = require('@hapi/vision');
-const inert = require('@hapi/inert');
 const react= require('react');
+const db = require('../models/db');
 
 module.exports = {
     name: 'home pages',
     register: async (server) => {
-        await server.register([vision, inert]);
-
-        // server.views({
-        //     relativeTo: __dirname + '/..',
-        //     path: 'templates',
-        //     engines : { react },
-        // });
 
         server.route({
             method: 'GET',
@@ -20,9 +12,21 @@ module.exports = {
                 description: 'Homepage',
                 tags: ['api', 'homepage'] 
             },
-            handler: function (request, h) {
-                return 'bienvenue'
-               // return h.view('home');
+            handler: async (request, h) => {
+                
+                // collect general informations to send to the front
+                const lang = await db.query('SELECT * FROM all_language');
+                const localisation = await db.query('SELECT * FROM all_country_city');
+                const itLang = await db.query('SELECT * FROM all_it_language');
+                const maxUser = await db.query('SELECT COUNT(*) AS count FROM usr_profile');
+
+                const info = {};
+                info.language = lang.rows[0].name;
+                info.it_language = itLang.rows[0].name;
+                info.maxUser = maxUser.rows[0].count;
+                info.localisation = localisation.rows;
+
+                return info;
             }
         });
 
@@ -30,11 +34,11 @@ module.exports = {
             method: 'GET',
             path: '/concept',
             options: {
-                // auth: {
-                    // strategy: 'base',
-                    // mode: 'required',
-                   // scope: ['user', 'admin']
-                // },
+                auth: {
+                    strategy: 'base',
+                    mode: 'required',
+                   scope: ['user', 'admin']
+                },
                 description: 'Example : restricted page for users authentified',
                 tags: ['api', 'concept']
             },

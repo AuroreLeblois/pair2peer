@@ -1,96 +1,195 @@
-/**
- * Gérer les champs de formulaire avec Formik
- */
+// == Import
 
-import React from "react";
-import ReactDOM from "react-dom";
-import { useFormik } from "formik";
+import React, { useEffect } from 'react';
+// import ReactDOM from 'react-dom';
+import { Formik, Form, useField } from 'formik';
 import './styles.css';
+// import styled from '@emotion/styled';
 
+import * as Yup from 'yup';
+
+
+// Semantic
+import { Button, Checkbox } from 'semantic-ui-react';
+
+/**
+// Validation ==> On passera directement par Yup pour la validation des forms
+
+const validate = values => {
+  const errors = {};
+  if (!values.firstName) {
+    errors.firstName = 'Required';
+  } else if (values.firstName.length > 15) {
+    errors.firstName = 'Must be 15 characters or less';
+  }
+
+  if (!values.lastName) {
+    errors.lastName = 'Required';
+  } else if (values.lastName.length > 20) {
+    errors.lastName = 'Must be 20 characters or less';
+  }
+
+  if (!values.email) {
+    errors.email = 'Required';
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = 'Invalid email address';
+  }
+
+  return errors;
+};
+*/
+const MyTextInput = ({ label, ...props }) => {
+  // useField () renvoie [formik.getFieldProps (), formik.getFieldMeta ()]
+  // que nous pouvons étendre sur <input> et remplacer ErrorMessage.
+  const [field, meta] = useField(props);
+  return (
+    <>
+      <label htmlFor={props.id || props.name}>{label}</label>
+      <input className="text-input" {...field} {...props} />
+      {meta.touched && meta.error ? (
+        <div className="error">{meta.error}</div>
+      ) : null}
+    </>
+  );
+};
+
+const MyCheckbox = ({ children, ...props }) => {
+  // On dit a useField quel type d'input c'est
+  // puisque React traite les radios et les cases à cocher différemment
+  // que les inputs/select/textarea.
+  const [field, meta] = useField({ ...props, type: 'checkbox' });
+  return (
+    <>
+      <label className="checkbox">
+        <input type="checkbox" {...field} {...props} />
+        {children}
+      </label>
+      {meta.touched && meta.error ? (
+        <div className="error">{meta.error}</div>
+      ) : null}
+    </>
+  );
+};
+
+
+
+// A faire OU utiliser semantic Ui
 /** 
-// CAPTCHA
-import ReCAPTCHA from "react-google-recaptcha";
+const StyledSelect = styled.select`
+  /** ... * /
+`;
 
-// Tentative de captcha
-function onChange(value) {
-  console.log("Captcha value:", value);
-}
- 
-ReactDOM.render(
-  <ReCAPTCHA
-    sitekey="Your client site key"
-    onChange={onChange}
-  />,
-  document.body
-);
+const StyledErrorMessage = styled.div`
+  color: red;
+`;
+
+const StyledLabel = styled.label`
+ /** ...* /
+`;
 
 */
 
 
-
 const Signup = () => {
-  const formik = useFormik({
-    initialValues: { prenom:"Valeur par defaut" ,nom:"Valeur par defaut" ,email: "Valeur@pardefaut.com", password: "Valeur par defaut", city: "Valeur par defaut" },
-
-// email invalide avec message d'erreur si il n'est pas aux "normes"
-
-    onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
-    }
-  });
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <label htmlFor="nom">Nom</label>
-      <input
-        id="nom"
-        name="nom"
-        type="nom"
-        onChange={formik.handleChange}
-        value={formik.values.nom}
-      />
-      <label htmlFor="prenom">Prenom</label>
-      <input
-        id="prenom"
-        name="prenom"
-        type="prenom"
-        onChange={formik.handleChange}
-        value={formik.values.prenom}
-      />
-      <label htmlFor="email">Email</label>
-      <input
-        id="email"
-        name="email"
-        type="email"
-        onChange={formik.handleChange}
-        value={formik.values.email}
-      />
-      <label htmlFor="password">Password</label>
-      <input
-        id="password"
-        name="password"
-        type="password"
-        onChange={formik.handleChange}
-        value={formik.values.password}
-      />
-      <label htmlFor="city">Ville :</label>
-      <input
-        id="city"
-        name="city"
-        type="city"
-        onChange={formik.handleChange}
-        value={formik.values.city}
-      />
-      <button type="submit">S'inscrire</button>
-      
-    </form>
+    <Formik
+      initialValues={
+        {
+          pseudo:'',
+          email: '',
+          password:'',
+          ville:'',
+          pays:'',
+          validationPassword:'',
+          remote:'',
+          acceptedTerms: false, // Pour la checkbox
+        }
+      }
+      validationSchema = {
+        Yup.object (
+          {
+            pseudo: Yup.string()
+            .max(15, 'Must be 15 characters or less')
+            .required('Required'),
+            password: Yup.string()
+            .max(20, 'Must be 20 characters or less')
+            .required('Required'),
+            validationPassword: Yup.string()
+            .max(20, 'Must be 20 characters or less')
+            .required('Required'),
+            email: Yup.string()
+            .email('Invalid email address')
+            .required('Required'),
+            remote: Yup.boolean()
+            .required('Required')
+            .oneOf([true], 'You must accept the terms and conditions.'),
+            //acceptedTerms: Yup.boolean()
+            //.required('Required')
+            //.oneOf([true], 'You must accept the terms and conditions.'), // Pour une future Charte de bonne conduite par exemple
+          }
+        )
+      }
+      onSubmit = {
+        (values, { setSubmitting } ) => {
+          setTimeout(() => {
+            alert(JSON.stringify(values, null, 2));
+            setSubmitting(false);
+          }, 0
+          );
+      }}
+    >
+      <Form className = "ui form">
+          <MyTextInput
+            label="Pseudo"
+            name="pseudo"
+            type="text"
+            placeholder="Jane57"
+          />
+          <MyTextInput
+            label="Mot de passe"
+            name="password"
+            type="password"
+            placeholder=""
+          />
+          <MyTextInput
+            label="Confirmation de mot de passe"
+            name="password"
+            type="password"
+            placeholder=""
+          />
+          <MyTextInput
+            label="Mail"
+            name="email"
+            type="email"
+            placeholder="jane@formik.com"
+          />
+          <MyTextInput
+            label="Pays"
+            name="pays"
+            type="text"
+            placeholder="France"
+          />
+          <MyTextInput
+          label="Ville"
+          name="ville"
+          type="text"
+          placeholder="Strasbourg"
+        />
+          <MyCheckbox
+            name="remote"
+            type="checkbox"            
+          >
+            Voulez-vous être en remote ?
+          </MyCheckbox>
+          {/* <MyCheckbox name="acceptedTerms">
+            J'accepte les conditions d'utilisations
+          </MyCheckbox> */}
+
+          <button className="ui button" type="submit">S'inscrire</button>
+        </Form>
+    </Formik>
   );
 };
 
-function App() {
-  return <Signup />;
-}
-
-const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
-
+// == Export
 export default Signup;

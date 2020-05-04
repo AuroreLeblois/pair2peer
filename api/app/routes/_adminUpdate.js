@@ -10,7 +10,7 @@ module.exports = {
            
         server.route({
                 method: 'GET',
-                path: '/update/profile/{speudo}',
+                path: '/update/profile/{pseudo}',
                 options: {
                     auth: {
                         strategy: 'base',
@@ -22,10 +22,10 @@ module.exports = {
                 },
                 handler: async (request, h) => {
                    
-                    const pseudo= request.params.speudo;
+                    const pseudo= request.params.pseudo;
                     const result = await db.query(`SELECT * FROM usr WHERE pseudo = $1`, [pseudo]);
                     if(!result.rows[0]){
-                        return h.responde.code(400);
+                        return h.response.code(400);
                     }
                     const user= result.rows[0];
                     return  user;
@@ -35,7 +35,7 @@ module.exports = {
             });
             server.route({
                 method: 'PATCH',
-                path: '/update/profile/{speudo}',
+                path: '/update/profile/{pseudo}',
                 options: {
                     auth: {
                         strategy: 'base',
@@ -47,7 +47,7 @@ module.exports = {
                 },
                 handler: async (request, h) => {
                     
-                        const pseudo= request.params.speudo;
+                        const pseudo= request.params.pseudo;
                         const result = await db.query(`SELECT * FROM usr 
                                                         WHERE pseudo = $1`, [pseudo]);
                         const userID= result.rows[0].id;
@@ -87,7 +87,7 @@ module.exports = {
 
             server.route({
                 method: 'DELETE',
-                path: '/delete/profile/{speudo}',
+                path: '/delete/profile/{pseudo}',
                 options: {
                     auth: {
                         strategy: 'base',
