@@ -17,7 +17,7 @@ module.exports = {
                 description: 'Admin\'s page',
                 tags: ['api', 'admin']
             },
-            handler: (request, h) => {
+            handler: async (request, h) => {
 
                 // send basic informations to the front
                 const language = await db.query('SELECT * FROM all_language');
