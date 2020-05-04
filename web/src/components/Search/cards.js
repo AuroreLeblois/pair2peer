@@ -25,6 +25,13 @@ const Cards = ({ users }) => {
           ))}
         </Label.Group>
       </Card.Content>
+      <Card.Content extra>
+        <Label.Group size="mini">
+          {user.language.map((language) => (
+            <Label key={language} size="mini">{language}</Label>
+          ))}
+        </Label.Group>
+      </Card.Content>
     </Card>
   ));
 };
