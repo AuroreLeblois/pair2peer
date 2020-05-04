@@ -10,7 +10,7 @@ import * as Yup from 'yup';
 
 
 // Semantic
-import { Button, Checkbox } from 'semantic-ui-react';
+// import { Button, Checkbox } from 'semantic-ui-react';
 
 /**
 // Validation ==> On passera directement par Yup pour la validation des forms
@@ -98,6 +98,8 @@ const Signup = () => {
           pseudo:'',
           email: '',
           password:'',
+          ville:'',
+          pays:'',
           validationPassword:'',
           remote:'',
           acceptedTerms: false, // Pour la checkbox
@@ -144,10 +146,10 @@ const Signup = () => {
             placeholder="Jane57"
           />
           <MyTextInput
-            label="Last Name"
+            label="password"
             name="lastName"
             type="text"
-            placeholder="Doe"
+            placeholder="***"
           />
           <MyTextInput
             label="Email Address"
@@ -155,6 +157,18 @@ const Signup = () => {
             type="email"
             placeholder="jane@formik.com"
           />
+          <MyTextInput
+            label="pays"
+            name="pays"
+            type="text"
+            placeholder="France"
+          />
+          <MyTextInput
+          label="ville"
+          name="ville"
+          type="text"
+          placeholder="Strasbourg"
+        />
           <MyCheckbox name="remote">
             Voulez-vous être en remote ?
           </MyCheckbox>
@@ -162,7 +176,7 @@ const Signup = () => {
             J'accepte les conditions d'utilisations
           </MyCheckbox>
 
-          <button type="submit">Submit</button>
+          <button type="submit">S'inscrire</button>
         </Form>
     </Formik>
   );
