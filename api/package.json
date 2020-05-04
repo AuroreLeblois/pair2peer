@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:web": "cd web/ && yarn start"
+    "start:web": "cd web/ && yarn start",
+    "start": "PGDATABASE=apotheosePP PGPASSWORD=js4life node api/server.js"
   },
   "repository": {
     "type": "git",
