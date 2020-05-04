@@ -9,7 +9,7 @@ module.exports = {
 
         server.route({
             method: 'GET',
-            path: '/who-are-we',
+            path: '/about',
             config: {
                 description: 'Team Page',
                 tags: ['api', 'team'] 
