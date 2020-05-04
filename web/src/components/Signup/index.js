@@ -1,10 +1,14 @@
 // == Import
 
 import React, { useEffect } from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import { Formik, Form, useField } from 'formik';
+
 // import styled from '@emotion/styled';
+
 import * as Yup from 'yup';
+
+
 // Semantic
 import { Button, Checkbox } from 'semantic-ui-react';
 
@@ -133,19 +137,33 @@ const Signup = () => {
       }}
     >
       <Form>
-        <MyTextInput label="pseudo" />
-          <input placeholder='pseudo' />
-        <MyTextInput label ="password" />
-          <input placeholder='password' />
-        <MyTextInput label ="validationPassword" />
-          <input placeholder='validationPassword' />
-        <MyTextInput label ="email" />
-          <input placeholder='email' />
-        <MyCheckbox name="acceptedTerms">
-            J'accepte les conditions d'utilisation
-        </MyCheckbox>
-        <Button type='submit'>S'inscrire</Button>
-      </Form>
+          <MyTextInput
+            label="pseudo"
+            name="pseudo"
+            type="text"
+            placeholder="Jane57"
+          />
+          <MyTextInput
+            label="Last Name"
+            name="lastName"
+            type="text"
+            placeholder="Doe"
+          />
+          <MyTextInput
+            label="Email Address"
+            name="email"
+            type="email"
+            placeholder="jane@formik.com"
+          />
+          <MyCheckbox name="remote">
+            Voulez-vous être en remote ?
+          </MyCheckbox>
+          <MyCheckbox name="acceptedTerms">
+            J'accepte les conditions d'utilisations
+          </MyCheckbox>
+
+          <button type="submit">Submit</button>
+        </Form>
     </Formik>
   );
 };
