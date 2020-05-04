@@ -37,6 +37,7 @@ module.exports = {
             handler: async (request, h) => {
     
                 const { email, password } = request.payload;
+
                 // test if the email exist
                 const visitor = await db.query(`SELECT * FROM usr WHERE email = $1`, [email]);
                 const user = visitor.rows[0];

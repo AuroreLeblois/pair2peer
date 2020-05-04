@@ -31,15 +31,9 @@ const App = () => {
       <Header />
       <div className="container">
         <Switch>
-          <Route exact path="/login">
-            <Login />
-          </Route>
-          <Route exact path="/signup">
-            <Signup />
-          </Route>
-          <Route exact path="/profile">
-            <Profile />
-          </Route>
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/signup" component={Signup} />
+          <Route exact path="/profile" render={() => loginCheck('/login', <Profile />)} />
           <Route exact path="/search" render={() => loginCheck('/login', <Search />)} />
         </Switch>
       </div>
