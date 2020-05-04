@@ -1,7 +1,7 @@
 require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 const HapiAuthCookie = require('@hapi/cookie');
-const package = require('./package');
+const package = require('../api/package');
 const db = require('./app/models/db');
 require('dotenv').config();
 
@@ -9,7 +9,10 @@ require('dotenv').config();
     const server = Hapi.server({
         port: 3000,
         routes: {
-            cors: true
+            cors: {
+                origin: ['*'],
+                credentials: true
+            }
         }
     });
 

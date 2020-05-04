@@ -41,8 +41,8 @@ const Results = () => {
       .then((res) => {
         const data = res.data
         const usersData = {};
-        usersData.maxPage = data.maxPage.count;
-        usersData.maxUsers = data.maxUser.count;
+        usersData.maxPage = data.maxPage;
+        usersData.maxUsers = data.maxUser;
         usersData.users = data.users;
         dispatch(getUsersList(usersData));
       })
@@ -67,12 +67,12 @@ const Results = () => {
   );
 
   return (
-    <Grid>
+    <Grid stretched>
       <Grid.Row centered>
         <Message attached color="black">{usersData.maxUsers} développeurs disponibles</Message>
       </Grid.Row>
-      <Grid.Row>
-        <Card.Group itemsPerRow={4}>
+      <Grid.Row stretched>
+        <Card.Group stackable itemsPerRow={4}>
           <Cards users={usersData.users} />
         </Card.Group>
       </Grid.Row>

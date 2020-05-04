@@ -22,10 +22,9 @@ const Filter = () => {
       .then((res) => {
         const data = res.data;
         const filtersList = {};
-        filtersList.it_language = data.it_language.name;
-        filtersList.language = data.language.name;
+        filtersList.it_language = data.it_language;
+        filtersList.language = data.language;
         filtersList.localisation = data.localisation;
-        console.log(filtersList);
         dispatch(getFiltersList(filtersList));
       })
       .catch((err) => {
@@ -67,6 +66,7 @@ const Filter = () => {
     { key: '9', text: '9', value: '9' },
     { key: '10', text: '10', value: '10' },
   ];
+
 
   // Object for remote select input options
   const remoteOptions = [

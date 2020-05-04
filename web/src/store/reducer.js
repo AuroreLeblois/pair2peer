@@ -61,6 +61,12 @@ export default (state = initialState, action = {}) => {
         },
       };
     }
+    case actions.DISPLAY_ERRORS_MSG: {
+      return {
+        ...state,
+        errors: action.errors,
+      };
+    }
     default: {
       return state;
     }

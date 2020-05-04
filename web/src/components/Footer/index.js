@@ -9,7 +9,7 @@ import './styles.scss';
 // == Composant
 const Footer = () => {
   return (
-    <Segment className="footer">
+    <Segment className="footer" basic>
       <Container>
         <Grid padded="horizontally" verticalAlign="middle" stackable>
           <Grid.Column textAlign="left" width={7}>
