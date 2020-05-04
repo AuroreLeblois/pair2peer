@@ -55,6 +55,7 @@ module.exports = {
                         birthyear: Joi.number(),
                         description: Joi.string(),
                         experience: Joi.number(),
+                        disponibility: Joi.number()
                     })
                 },
                 description: 'handle update user profile',
@@ -93,10 +94,8 @@ module.exports = {
                 let itLevel= [request.payload.itLevels];
                 //on peut me trouver via le filtre?
                 let searchMe= request.payload.searchable;
-                //les dispo
-                let days= [request.payload.disponibilityDays];
-                let startSession= request.payload.hourSessionStart;
-                let stopSession= request.payload.hourSessionStop;
+                //les dispos
+                let disponibility= request.payload.disponibility;
                 
                 //petit console.log(request.payload) pour vérifier tout ça
                 console.log(request.payload);
@@ -174,9 +173,9 @@ module.exports = {
                         const detailExist= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
                         //il n'existe pas=> on insert
                          if(!detailExist.rows[0]){
-                             await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id,birthyear, picture, decription, experience, latitude, longitude)
-                                            VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7, $8, $9, $10);`
-                                            ,[city, country, remote, userID, birthyear, picture, description,experience, latitude, longitude]);
+                             await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id,birthyear, picture, decription, experience, latitude, longitude, disponibility)
+                                            VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7, $8, $9, $10, $11);`
+                                            ,[city, country, remote, userID, birthyear, picture, description,experience, latitude, longitude, disponibility]);
                     }//sinon on update
                          else{
                              await db.query(`UPDATE usr_detail
@@ -261,50 +260,6 @@ module.exports = {
                         }
                     }
                     };
-                
-                // //diponibility
-                // //est ce que j'ai sélectionné des jours?
-                // if(days.length>0){
-                //     //la dispo existe?
-                //     for(let day of days){
-                        
-                //    const dispoExists= await db.query(`SELECT * 
-                //                                     FROM disponibility
-                //                                     WHERE usr_id=$1
-                //                                     AND day=$2`,
-                //                                     [userID, day]);
-                //     //non
-                //     if(!dispoExists.rows[0]){
-                //         //pour chaque jour=>insert du jour pour créer la ligne
-                //             await db.query(`INSERT INTO disponibility(day, usr_id)
-                //                             VALUES ($1, $2)`,
-                //                             [day, userID])
-                         
-                //          if(startSession!==null||startSession!==undefined||startSession!==isNaN(startSession)){
-                //             //l'user a rentré une fin?
-                //                 if(stopSession!==null||stopSession!==undefined||stopSession!==isNaN(stopSession)){
-                //                     let interval= stopSession-startSession;
-                //                     const intervalSession= interval+'H';
-                //                 }
-                //             }
-                //         }
-                //     }
-                //     //et si aucune case n'est cochée=> user ne veut plus faire de session donc... plus dispo
-                // }else{
-                //     //on select les rows du user
-                //     const dispoExists= await db.query(`SELECT * 
-                //                                     FROM disponibility
-                //                                     WHERE usr_id=$1`,
-                //                                     [userID]);
-                //     //si on trouve des correspondances on les supprime
-                //     if(dispoExists.rows[0]){
-                //         await db.query(`DELETE * 
-                //                         FROM disponibility
-                //                         WHERE usr_id=$1`,[userID])
-                //     }
-                // }
-                
-
 
                         //si il y a des erreurs
                         if(error.length>0){
