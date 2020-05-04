@@ -24,7 +24,7 @@ const Header = () => {
         </Link>
       </Menu.Item>
     </>
-  )
+  );
 
   const UserConnected = () => (
     <>

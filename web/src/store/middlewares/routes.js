@@ -1,3 +1,4 @@
+/* eslint-disable no-fallthrough */
 import { actions } from '../actions';
 
 export default (store) => (next) => (action) => {

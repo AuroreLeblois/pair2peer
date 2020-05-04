@@ -1,8 +1,8 @@
 import { actions } from 'src/store/actions';
 
 const initialState = {
-  email: 'tony0@gmail.com',
-  password: 'azertyui',
+  email: '',
+  password: '',
   search: {
     remote: '',
     language: '',
@@ -59,6 +59,12 @@ export default (state = initialState, action = {}) => {
           ...state.search,
           [action.name]: action.value,
         },
+      };
+    }
+    case actions.DISPLAY_ERRORS_MSG: {
+      return {
+        ...state,
+        errors: action.errors,
       };
     }
     default: {

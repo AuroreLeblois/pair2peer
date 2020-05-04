@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Card, Icon, Image, Label } from 'semantic-ui-react';
 import { firstLetterToUppercase } from 'src/store/utils';
 
