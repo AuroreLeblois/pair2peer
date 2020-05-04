@@ -33,9 +33,8 @@ module.exports = {
                     return 'profil introuvable'
                 }
                 else{
-                    const result= await db.query(`SELECT * FROM usr
-                                                 JOIN usr_detail ON usr.id=usr_detail.usr_id
-                                                 WHERE usr.id=$1;`, [userID]);
+                    const result= await db.query(`SELECT * FROM usr_profile
+                                                WHERE "id"=$1;`, [userID]);
                     const user= result.rows[0];
                 return h.response(user);
                 }
@@ -69,9 +68,8 @@ module.exports = {
                     return 'profil introuvable'
                 }
                 else{
-                    const result= await db.query(`SELECT * FROM usr
-                                                 JOIN usr_detail ON usr.id=usr_detail.usr_id
-                                                 WHERE usr.id=$1;`, [userID]);
+                    const result= await db.query(`SELECT * FROM usr_profile
+                                                 WHERE "id"=$1;`, [userID]);
                     const user= result.rows[0];
                 return h.response(user);
                 }
