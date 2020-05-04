@@ -30,11 +30,11 @@ module.exports = {
             method: 'GET',
             path: '/concept',
             options: {
-                // auth: {
-                    // strategy: 'base',
-                    // mode: 'required',
-                   // scope: ['user', 'admin']
-                // },
+                auth: {
+                    strategy: 'base',
+                    mode: 'required',
+                   scope: ['user', 'admin']
+                },
                 description: 'Example : restricted page for users authentified',
                 tags: ['api', 'concept']
             },

@@ -25,7 +25,7 @@ module.exports = {
             },
             handler: async (request, h) => {
                 
-                const { page_nb, user_nb } = request.query;
+                const { page_nb, user_nb } = request.query;
 
                 const lang = await db.query('SELECT * FROM all_language');
                 const localisation = await db.query('SELECT * FROM all_country_city');
@@ -83,7 +83,7 @@ module.exports = {
             handler: async (request, h) => {
 
                 const query = request.payload;
-                const { page_nb, user_nb } = request.query;
+                const { page_nb, user_nb } = request.query;
 
                 // first filter, if key doesn't have any value, the pair key-value will be remove of the object
                 for (let item in query) {

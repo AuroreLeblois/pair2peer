@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const db = require('../models/db');
 const Joi = require('@hapi/joi');
 const Wreck = require('@hapi/wreck');
+require('dotenv').config();
 
 module.exports = {
     name: 'logs pages',
@@ -36,7 +37,7 @@ module.exports = {
             handler: async (request, h) => {
     
                 const { email, password } = request.payload;
-                
+                console.log(request.payload);
                 // test if the email exist
                 const visitor = await db.query(`SELECT * FROM usr WHERE email = $1`, [email]);
                 const user = visitor.rows[0];
