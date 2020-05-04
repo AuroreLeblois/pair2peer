@@ -67,9 +67,9 @@ module.exports = {
                 //le cookie email pour retrouver l'user
                 const email= request.state.cookie.email;
                 //on retrouve l'user de suite pour ne pas avoir à le refaire plus tard
-                const result = await db.query(`SELECT * FROM usr WHERE email = $1`, [email]);
+                const result = await db.query(`SELECT * FROM usr WHERE email = $1;`, [email]);
                 const userID= result.rows[0].id;
-                const userDetails= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
+                const userDetails= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1;`,[userID]);
                 const userCountry= userDetails.rows[0].country;
                 const userCity=userDetails.rows[0].city;
                 //les données du formulaire:
@@ -104,9 +104,9 @@ module.exports = {
                 //le speudo
                 if(pseudo!== undefined||pseudo!== null||pseudo.length>0 && pseudo!==result.rows[0].speudo){
                     //oui mais le speudo doit être unique
-                    pseudoExists= await db.query(`SELECT speudo FROM usr WHERE speudo= $1` ,[speudo]);
+                    pseudoExists= await db.query(`SELECT speudo FROM usr WHERE speudo= $1;` ,[speudo]);
                     if(!speudoExists.rows[0]){
-                    await db.query(`UPDATE usr SET speudo= ${speudo} WHERE usr.id= $1`[userID]);
+                    await db.query(`UPDATE usr SET speudo= ${speudo} WHERE usr.id= $1;`[userID]);
                     }
                     //si le speudo existe=> on le dit à l'utilisateur
                     else{
@@ -143,11 +143,11 @@ module.exports = {
                     //dans ce cas on va update le profil
                     await db.query(`UPDATE usr 
                                     SET "email"=$1 
-                                    WHERE usr.id=$1`, [changeMyEmail, userID])
+                                    WHERE usr.id=$1`, [changeMyEmail, userID]);
                     }
                     //sinon on prévient l'user
                     else{
-                        error.push(`L'email saisie est invalide ou n'est pas équivalent à la validation.`)
+                        error.push(`L'email saisie est invalide ou n'est pas équivalent à la validation.`);
                     }
                 };
                 
@@ -166,8 +166,8 @@ module.exports = {
                         //il n'existe pas=> on insert
                          if(!detailExist.rows[0]){
                              await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id,birthyear, picture, decription, experience, latitude, longitude)
-                                            VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7, $8, $9, $10)`
-                                            ,[city, country, remote, userID, birthyear, picture, description,experience, latitude, longitude])
+                                            VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7, $8, $9, $10);`
+                                            ,[city, country, remote, userID, birthyear, picture, description,experience, latitude, longitude]);
                     }//sinon on update
                          else{
                              await db.query(`UPDATE usr_detail
@@ -205,7 +205,7 @@ module.exports = {
             
 
 
-                //si l'utilisateur rentre une langue (insert user knows lang)
+                //si l'utilisateur rentre une langue
                 if(selectedLang.length >0){
                     for (let lang of selectedLang){
                         const langID= await db.query(`SELECT id 
