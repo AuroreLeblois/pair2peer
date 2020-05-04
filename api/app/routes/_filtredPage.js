@@ -46,8 +46,8 @@ module.exports = {
                 // build the response to the front
                 const info = {};
                 info.language = lang.rows[0].name;
-                info.localisation = localisation.rows;
                 info.it_language = itLang.rows[0].name;
+                info.localisation = localisation.rows;
                 info.users = user.rows
 
                 return info
