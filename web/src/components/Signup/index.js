@@ -10,7 +10,7 @@ import * as Yup from 'yup';
 
 
 // Semantic
-// import { Button, Checkbox } from 'semantic-ui-react';
+import { Button, Checkbox } from 'semantic-ui-react';
 
 /**
 // Validation ==> On passera directement par Yup pour la validation des forms
@@ -123,9 +123,9 @@ const Signup = () => {
             remote: Yup.boolean()
             .required('Required')
             .oneOf([true], 'You must accept the terms and conditions.'),
-            acceptedTerms: Yup.boolean()
-            .required('Required')
-            .oneOf([true], 'You must accept the terms and conditions.'), // Pour une future Charte de bonne conduite par exemple
+            //acceptedTerms: Yup.boolean()
+            //.required('Required')
+            //.oneOf([true], 'You must accept the terms and conditions.'), // Pour une future Charte de bonne conduite par exemple
           }
         )
       }
@@ -138,7 +138,7 @@ const Signup = () => {
           );
       }}
     >
-      <Form>
+      <Form className = "ui form">
           <MyTextInput
             label="pseudo"
             name="pseudo"
@@ -169,14 +169,17 @@ const Signup = () => {
           type="text"
           placeholder="Strasbourg"
         />
-          <MyCheckbox name="remote">
+          <MyCheckbox
+            name="remote"
+            type="checkbox"            
+          >
             Voulez-vous être en remote ?
           </MyCheckbox>
-          <MyCheckbox name="acceptedTerms">
+          {/* <MyCheckbox name="acceptedTerms">
             J'accepte les conditions d'utilisations
-          </MyCheckbox>
+          </MyCheckbox> */}
 
-          <button type="submit">S'inscrire</button>
+          <button className="ui button" type="submit">S'inscrire</button>
         </Form>
     </Formik>
   );
