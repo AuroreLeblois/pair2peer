@@ -41,8 +41,8 @@ const Results = () => {
       .then((res) => {
         const data = res.data
         const usersData = {};
-        usersData.maxPage = data.maxPage.count;
-        usersData.maxUsers = data.maxUser.count;
+        usersData.maxPage = data.maxPage;
+        usersData.maxUsers = data.maxUser;
         usersData.users = data.users;
         dispatch(getUsersList(usersData));
       })
