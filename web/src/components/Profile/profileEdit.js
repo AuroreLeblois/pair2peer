@@ -1,7 +1,7 @@
 // == Import npm
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Form, Input, TextArea, Button, Select, Header } from 'semantic-ui-react';
+import { Form, Input, Header } from 'semantic-ui-react';
 
 // == Composant
 const ProfileEdit = () => {
