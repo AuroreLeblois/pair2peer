@@ -8,8 +8,8 @@ const Cards = ({ users }) => {
   }
 
   return users.map((user) => (
-    <Card fluid color="yellow" key={user.id}>
-      <Image src={user.picture} />
+    <Card color="yellow" key={user.id}>
+      <Image src={user.picture} wrapped />
       <Card.Content>
         <Card.Header>{firstLetterToUppercase(user.pseudo)}</Card.Header>
         <Card.Meta>

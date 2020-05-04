@@ -13,7 +13,7 @@ const Profile = () => {
   console.log(user);
 
   return (
-    <Grid centered>
+    <Grid relaxed="very" centered>
       <Grid.Column width={3}>
         <Image src={user.picture} circular size="medium" />
         <Card>
@@ -23,10 +23,10 @@ const Profile = () => {
               <Icon name="map marker" /> {firstLetterToUppercase(user.city)}, {firstLetterToUppercase(user.country)}
             </Card.Meta>
           </Card.Content>
-          <Card.Content extra centered>
-            <Label.Group size="mini" centered>
+          <Card.Content extra>
+            <Label.Group size="mini">
               {user.it_language.map((label) => (
-                <Label key={label.name} size="mini" centered>{label.name}</Label>
+                <Label key={label.name} size="mini">{label.name}</Label>
               ))}
             </Label.Group>
           </Card.Content>
