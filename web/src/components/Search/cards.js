@@ -9,7 +9,7 @@ const Cards = ({ users }) => {
 
   return users.map((user) => (
     <Card fluid color="yellow" key={user.id}>
-      <Image src="http://fr.web.img4.acsta.net/r_640_360/newsv7/19/01/27/15/43/1278026.jpg" />
+      <Image src={user.picture} />
       <Card.Content>
         <Card.Header>{firstLetterToUppercase(user.pseudo)}</Card.Header>
         <Card.Meta>

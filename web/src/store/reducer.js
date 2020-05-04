@@ -1,8 +1,8 @@
 import { actions } from 'src/store/actions';
 
 const initialState = {
-  email: '',
-  password: '',
+  email: 'tony0@gmail.com',
+  password: 'azertyui',
   search: {
     remote: '',
     language: '',

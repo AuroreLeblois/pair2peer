@@ -52,12 +52,18 @@ const Header = () => {
       </Menu.Item>
 
       <Menu.Menu position="right">
-        <Menu.Item name="map">Carte</Menu.Item>
-        <Menu.Item name="about">A Propos</Menu.Item>
-        <Menu.Item name="contact">Contact</Menu.Item>
+        <Menu.Item name="map">
+          <Link to="/map">Carte</Link>
+        </Menu.Item>
+        <Menu.Item name="about">
+          <Link to="/map">A Propos</Link>
+        </Menu.Item>
+        <Menu.Item name="contact">
+          <Link to="/contact">Contact</Link>
+        </Menu.Item>
         <Menu.Item name="search">
           <Link to="/search">
-            Search
+            Rechercher
           </Link>
         </Menu.Item>
         {(user) ? <UserConnected /> : <NoUser />}

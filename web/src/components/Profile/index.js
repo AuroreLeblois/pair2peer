@@ -1,9 +1,11 @@
 // == Import npm
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Card, Icon, Image, Grid, Segment } from 'semantic-ui-react';
+import { Card, Icon, Image, Grid, Container, Label } from 'semantic-ui-react';
+import { firstLetterToUppercase } from 'src/store/utils';
 
 // == Import
+import ProfileEdit from './profileEdit';
 
 // == Composant
 const Profile = () => {
@@ -11,34 +13,27 @@ const Profile = () => {
   console.log(user);
 
   return (
-    <Grid columns='equal'>
-      <Grid.Column>
-        <Segment>
-          <Card>
-            <Image src='/images/avatar/large/matthew.png' wrapped ui={false} />
-            <Card.Content>
-              <Card.Header>Matthew</Card.Header>
-              <Card.Meta>
-                <span className='date'>Joined in 2015</span>
-              </Card.Meta>
-              <Card.Description>
-                Matthew is a musician living in Nashville.
-              </Card.Description>
-            </Card.Content>
-            <Card.Content extra>
-              <a>
-                <Icon name='user' />
-                22 Friends
-              </a>
-            </Card.Content>
-          </Card>
-        </Segment>
+    <Grid centered>
+      <Grid.Column width={3}>
+        <Image src={user.picture} circular size="medium" />
+        <Card>
+          <Card.Content>
+            <Card.Header>{firstLetterToUppercase(user.pseudo)}</Card.Header>
+            <Card.Meta>
+              <Icon name="map marker" /> {firstLetterToUppercase(user.city)}, {firstLetterToUppercase(user.country)}
+            </Card.Meta>
+          </Card.Content>
+          <Card.Content extra centered>
+            <Label.Group size="mini" centered>
+              {user.it_language.map((label) => (
+                <Label key={label.name} size="mini" centered>{label.name}</Label>
+              ))}
+            </Label.Group>
+          </Card.Content>
+        </Card>
       </Grid.Column>
       <Grid.Column width={8}>
-        <Segment>2</Segment>
-      </Grid.Column>
-      <Grid.Column>
-        <Segment>3</Segment>
+        <ProfileEdit />
       </Grid.Column>
     </Grid>
   );
