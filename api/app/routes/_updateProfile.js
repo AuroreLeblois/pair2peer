@@ -101,13 +101,13 @@ module.exports = {
                 //petit console.log(request.payload) pour vérifier tout ça
                 console.log(request.payload);
                 //si l'utisateur change des infos=> update user table
-                //le speudo
+                //le pseudo
                 if(pseudo!== undefined
                     ||pseudo!== null
                     ||pseudo.length>0 && pseudo!==result.rows[0].pseudo){
-                    //oui mais le speudo doit être unique
-                    pseudoExists= await db.query(`SELECT pseudo FROM usr WHERE speudo= $1;` ,[pseudo]);
-                    if(!speudoExists.rows[0]){
+                    //oui mais le pseudo doit être unique
+                    pseudoExists= await db.query(`SELECT pseudo FROM usr WHERE pseudo= $1;` ,[pseudo]);
+                    if(!pseudoExists.rows[0]){
                     await db.query(`UPDATE usr SET pseudo= ${pseudo} WHERE usr.id= $1;`[userID]);
                     }
                     //si le pseudo existe=> on le dit à l'utilisateur
