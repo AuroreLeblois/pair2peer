@@ -6,6 +6,9 @@ export default (store) => (next) => (action) => {
     case actions.GET_AUTHENTIFIED: {
       action.history.push('/');
     }
+    case actions.GET_LOGOUT: {
+      action.history.push('/');
+    }
     default: {
       next(action);
     }

@@ -5,6 +5,8 @@ export const API_URI = 'http://localhost:3000';
 export const actions = {
   SYNC_LOGIN: 'action/SYNC_LOGIN',
   SUBMIT_LOGIN: 'actions/SUBMIT_LOGIN',
+  SUBMIT_LOGOUT: 'actions/SUBMIT_LOGOUT',
+  GET_LOGOUT: 'actions/GET_LOGOUT',
   GET_AUTHENTIFIED: 'actions/GET_AUTHENTIFIED',
   GET_USERS_LIST: 'actions/GET_USERS_LIST',
   GET_FILTERS_LIST: 'actions/GET_FILTERS_LIST',
@@ -21,6 +23,14 @@ export const syncLogin = (name, value) => (
 
 export const submitLogin = (history) => (
   { type: actions.SUBMIT_LOGIN, history }
+);
+
+export const submitLogout = (history) => (
+  { type: actions.SUBMIT_LOGOUT, history }
+);
+
+export const getLogout = (history) => (
+  { type: actions.GET_LOGOUT, history }
 );
 
 export const getAuthentified = (history, data) => (

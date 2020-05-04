@@ -34,6 +34,14 @@ export default (state = initialState, action = {}) => {
         user: action.data,
       };
     }
+    case actions.GET_LOGOUT: {
+      console.log('reducer logout')
+      return {
+        ...state,
+        user: '',
+        email: '',
+      };
+    }
     case actions.GET_USERS_LIST: {
       return {
         ...state,
