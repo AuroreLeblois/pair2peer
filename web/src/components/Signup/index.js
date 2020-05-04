@@ -3,14 +3,14 @@
 import React, { useEffect } from 'react';
 // import ReactDOM from 'react-dom';
 import { Formik, Form, useField } from 'formik';
-
+import './styles.css';
 // import styled from '@emotion/styled';
 
 import * as Yup from 'yup';
 
 
 // Semantic
-// import { Button, Checkbox } from 'semantic-ui-react';
+import { Button, Checkbox } from 'semantic-ui-react';
 
 /**
 // Validation ==> On passera directement par Yup pour la validation des forms
@@ -123,9 +123,9 @@ const Signup = () => {
             remote: Yup.boolean()
             .required('Required')
             .oneOf([true], 'You must accept the terms and conditions.'),
-            acceptedTerms: Yup.boolean()
-            .required('Required')
-            .oneOf([true], 'You must accept the terms and conditions.'), // Pour une future Charte de bonne conduite par exemple
+            //acceptedTerms: Yup.boolean()
+            //.required('Required')
+            //.oneOf([true], 'You must accept the terms and conditions.'), // Pour une future Charte de bonne conduite par exemple
           }
         )
       }
@@ -138,45 +138,54 @@ const Signup = () => {
           );
       }}
     >
-      <Form>
+      <Form className = "ui form">
           <MyTextInput
-            label="pseudo"
+            label="Pseudo"
             name="pseudo"
             type="text"
             placeholder="Jane57"
           />
           <MyTextInput
-            label="password"
-            name="lastName"
-            type="text"
-            placeholder="***"
+            label="Mot de passe"
+            name="password"
+            type="password"
+            placeholder=""
           />
           <MyTextInput
-            label="Email Address"
+            label="Confirmation de mot de passe"
+            name="password"
+            type="password"
+            placeholder=""
+          />
+          <MyTextInput
+            label="Mail"
             name="email"
             type="email"
             placeholder="jane@formik.com"
           />
           <MyTextInput
-            label="pays"
+            label="Pays"
             name="pays"
             type="text"
             placeholder="France"
           />
           <MyTextInput
-          label="ville"
+          label="Ville"
           name="ville"
           type="text"
           placeholder="Strasbourg"
         />
-          <MyCheckbox name="remote">
+          <MyCheckbox
+            name="remote"
+            type="checkbox"            
+          >
             Voulez-vous être en remote ?
           </MyCheckbox>
-          <MyCheckbox name="acceptedTerms">
+          {/* <MyCheckbox name="acceptedTerms">
             J'accepte les conditions d'utilisations
-          </MyCheckbox>
+          </MyCheckbox> */}
 
-          <button type="submit">S'inscrire</button>
+          <button className="ui button" type="submit">S'inscrire</button>
         </Form>
     </Formik>
   );

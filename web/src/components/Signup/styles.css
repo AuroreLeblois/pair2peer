@@ -1,9 +1,17 @@
 label {
   display: flex;
-
+  color:white;
 }
 
-button {
-  display: flex;
-  
+
+.ui {
+  margin: 10px;
+  padding: 10px;
+}
+
+
+.ui.button {
+  display: block; 
+  margin: auto;
+
 }
