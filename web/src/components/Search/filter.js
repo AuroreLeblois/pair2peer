@@ -21,11 +21,11 @@ const Filter = () => {
     )
       .then((res) => {
         const data = res.data;
+        console.log(data)
         const filtersList = {};
-        filtersList.it_language = data.it_language.name;
-        filtersList.language = data.language.name;
+        filtersList.it_language = data.it_language;
+        filtersList.language = data.language;
         filtersList.localisation = data.localisation;
-        console.log(filtersList);
         dispatch(getFiltersList(filtersList));
       })
       .catch((err) => {
