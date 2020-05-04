@@ -193,7 +193,7 @@ module.exports = {
                 const hashPassword = bcrypt.hashSync(password, 10);
 
                 // create a new user
-                const newRegistered = await db.query('SELECT * FROM add_usr($1, $2, $3)', [email, pseudo.toLowerCase(), hashPassword]);
+                const newRegistered = await db.query('SELECT * FROM add_usr($1, $2, $3)', [email, pseudo, hashPassword]);
 
                 const userId = newRegistered.rows[0].id;
 
