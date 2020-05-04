@@ -8,7 +8,6 @@
     "start:web": "cd web/ && yarn start",
 
     "start": "PGDATABASE=apotest PGPASSWORD=apotest PGUSER=apotest node-dev server.js",
-
     "startBis": "PGDATABASE=apotheosePP PGPASSWORD=js4life node server.js"
 
   },

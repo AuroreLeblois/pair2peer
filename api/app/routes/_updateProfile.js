@@ -262,47 +262,47 @@ module.exports = {
                     }
                     };
                 
-                //diponibility
-                //est ce que j'ai sélectionné des jours?
-                if(days.length>0){
-                    //la dispo existe?
-                    for(let day of days){
+                // //diponibility
+                // //est ce que j'ai sélectionné des jours?
+                // if(days.length>0){
+                //     //la dispo existe?
+                //     for(let day of days){
                         
-                   const dispoExists= await db.query(`SELECT * 
-                                                    FROM disponibility
-                                                    WHERE usr_id=$1
-                                                    AND day=$2`,
-                                                    [userID, day]);
-                    //non
-                    if(!dispoExists.rows[0]){
-                        //pour chaque jour=>insert du jour pour créer la ligne
-                            await db.query(`INSERT INTO disponibility(day, usr_id)
-                                            VALUES ($1, $2)`,
-                                            [day, userID])
+                //    const dispoExists= await db.query(`SELECT * 
+                //                                     FROM disponibility
+                //                                     WHERE usr_id=$1
+                //                                     AND day=$2`,
+                //                                     [userID, day]);
+                //     //non
+                //     if(!dispoExists.rows[0]){
+                //         //pour chaque jour=>insert du jour pour créer la ligne
+                //             await db.query(`INSERT INTO disponibility(day, usr_id)
+                //                             VALUES ($1, $2)`,
+                //                             [day, userID])
                          
-                         if(startSession!==null||startSession!==undefined||startSession!==isNaN(startSession)){
-                            //l'user a rentré une fin?
-                                if(stopSession!==null||stopSession!==undefined||stopSession!==isNaN(stopSession)){
-                                    let interval= stopSession-startSession;
-                                    const intervalSession= interval+'H';
-                                }
-                            }
-                        }
-                    }
-                    //et si aucune case n'est cochée=> user ne veut plus faire de session donc... plus dispo
-                }else{
-                    //on select les rows du user
-                    const dispoExists= await db.query(`SELECT * 
-                                                    FROM disponibility
-                                                    WHERE usr_id=$1`,
-                                                    [userID]);
-                    //si on trouve des correspondances on les supprime
-                    if(dispoExists.rows[0]){
-                        await db.query(`DELETE * 
-                                        FROM disponibility
-                                        WHERE usr_id=$1`,[userID])
-                    }
-                }
+                //          if(startSession!==null||startSession!==undefined||startSession!==isNaN(startSession)){
+                //             //l'user a rentré une fin?
+                //                 if(stopSession!==null||stopSession!==undefined||stopSession!==isNaN(stopSession)){
+                //                     let interval= stopSession-startSession;
+                //                     const intervalSession= interval+'H';
+                //                 }
+                //             }
+                //         }
+                //     }
+                //     //et si aucune case n'est cochée=> user ne veut plus faire de session donc... plus dispo
+                // }else{
+                //     //on select les rows du user
+                //     const dispoExists= await db.query(`SELECT * 
+                //                                     FROM disponibility
+                //                                     WHERE usr_id=$1`,
+                //                                     [userID]);
+                //     //si on trouve des correspondances on les supprime
+                //     if(dispoExists.rows[0]){
+                //         await db.query(`DELETE * 
+                //                         FROM disponibility
+                //                         WHERE usr_id=$1`,[userID])
+                //     }
+                // }
                 
 
 
