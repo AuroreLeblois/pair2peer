@@ -15,12 +15,8 @@ module.exports = {
                 tags: ['api', 'team'] 
             },
             handler: async (request, h) => {
-            
-                return `la fine équipe:
-                -Charles
-                -Maximilen
-                -Victor
-                -Aurore`;
+                const team=["Charles","Aurore","Victor","Max"];
+                return team;
             }
         });
     }

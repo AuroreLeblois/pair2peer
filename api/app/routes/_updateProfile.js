@@ -13,11 +13,11 @@ module.exports = {
             method: 'GET',
             path: '/update/profile',
             options: {
-                // auth: {
-                //     strategy: 'base',
-                //     mode: 'required',
-                //     scope: ['user', 'admin']
-                // },
+                auth: {
+                    strategy: 'base',
+                    mode: 'required',
+                    scope: ['user', 'admin']
+                },
                 description: 'User\'s profile update page',
                 tags: ['api', 'profile', 'form']
             },
@@ -37,11 +37,11 @@ module.exports = {
             method: 'PATCH',
             path: '/update/profile',
             options: {
-                // auth: {
-                //     strategy: 'base',
-                //     mode: 'required',
-                //     scope: ['user', 'admin']
-                // },
+                auth: {
+                    strategy: 'base',
+                    mode: 'required',
+                    scope: ['user', 'admin']
+                },
                 validate: {
                     payload: Joi.object({
                         password: Joi.string(),
@@ -102,21 +102,25 @@ module.exports = {
                 console.log(request.payload);
                 //si l'utisateur change des infos=> update user table
                 //le speudo
-                if(pseudo!== undefined||pseudo!== null||pseudo.length>0 && pseudo!==result.rows[0].speudo){
+                if(pseudo!== undefined
+                    ||pseudo!== null
+                    ||pseudo.length>0 && pseudo!==result.rows[0].pseudo){
                     //oui mais le speudo doit être unique
-                    pseudoExists= await db.query(`SELECT speudo FROM usr WHERE speudo= $1;` ,[speudo]);
+                    pseudoExists= await db.query(`SELECT pseudo FROM usr WHERE speudo= $1;` ,[pseudo]);
                     if(!speudoExists.rows[0]){
-                    await db.query(`UPDATE usr SET speudo= ${speudo} WHERE usr.id= $1;`[userID]);
+                    await db.query(`UPDATE usr SET pseudo= ${pseudo} WHERE usr.id= $1;`[userID]);
                     }
-                    //si le speudo existe=> on le dit à l'utilisateur
+                    //si le pseudo existe=> on le dit à l'utilisateur
                     else{
-                        error.push('Désolé...Ce speudo est déjà pris! ');
+                        error.push('Désolé...Ce pseudo est déjà pris! ');
                     }
                 };
                 //le mot de passe
                 //on compare le mdp avec la validation si mdp changé
                 //déjà est ce que le user a rentré un mdp?
-                if(password!== null||password!== undefined||password.length>0){
+                if(password!== null
+                    ||password!== undefined
+                    ||password.length>0){
                     console.log('un mot de passe a été saisie!')
                     //est ce que le mdp fait bien 8 caractères au moins?
                     if(password.length>=8){
@@ -126,7 +130,7 @@ module.exports = {
                             console.log('le mdp est le meme que la validation')
                             await db.query(`UPDATE usr
                                             SET "password"= ${password} 
-                                            WHERE usr.id=${userID}`);
+                                            WHERE "id"=${userID}`);
                         }
                         else{
                             error.push('La validation et le mot de passe sont différents.');
@@ -136,7 +140,10 @@ module.exports = {
                 };
                 //l'email
                 //est-ce que le champs email est rempli et différent du cookie?
-                if(changeMyEmail!== null||changeMyEmail!== undefined||changeMyEmail.length>0||changeMyEmail!==email&& changeMyEmail===validateEmail){
+                if(changeMyEmail!== null
+                    ||changeMyEmail!== undefined
+                    ||changeMyEmail.length>0
+                    ||changeMyEmail!==email&& changeMyEmail===validateEmail){
                     console.log('un email a été saisie et est différent+validation ok')
                     //ok mais c'est un email?
                     if(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(changeMyEmail)===true){
@@ -153,11 +160,13 @@ module.exports = {
                 
                 //si l'user change son détail=> usr_detail
                 //avant on vérifie que les input "required" sont conformes
-                if(city!==null&& country!==null && remote!==null||city!== undefined&& country!== undefined&& remote!== undefined){
+                if(city!==null&& country!==null && remote!==null
+                    ||city!== undefined&& country!== undefined&& remote!== undefined){
                     //ensuite on vérifie si ce qui a été saisie diffère des données existantes
-                    if(city!==userCity &&country!==userCountry||country==userCountry&& city!==userCity||city==userCity&&country!==userCountry){
-                        const api= await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}
-                        &apiKey=${APIKEY}`,{
+                    if(city!==userCity &&country!==userCountry
+                        ||country==userCountry&& city!==userCity
+                        ||city==userCity&&country!==userCountry){
+                        const api= await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}&apiKey=${APIKEY}`,{
                             json:true
                         });
                         const latitude= api.payload.items[0].position.lat;
