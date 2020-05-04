@@ -88,7 +88,7 @@ module.exports = {
                 // it will replace all special characters to struggle against SQL injection
                 const regex = /[*;$><&|?@="]/g;
                 protec = (value) => {
-                    return value.toString().replace(regex, "%20");
+                    return value.toString().toLowerCase().replace(regex, "%20");
                 };
                 
                 // it will build the SQL query filter

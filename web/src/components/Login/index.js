@@ -1,7 +1,7 @@
 // == Import npm
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { Button, Form, Grid, Input } from 'semantic-ui-react';
 import { syncLogin, submitLogin } from 'src/store/actions';
 
