@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 // import ReactDOM from 'react-dom';
 import { Formik, Form, useField } from 'formik';
-
+import './styles.css';
 // import styled from '@emotion/styled';
 
 import * as Yup from 'yup';
@@ -140,31 +140,37 @@ const Signup = () => {
     >
       <Form className = "ui form">
           <MyTextInput
-            label="pseudo"
+            label="Pseudo"
             name="pseudo"
             type="text"
             placeholder="Jane57"
           />
           <MyTextInput
-            label="password"
-            name="lastName"
-            type="text"
-            placeholder="***"
+            label="Mot de passe"
+            name="password"
+            type="password"
+            placeholder=""
           />
           <MyTextInput
-            label="Email Address"
+            label="Confirmation de mot de passe"
+            name="password"
+            type="password"
+            placeholder=""
+          />
+          <MyTextInput
+            label="Mail"
             name="email"
             type="email"
             placeholder="jane@formik.com"
           />
           <MyTextInput
-            label="pays"
+            label="Pays"
             name="pays"
             type="text"
             placeholder="France"
           />
           <MyTextInput
-          label="ville"
+          label="Ville"
           name="ville"
           type="text"
           placeholder="Strasbourg"
