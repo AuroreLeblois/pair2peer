@@ -95,6 +95,7 @@ const Signup = () => {
           email: '',
           password:'',
           validationPassword:'',
+          remote:'',
           acceptedTerms: false, // Pour la checkbox
         }
       }
@@ -113,6 +114,9 @@ const Signup = () => {
             email: Yup.string()
             .email('Invalid email address')
             .required('Required'),
+            remote: Yup.boolean()
+            .required('Required')
+            .oneOf([true], 'You must accept the terms and conditions.'),
             acceptedTerms: Yup.boolean()
             .required('Required')
             .oneOf([true], 'You must accept the terms and conditions.'), // Pour une future Charte de bonne conduite par exemple
@@ -140,7 +144,7 @@ const Signup = () => {
         <MyCheckbox name="acceptedTerms">
             J'accepte les conditions d'utilisation
         </MyCheckbox>
-        <Button type='submit'>Submit</Button>
+        <Button type='submit'>S'inscrire</Button>
       </Form>
     </Formik>
   );
