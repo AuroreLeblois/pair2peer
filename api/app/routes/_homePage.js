@@ -12,7 +12,7 @@ module.exports = {
                 description: 'Homepage',
                 tags: ['api', 'homepage'] 
             },
-            handler: (request, h) => {
+            handler: async (request, h) => {
                 
                 // collect general informations to send to the front
                 const lang = await db.query('SELECT * FROM all_language');
