@@ -50,7 +50,8 @@ CREATE VIEW usr_profile AS
 		usr_detail.remote,
 		usr_detail.birthyear,
 		usr_detail.experience,
-        usr_detail.description, 
+        usr_detail.description,
+        usr_detail.disponibility, 
         jsonb_agg(DISTINCT lang.name) "language",
         jsonb_agg(DISTINCT jsonb_build_object(
             'name', it_lang.name,
@@ -73,7 +74,8 @@ CREATE VIEW usr_profile AS
 		usr_detail.birthyear,
 		usr_detail.experience,
         usr_detail.latitude,
-        usr_detail.longitude;
+        usr_detail.longitude,
+        usr_detail.disponibility;
 
 
 CREATE VIEW all_it_language AS (
