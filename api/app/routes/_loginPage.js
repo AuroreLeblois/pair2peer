@@ -105,12 +105,12 @@ module.exports = {
                 tags: ['api', 'signup'],
                 validate: {
                     payload: Joi.object({
-                        email: Joi.string().email({ minDomainSegments: 2}).required(),
-                        pseudo: Joi.string().required(),
+                        email: Joi.string().email({ minDomainSegments: 2}).trim().required(),
+                        pseudo: Joi.string().trim().required(),
                         password: Joi.string().min(8).required(),        
                         passwordConfirm: Joi.ref('password'),
-                        country: Joi.string().required(),
-                        city: Joi.string().required(),
+                        country: Joi.string().trim().required(),
+                        city: Joi.string().trim().required(),
                         remote: Joi.string().required(),
                         role: Joi.string().required()
                     }),
@@ -196,7 +196,7 @@ module.exports = {
                 const newRegistered = await db.query('SELECT * FROM add_usr($1, $2, $3)', [email, pseudo, hashPassword]);
 
                 // bind some descriptions to the new user
-                const newRegisteredDetail = await db.query('SELECT * FROM add_usr_detail($1, $2, $3, $4, $5, $6)', [newRegistered.rows[0].id, address.countryName, address.city, position.lat, position.lng, remote]);
+                const newRegisteredDetail = await db.query('SELECT * FROM add_usr_detail($1, $2, $3, $4, $5, $6)', [newRegistered.rows[0].id, address.countryName.toLowerCase(), address.city.toLowerCase(), position.lat, position.lng, remote]);
 
                 console.log(newRegistered.rows[0]);
                 return 'ok enregistré'

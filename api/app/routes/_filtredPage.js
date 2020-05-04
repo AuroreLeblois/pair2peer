@@ -69,8 +69,8 @@ module.exports = {
                     payload: Joi.object({
                         remote: Joi.string().allow(''),
                         language: Joi.string().allow(''),
-                        country: Joi.string().allow(''),
-                        city: Joi.string().allow(''),
+                        country: Joi.string().trim().allow(''),
+                        city: Joi.string().trim().allow(''),
                         it_language: Joi.string().allow(''),
                         level: Joi.number().min(1).max(10).allow('')
                     }),
