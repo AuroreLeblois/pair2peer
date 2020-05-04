@@ -59,9 +59,11 @@ module.exports = {
                 // if key doesn't have any value, the pair key-value will be remove of the object
                 for (let item in query) {
                     if (!query[item]) {
-                        delete query[item]
+                        delete query[item];
+                    } else {
+                        query[item] = query[item].toLowerCase();
                     }
-                } 
+                };
 
                 const keys = Object.keys(query);
                 const values = Object.values(query);
@@ -75,7 +77,7 @@ module.exports = {
                     } else if (keys[index] === 'language' && !language.rows[0].name.includes(values[index])) {
                         await db.query(`INSERT INTO lang (name) VALUES ('${values[index]}')`)
                     }
-                }
+                };
 
                 // we have to call again to visualize the increase
                 language = await db.query('SELECT * FROM all_language');
