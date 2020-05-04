@@ -59,9 +59,11 @@ module.exports = {
                 // if key doesn't have any value, the pair key-value will be remove of the object
                 for (let item in query) {
                     if (!query[item]) {
-                        delete query[item]
+                        delete query[item];
+                    } else {
+                        query[item] = query[item].toLowerCase();
                     }
-                } 
+                };
 
                 const keys = Object.keys(query);
                 const values = Object.values(query);
@@ -75,7 +77,7 @@ module.exports = {
                     } else if (keys[index] === 'language' && !language.rows[0].name.includes(values[index])) {
                         await db.query(`INSERT INTO lang (name) VALUES ('${values[index]}')`)
                     }
-                }
+                };
 
                 // we have to call again to visualize the increase
                 language = await db.query('SELECT * FROM all_language');
@@ -97,6 +99,11 @@ module.exports = {
                     strategy: 'base',
                     mode: 'required',
                     scope: 'admin'
+                },
+                validate: {
+                    params: Joi.object({
+                        langName: Joi.string().required()
+                    })
                 },
                 description: 'Admin\'s page for update lang',
                 tags: ['api', 'admin', 'lang']
@@ -120,11 +127,14 @@ module.exports = {
                 auth: {
                     strategy: 'base',
                     mode: 'required',
-                    scope: ['admin']
+                    scope: 'admin'
                 },
                 validate: {
                     payload: Joi.object({ 
                         language: Joi.string().required(), 
+                    }),
+                    params: Joi.object({
+                        langName: Joi.string().required()
                     })
                 },
                 description: 'handle update lang',
@@ -174,6 +184,11 @@ module.exports = {
                     mode: 'required',
                     scope: 'admin'
                 },
+                validate: {
+                    params: Joi.object({
+                        it_lang: Joi.string().required()
+                    })
+                },
                 description: 'Admin\'s page for update it_lang',
                 tags: ['api', 'admin', 'it_lang']
             },
@@ -201,6 +216,9 @@ module.exports = {
                 validate: {
                     payload: Joi.object({ 
                         it_language: Joi.string().required(), 
+                    }),
+                    params: Joi.object({
+                        it_lang: Joi.string().required()
                     })
                 },
                 description: 'handle update it_lang',
@@ -231,6 +249,11 @@ module.exports = {
                     strategy: 'base',
                     mode: 'required',
                     scope: ['admin']
+                },
+                validate: {
+                    params: Joi.object({
+                        it_lang: Joi.string().required()
+                    })
                 },
                 description: 'handle delete lang',
                 tags: ['api', 'language', 'delete']

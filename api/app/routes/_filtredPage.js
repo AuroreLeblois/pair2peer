@@ -25,7 +25,7 @@ module.exports = {
             },
             handler: async (request, h) => {
                 
-                const { page_nb, user_nb } = request.query;
+                const { page_nb, user_nb } = request.query;
 
                 const lang = await db.query('SELECT * FROM all_language');
                 const localisation = await db.query('SELECT * FROM all_country_city');
@@ -58,19 +58,19 @@ module.exports = {
             method: 'POST',
             path: '/search',
             options: {
-                auth: {
-                    strategy: 'base',
-                    mode: 'required',
-                    scope: ['user', 'admin']
-                },
+                // auth: {
+                //     strategy: 'base',
+                //     mode: 'required',
+                //     scope: ['user', 'admin']
+                // },
                 description: 'Target of the filter, find all matches',
                 tags: ['api', 'filter'],
                 validate: {
                     payload: Joi.object({
                         remote: Joi.string().allow(''),
                         language: Joi.string().allow(''),
-                        country: Joi.string().allow(''),
-                        city: Joi.string().allow(''),
+                        country: Joi.string().trim().allow(''),
+                        city: Joi.string().trim().allow(''),
                         it_language: Joi.string().allow(''),
                         level: Joi.number().min(1).max(10).allow('')
                     }),
@@ -83,27 +83,25 @@ module.exports = {
             handler: async (request, h) => {
 
                 const query = request.payload;
-                const { page_nb, user_nb } = request.query;
+                const { page_nb, user_nb } = request.query;
+
+                // it will replace all special characters to struggle against SQL injection
+                const regex = /[*;$><&|?@="]/g;
 
                 // first filter, if key doesn't have any value, the pair key-value will be remove of the object
                 for (let item in query) {
                     if (!query[item]) {
                         delete query[item]
+                    } else {
+                        query[item] = query[item].toString().toLowerCase().replace(regex, "%20");
                     }
                 } 
 
                 const keys = Object.keys(query);
                 const values = Object.values(query);
                 
-                // it will replace all special characters to struggle against SQL injection
-                const regex = /[*;$><&|?@="]/g;
-                protec = (value) => {
-                    return value.toString().toLowerCase().replace(regex, "%20");
-                };
-                
                 // it will build the SQL query filter
                 let filter = values.map(( value, index ) => {
-                    value = protec(value);
                     if (keys[index] === 'language') {
                         // example : "language" ? 'français'
                         return `"${keys[index]}" ? '${value}' `;
@@ -113,7 +111,7 @@ module.exports = {
                     } else if (keys[index] === 'level') {
                         // exemple : it_language @> '[{ "name": "previous it_language.name", "level": 1 }]'
                         // add specific security to itName because values[index -1] doesn't have any protection
-                        return `it_language @> '[{"name":"${protec(values[index - 1])}", "level":${value}}]' `;
+                        return `it_language @> '[{"name":"${values[index - 1]}", "level":${value}}]' `;
                     } else if (keys[index] === 'remote') {
                         // example : remote = true/ false
                         return `${keys[index]} = ${value} `;

@@ -7,12 +7,6 @@ module.exports = {
     register: async (server) => {
         await server.register([vision, inert]);
 
-        // server.views({
-        //     relativeTo: __dirname + '/..',
-        //     path: 'templates',
-        //     engines : { react },
-        // });
-
         server.route({
             method: 'GET',
             path: '/',
@@ -21,8 +15,8 @@ module.exports = {
                 tags: ['api', 'homepage'] 
             },
             handler: function (request, h) {
-                return 'bienvenue'
-               // return h.view('home');
+                 return 'bienvenue'
+            //   return h.view('home');
             }
         });
 
