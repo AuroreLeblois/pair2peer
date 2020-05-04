@@ -22,10 +22,10 @@ module.exports = {
                 },
                 handler: async (request, h) => {
                    
-                    const pseudo= request.params.speudo;
+                    const pseudo= request.params.pseudo;
                     const result = await db.query(`SELECT * FROM usr WHERE pseudo = $1`, [pseudo]);
                     if(!result.rows[0]){
-                        return h.responde.code(400);
+                        return h.response.code(400);
                     }
                     const user= result.rows[0];
                     return  user;

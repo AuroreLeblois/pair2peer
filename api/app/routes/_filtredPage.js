@@ -15,7 +15,13 @@ module.exports = {
                 //     scope: ['user', 'admin']
                 // },
                 description: 'Filter to search matches',
-                tags: ['api', 'filter']
+                tags: ['api', 'filter'],
+                validate: {
+                    query: Joi.object({
+                        page_nb: Joi.number().min(1).required(),
+                        user_nb: Joi.number().min(9).required()
+                    })
+                }
             },
             handler: async (request, h) => {
                 
@@ -67,6 +73,10 @@ module.exports = {
                         city: Joi.string().allow(''),
                         it_language: Joi.string().allow(''),
                         level: Joi.number().min(1).max(10).allow('')
+                    }),
+                    query: Joi.object({
+                        page_nb: Joi.number().min(1).required(),
+                        user_nb: Joi.number().min(9).required()
                     })
                 }
             },
