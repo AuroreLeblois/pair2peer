@@ -4,15 +4,9 @@ const db = require('../models/db');
 const Joi = require('@hapi/joi');
 
 module.exports = {
-    name: 'profile pages',
+    name: 'get profile pages',
     register: async (server) => {
         await server.register([vision, inert]);
-
-        // server.views({
-        //     relativeTo: __dirname + '/..',
-        //     path: 'templates',
-        //     engines : { pug },
-        // });
 
         server.route({
             method: 'GET',
@@ -24,7 +18,7 @@ module.exports = {
                     scope: ['user', 'admin']
                 },
                 description: 'User\'s profile',
-                tags: ['api', 'profile']
+                tags: ['api', 'profile', 'info']
             },
             handler: async (request, h) => {
                 // passage de true string en true boolean 
@@ -49,7 +43,7 @@ module.exports = {
                     scope: ['user', 'admin']
                 },
                 description: 'Other user\'s profile page',
-                tags: ['api', 'other profile'],
+                tags: ['api', 'other' ,'profile'],
                 validate: {
                     params: Joi.object({
                         pseudo: Joi.string().required()
@@ -61,7 +55,7 @@ module.exports = {
                 const result = await db.query(`SELECT * FROM usr_map WHERE pseudo = $1`, [pseudo]);
 
                 const user = result.rows[0];
-                return {user};
+                return user;
             }
         });
     

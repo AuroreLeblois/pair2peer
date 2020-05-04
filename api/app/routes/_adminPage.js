@@ -98,6 +98,11 @@ module.exports = {
                     mode: 'required',
                     scope: 'admin'
                 },
+                validate: {
+                    params: Joi.object({
+                        langName: Joi.string().required()
+                    })
+                },
                 description: 'Admin\'s page for update lang',
                 tags: ['api', 'admin', 'lang']
             },
@@ -120,11 +125,14 @@ module.exports = {
                 auth: {
                     strategy: 'base',
                     mode: 'required',
-                    scope: ['admin']
+                    scope: 'admin'
                 },
                 validate: {
                     payload: Joi.object({ 
                         language: Joi.string().required(), 
+                    }),
+                    params: Joi.object({
+                        langName: Joi.string().required()
                     })
                 },
                 description: 'handle update lang',
@@ -174,6 +182,11 @@ module.exports = {
                     mode: 'required',
                     scope: 'admin'
                 },
+                validate: {
+                    params: Joi.object({
+                        it_lang: Joi.string().required()
+                    })
+                },
                 description: 'Admin\'s page for update it_lang',
                 tags: ['api', 'admin', 'it_lang']
             },
@@ -201,6 +214,9 @@ module.exports = {
                 validate: {
                     payload: Joi.object({ 
                         it_language: Joi.string().required(), 
+                    }),
+                    params: Joi.object({
+                        it_lang: Joi.string().required()
                     })
                 },
                 description: 'handle update it_lang',
@@ -231,6 +247,11 @@ module.exports = {
                     strategy: 'base',
                     mode: 'required',
                     scope: ['admin']
+                },
+                validate: {
+                    params: Joi.object({
+                        it_lang: Joi.string().required()
+                    })
                 },
                 description: 'handle delete lang',
                 tags: ['api', 'language', 'delete']
