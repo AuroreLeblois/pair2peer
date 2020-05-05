@@ -23,6 +23,7 @@ CREATE TABLE usr_detail (
     experience TEXT,
     "description" TEXT,
     disponibility INT DEFAULT 0,
+    linkedin_link TEXT,
     usr_id INT NOT NULL REFERENCES usr(id)
     ON DELETE CASCADE
 );

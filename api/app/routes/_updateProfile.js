@@ -88,6 +88,7 @@ module.exports = {
                 let changeMyEmail= request.payload.email;
                 let validateEmail= request.payload.validateEmail;
                 let pseudo= request.payload.pseudo;
+                let linkedinLink=request.payload.linkedinLink;
                 //les langues
                 let selectedLang= [request.payload.languages];
                 //les it
@@ -175,9 +176,9 @@ module.exports = {
                         const detailExist= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
                         //il n'existe pas=> on insert
                          if(!detailExist.rows[0]){
-                             await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id,birthyear, picture, decription, experience, latitude, longitude, disponibility)
-                                            VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7, $8, $9, $10, $11);`
-                                            ,[city, country, remote, userID, birthyear, picture, description,experience, latitude, longitude, disponibility]);
+                             await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id,birthyear, picture, decription, experience, latitude, longitude, disponibility, linkedin_link)
+                                            VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7, $8, $9, $10, $11,$12);`
+                                            ,[city, country, remote, userID, birthyear, picture, description,experience, latitude, longitude, disponibility, linkedinLink]);
                     }//sinon on update
                          else{
                              await db.query(`UPDATE usr_detail
@@ -189,10 +190,12 @@ module.exports = {
                                             description=$6 ,
                                             experience=$7,
                                             latitude=$8,
-                                            longitude=$9 
+                                            longitude=$9,
+                                            disponibility=$10,
+                                            linkedin_link=$11
                                             WHERE usr_id=$1`,
                                             [city, country, remote, birthyear,
-                                            picture, description, experience, latitude, longitude,userID]);
+                                            picture, description, experience, latitude, longitude,disponibility,linkedinLink,userID]);
                             };
                     
                     }
