@@ -46,19 +46,21 @@ module.exports = {
                 },
                 validate: {
                     payload: Joi.object({
-                        password: Joi.string(),
+                        password: Joi.string().allow(''),
                         validatePassword: Joi.ref('password'),
-                        pseudo: Joi.string(),
-                        email: Joi.string().email({ minDomainSegments: 2}),
+                        pseudo: Joi.string().allow(''),
+                        firstEmail: Joi.string().email().required(),
+                        email: Joi.string().email().allow(''),
+                        validateEmail: Joi.string().email().allow(''),
                         searchable: Joi.boolean().required(),
                         remote: Joi.boolean().required(),
                         city: Joi.string().required(),
                         country: Joi.string().required(),
-                        birthyear: Joi.number(),
-                        description: Joi.string().allow(' '),
-                        experience: Joi.number(),
+                        birthyear: Joi.number().allow(''),
+                        description: Joi.string().allow(''),
+                        experience: Joi.number().allow(''),
                         disponibility: Joi.number(),
-                        linkedinLink: Joi.string(),
+                        linkedinLink: Joi.string().allow(''),
                         // languages: Joi.array().items(Joi.string()),
                         // itLang: Joi.string().items(Joi.string())
                     })
@@ -71,11 +73,16 @@ module.exports = {
                 //un tableau d'erreurs vide
                 let error= [];
                 //le cookie email pour retrouver l'user
-                const email= request.state.cookie.email;
+                // const email= request.state.cookie.email;
+                const email= request.payload.firstEmail;
+                console.log(email);
                 //on retrouve l'user de suite pour ne pas avoir à le refaire plus tard
-                const result = await db.query(`SELECT * FROM usr WHERE email = $1;`, [email]);
+                const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
+                console.log(`user trouvé!`)
                 const userID= result.rows[0].id;
-                const userDetails= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1;`,[userID]);
+                console.log(userID)
+                const userDetails= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
+                console.log(`detail trouvé`)
                 const userCountry= userDetails.rows[0].country;
                 const userCity=userDetails.rows[0].city;
                 //les données du formulaire:
@@ -107,19 +114,7 @@ module.exports = {
                 console.log(request.payload);
                 //si l'utisateur change des infos=> update user table
                 //le pseudo
-                if(pseudo!== undefined
-                    ||pseudo!== null
-                    ||pseudo.length>0 && pseudo.toLowerCase()!==result.rows[0].pseudo){
-                    //oui mais le pseudo doit être unique
-                    const pseudoExists= await db.query(`SELECT pseudo FROM usr WHERE pseudo= $1;` ,[pseudo.toLowerCase()]);
-                    if(!pseudoExists.rows[0]){
-                    await db.query(`UPDATE usr SET pseudo= ${pseudo.toLowerCase()} WHERE usr.id= $1;`[userID]);
-                    }
-                    //si le pseudo existe=> on le dit à l'utilisateur
-                    else{
-                        error.push('Désolé...Ce pseudo est déjà pris! ');
-                    }
-                };
+                
                 //le mot de passe
                 //on compare le mdp avec la validation si mdp changé
                 //déjà est ce que le user a rentré un mdp?
@@ -154,6 +149,7 @@ module.exports = {
                     //ok mais c'est un email?
                     if(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(changeMyEmail)===true){
                     //dans ce cas on va update le profil
+                    console.log(`c'est bien un email`)
                     await db.query(`UPDATE usr 
                                     SET "email"=$1 
                                     WHERE usr.id=$1`, [changeMyEmail, userID]);
@@ -163,28 +159,36 @@ module.exports = {
                         error.push(`L'email saisie est invalide ou n'est pas équivalent à la validation.`);
                     }
                 };
+               
                 
                 //si l'user change son détail=> usr_detail
                 //avant on vérifie que les input "required" sont conformes
                 if(city!==null&& country!==null && remote!==null
                     ||city!== undefined&& country!== undefined&& remote!== undefined){
+                        console.log(`attention je rentre dans la vérification de la ville et du pays`)
                     //ensuite on vérifie si ce qui a été saisie diffère des données existantes
                     if(city!==userCity &&country!==userCountry
                         ||country==userCountry&& city!==userCity
                         ||city==userCity&&country!==userCountry){
+                            console.log(`je lance la requete vers l'api`)
                         const api= await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}&apiKey=${APIKEY}`,{
                             json:true
                         });
+                        console.log(`j'ai vérifié la requête à l'api`)
                         const latitude= api.payload.items[0].position.lat;
+                        console.log(latitude);
                         const longitude= api.payload.items[0].position.lng;
+                        console.log(longitude);
                         const detailExist= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
                         //il n'existe pas=> on insert
                          if(!detailExist.rows[0]){
+                             console.log(`je n'ai pas trouvé de correspondance=>j'insère`)
                              await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id,birthyear, picture, decription, experience, latitude, longitude, disponibility, linkedin_link)
                                             VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7, $8, $9, $10, $11,$12);`
                                             ,[city, country, remote, userID, birthyear, picture, description,experience, latitude, longitude, disponibility, linkedinLink]);
                     }//sinon on update
                          else{
+                             console.log(`j'ai trouvé une correspondance=>j'update`)
                              await db.query(`UPDATE usr_detail
                                             SET "city"=$1 , 
                                             "country"=$2 ,
@@ -200,7 +204,8 @@ module.exports = {
                                             WHERE usr_id=$1`,
                                             [city, country, remote, birthyear,
                                             picture, description, experience, latitude, longitude,disponibility,linkedinLink,userID]);
-                            };
+                                            console.log(`update usr_detail ok`)
+                                        };
                     
                     }
                   
@@ -224,6 +229,7 @@ module.exports = {
 
                 //si l'utilisateur rentre une langue
                 if(selectedLang.length >0){
+                    console.log(`il y a des langues`)
                     for (let lang of selectedLang){
                         const langExists= await db.query(`SELECT id 
                                                       FROM lang
@@ -271,6 +277,24 @@ module.exports = {
                         }
                     }
                     };
+                    if(pseudo!== undefined
+                        ||pseudo!== null
+                        ||pseudo.length>3 && pseudo.toLowerCase()!==result.rows[0].pseudo
+                        ||!!pseudo){
+                           
+                        //oui mais le pseudo doit être unique
+                        console.log(`je rentre dans la vérification du pseudo`);
+                        const pseudoExists= await db.query(`SELECT pseudo FROM usr WHERE pseudo= $1;` ,[pseudo]);
+                        if(!pseudoExists.rows[0]){
+                            console.log(`aucun pseudo équivalent`);
+                            await db.query(`UPDATE usr SET pseudo=${pseudo} WHERE "id"=$2;`,[userID]);
+                            console.log(`j'ai update le pseudo`);
+                        }
+                        //si le pseudo existe=> on le dit à l'utilisateur
+                        else{
+                            error.push('Désolé...Ce pseudo est déjà pris! ');
+                        }
+                    };
                         //si il y a des erreurs
                         if(error.length>0){
                             return h.response(error).code(400);
@@ -279,7 +303,7 @@ module.exports = {
                         else{
                             const newResult = await db.query(`SELECT * FROM usr WHERE "id" = $1` ,[userID]);
                             const newProfile= await db.query(`SELECT * FROM usr_profile WHERE pseudo=$1 `,[newResult.rows[0].pseudo]);
-                            const newPlace= await db.query(`SELECT * FROM usr_map WHERE pseudo=$1`, [newResult.rows[0].pseudo])
+                            const newPlace= await db.query(`SELECT * FROM usr_map WHERE pseudo=$1`, [newResult.rows[0].pseudo]);
                             return  {newPlace, newProfile};
                         }
                         //si le champs est vide=> ne rien faire
