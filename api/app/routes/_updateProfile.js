@@ -30,6 +30,7 @@ module.exports = {
                 const Lang= Langs.rows;
                 const result = await db.query(`SELECT * FROM usr_profile WHERE email = $1`, [email]);
                 const user= result.rows[0];
+                console.log(email);
                return  {user, itLang, Lang};
             }
         });
@@ -54,7 +55,7 @@ module.exports = {
                         city: Joi.string().required(),
                         country: Joi.string().required(),
                         birthyear: Joi.number(),
-                        description: Joi.string(),
+                        description: Joi.string().allow(' '),
                         experience: Joi.number(),
                         disponibility: Joi.number(),
                         linkedinLink: Joi.string()
@@ -266,16 +267,15 @@ module.exports = {
                         }
                     }
                     };
-
                         //si il y a des erreurs
                         if(error.length>0){
-                            return error
+                            return h.response(error).code(400);
                         }
                         //sinon on renvoie les nouvelles infos
                         else{
                             const newResult = await db.query(`SELECT * FROM usr WHERE "id" = $1` ,[userID]);
-                            const newProfile= await db.query(`SELECT * FROM usr_profile WHERE usr.pseudo=$1 `,[newResult.rows[0].pseudo]);
-                            const newPlace= await db.query(`SELECT * FROM usr_map WHERE usr.pseudo=$1`, [newResult.rows[0].pseudo])
+                            const newProfile= await db.query(`SELECT * FROM usr_profile WHERE pseudo=$1 `,[newResult.rows[0].pseudo]);
+                            const newPlace= await db.query(`SELECT * FROM usr_map WHERE pseudo=$1`, [newResult.rows[0].pseudo])
                             return  {newPlace, newProfile};
                         }
                         //si le champs est vide=> ne rien faire
