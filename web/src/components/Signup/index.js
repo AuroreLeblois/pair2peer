@@ -208,9 +208,8 @@ const Signup = () => {
             name='remote'
             value='true'
             checked={radioValue === 'true'}
-            onClick={e => setRemote(!e.target.value)}
             onChange={handleRadioChange}
-
+            onClick={e => setRemote(!e.target.value)}
           />
 
           <Radio
@@ -218,7 +217,7 @@ const Signup = () => {
             name='remote'
             value='false'
             checked={radioValue === 'false'}
-            onClick={e => setRemote(e.target.value)}
+
             onChange={handleRadioChange}
           />
         
