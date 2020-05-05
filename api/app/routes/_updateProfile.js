@@ -14,11 +14,11 @@ module.exports = {
             method: 'GET',
             path: '/update/profile',
             options: {
-                auth: {
-                    strategy: 'base',
-                    mode: 'required',
-                    scope: ['user', 'admin']
-                },
+                // auth: {
+                //     strategy: 'base',
+                //     mode: 'required',
+                //     scope: ['user', 'admin']
+                // },
                 description: 'User\'s profile update page',
                 tags: ['api', 'profile', 'form']
             },
@@ -30,6 +30,7 @@ module.exports = {
                 const Lang= Langs.rows;
                 const result = await db.query(`SELECT * FROM usr_profile WHERE email = $1`, [email]);
                 const user= result.rows[0];
+                console.log(email);
                return  {user, itLang, Lang};
             }
         });
@@ -54,7 +55,7 @@ module.exports = {
                         city: Joi.string().required(),
                         country: Joi.string().required(),
                         birthyear: Joi.number(),
-                        description: Joi.string(),
+                        description: Joi.string().allow(' '),
                         experience: Joi.number(),
                         disponibility: Joi.number(),
                         linkedinLink: Joi.string()
