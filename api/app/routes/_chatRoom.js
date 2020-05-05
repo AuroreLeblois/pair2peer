@@ -1,35 +1,12 @@
 const vision = require('@hapi/vision');
 const inert = require('@hapi/inert');
-const react= require('react');
+const Joi = require('@hapi/joi');
 
 module.exports = {
     name: 'chat pages',
     register: async (server) => {
         await server.register([vision, inert]);
 
-
-        server.route({
-            method: 'GET',
-            path: '/chatroom/{chatName}',
-            options: {
-                // auth: {
-                //     strategy: 'base',
-                //     mode: 'required',
-                //     scope: ['user', 'admin']
-                // },
-                description: 'ChatRoom with people',
-                tags: ['api', 'chatroom']
-            },
-            handler: function (request, h) {
-                const chatCode= request.params.chatName;
-                const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`,[chatCode]);
-                if(!chatExists.rows[0]){
-                    return h.response(400);
-                }
-                return `Vous allez commencer un chatroom numéro ${chatCode}`
-               
-            }
-        });
         server.route({
             method: 'GET',
             path: '/chatroom/{chatName}',
@@ -47,15 +24,26 @@ module.exports = {
                 description: 'ChatRoom with people',
                 tags: ['api', 'chatroom']
             },
-            handler: function (request, h) {
+            handler: async function (request, h) {
                 const participants=[];
+                const error= [];
+                
                 const myEmail= request.state.cookie.email;
                 const me= await db.query(`SELECT * FROM usr WHERE email=$1`,[myEmail]);
-                const myEmail= me.rows[0].email;
                 const myName= me.rows[0].pseudo;
                 participants.push(myName);
                 const chatCode= request.params.chatName;
-                return `Vous allez commencer un chatroom numéro ${chatCode}`
+                const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`, [chatCode]);
+                    if(!chatExists.rows[0]){
+                        error.push("Cette chatroom n'existe pas ou a été suprimée");
+                        
+                         return h.response(error).code(400);
+                     }
+                     else{
+                         const messages= await db.query(`SELECT script, "date" FROM usr_message_chat 
+                                                        WHERE chat_id=$1`,[chatExists.rows[0].id]);
+                        return h.code(200);
+                     }
                
             }
         });

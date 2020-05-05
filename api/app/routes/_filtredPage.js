@@ -9,11 +9,11 @@ module.exports = {
             method: 'GET',
             path: '/search',
             options: {
-                // auth: {
-                //     strategy: 'base',
-                //     mode: 'required',
-                //     scope: ['user', 'admin']
-                // },
+                auth: {
+                    strategy: 'base',
+                    mode: 'required',
+                    scope: ['user', 'admin']
+                },
                 description: 'Filter to search matches',
                 tags: ['api', 'filter'],
                 validate: {
