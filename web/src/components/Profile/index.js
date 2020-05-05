@@ -14,8 +14,8 @@ const Profile = () => {
 
   return (
     <Grid relaxed="very" centered>
-      <Grid.Column width={3}>
-        <Image src={user.picture} circular size="medium" />
+      <Grid.Column width={4}>
+        <Image src={user.picture} circular size="large" centered />
         <Card>
           <Card.Content>
             <Card.Header>{firstLetterToUppercase(user.pseudo)}</Card.Header>
@@ -32,7 +32,7 @@ const Profile = () => {
           </Card.Content>
         </Card>
       </Grid.Column>
-      <Grid.Column width={8}>
+      <Grid.Column width={10}>
         <ProfileEdit />
       </Grid.Column>
     </Grid>

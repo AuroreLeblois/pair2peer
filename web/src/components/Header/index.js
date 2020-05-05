@@ -1,14 +1,22 @@
 // == Import npm
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Menu, Icon, Button } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 // == Import
+import { submitLogout } from 'src/store/actions';
 import './styles.css';
 
 // == Composant
 const Header = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const handleLogout = () => {
+    dispatch(submitLogout(history));
+  };
+
   const { user } = useSelector((state) => state);
 
   const NoUser = () => (
@@ -34,9 +42,7 @@ const Header = () => {
         </Link>
       </Menu.Item>
       <Menu.Item>
-        <Link to="/logout">
-          <Button color="red" content="Déconnexion" />
-        </Link>
+        <Button color="red" content="Déconnexion" onClick={handleLogout} />
       </Menu.Item>
     </>
   );
