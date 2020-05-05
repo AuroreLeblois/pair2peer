@@ -4,7 +4,6 @@ import { Input, Dropdown, Form, Header } from 'semantic-ui-react';
 
 // == Composant
 const ITSkills = ({ it_language }) => {
-  console.log(it_language);
   const lvlOptions = [
     { key: '1', text: '1', value: '1' },
     { key: '2', text: '2', value: '2' },
