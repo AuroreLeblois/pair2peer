@@ -1,22 +1,13 @@
-
-// == Import
-
+// == Import npm
 import React, { useEffect, useState } from 'react';
-// import ReactDOM from 'react-dom';
 import { Formik, Form, useField } from 'formik';
-// ES2015 module syntax
-// import { Form, Field } from '@progress/kendo-react-form';
-import './styles.css';
 import * as Yup from 'yup';
-
-// Semantic
-import { Checkbox, Radio } from 'semantic-ui-react';
-
-
+import axios from 'axios';
+import { Radio } from 'semantic-ui-react';
 
 //************************************************* */
 
-
+// == Composant
 const MyTextInput = ({ label, ...props }) => {
   // useField () renvoie [formik.getFieldProps (), formik.getFieldMeta ()]
   // que nous pouvons étendre sur <input> et remplacer ErrorMessage.
@@ -51,6 +42,8 @@ const MyCheckbox = ({ children, ...props }) => {
   );
 };
 */
+
+
 const Signup = () => {
 
   // Les hooks
@@ -74,6 +67,29 @@ const Signup = () => {
       remote: ${remote}
     `);
     event.preventDefault ();
+
+    // ******************************************************************************
+    // AXIOS ?
+    const newUser = {
+      "pseudo": "pseudo",
+      "mail": "email",
+      password: password,
+      passwordConfirm: passwordConfirm,
+      country: country,
+      city: city,
+      remote: remote,
+    };
+
+    axios.post(`http://localhost:3000/signup`, {
+      newUser
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
   };
 
   const handleRadioChange = (evt, result) => {
@@ -81,10 +97,9 @@ const Signup = () => {
   };
   
 
-
   return (
-    <Formik
-      initialValues={
+      <Formik
+        initialValues={
         {
           pseudo:'',
           email: '',
@@ -93,7 +108,7 @@ const Signup = () => {
           country:'',
           city:'',
           remote:'',
-          role:'',
+          // role:'',
           // acceptedTerms: false, // Pour la checkbox
         }
       }
@@ -103,13 +118,13 @@ const Signup = () => {
         Yup.object (
           {
             pseudo: Yup.string()
-            .max(15, 'Must be 15 characters or less')
+            .max(15)
             .required('Obligatoire'),
             country: Yup.string()
-            .max(15, 'Must be 15 characters or less')
+            .max(15)
             .required('Obligatoire'),
             city: Yup.string()
-            .max(15, 'Must be 15 characters or less')
+            .max(15)
             .required('Obligatoire'),
             email: Yup.string()
             .email('Invalid email address')
@@ -138,9 +153,8 @@ const Signup = () => {
             setSubmitting(false);
           }, 400
           );
-      }}
-      // Possibilité de faire un forEach de l'objet Yup pour construire chaque form ??
-    >
+        }}
+      >
       
       <Form 
       className = "ui form"
