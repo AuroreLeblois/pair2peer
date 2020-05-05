@@ -58,8 +58,10 @@ const Signup = () => {
   const [passwordConfirm, setPasswordConfirm] = React.useState("");
   const [country, setCountry] = React.useState("");
   const [city, setCity] = React.useState("");
-  const [remote, setRemote] = React.useState('false');
 
+
+  const [remote, setRemote] = React.useState('false');
+  
 
   const handleSubmit = (données, événement) => {
     console.log (`
@@ -76,7 +78,6 @@ const Signup = () => {
   };
 
 
-
   return (
     <Formik
       initialValues={
@@ -87,7 +88,7 @@ const Signup = () => {
           passwordConfirm:'',
           country:'',
           city:'',
-          remote:'',
+          remote:'false',
           role:'defaut ??',
           // acceptedTerms: false, // Pour la checkbox
         }
@@ -199,15 +200,13 @@ const Signup = () => {
             label='Oui'
             name='remote'
             value='true'
-            checked={remote === true}
-            onClick={e => setRemote(e.target.value)}
+            onClick={e => setRemote(!e.target.value)}
           />
           <Radio
             label='Non'
             name='remote'
             value='false'
-            checked={remote === false}
-            onClick={e => setRemote(e.target.value)}
+            onClick={evt => setRemote(evt.target.value)}
           />
 
           {/* <MyCheckbox name="acceptedTerms">
@@ -225,9 +224,8 @@ const Signup = () => {
             setCountry(country)
             setCity(city)
             setRemote(remote)
-
           }
-          }
+        }
           >
             S'inscrire
           </button>

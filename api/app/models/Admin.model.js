@@ -9,6 +9,9 @@ module.exports = class Admin {
         });
     };
 
+    // ####               ####
+    // ##   Add method      ##
+    // ####               ####
     static async add (query) {
 
         let language = await db.query('SELECT * FROM all_language');

@@ -1,7 +1,4 @@
-const bcrypt = require('bcrypt');
-const db = require('../models/db');
 const Joi = require('@hapi/joi');
-const Wreck = require('@hapi/wreck');
 const User = require('../models/User.model')
 
 module.exports = {
@@ -16,7 +13,7 @@ module.exports = {
                 tags: ['api', 'login']
             },
             handler: function (request, h) {
-    
+
                 return 'à définir';
             }
         });
@@ -60,7 +57,8 @@ module.exports = {
             },
             handler: (request, h) => {
                 
-                request.cookieAuth.clear()
+                // remove the cookie
+                request.cookieAuth.clear();
                 return h.redirect('/');
             }
         });
@@ -92,16 +90,16 @@ module.exports = {
                         passwordConfirm: Joi.ref('password'),
                         country: Joi.string().trim().required(),
                         city: Joi.string().trim().required(),
-                        remote: Joi.string().required(),
+                        remote: Joi.string().required()
                     }),
                     options: {
-                        // false mean I go through each key (payload) even if one error appears
+                        // false mean I go through each key (payload) even if one error appears	
                         // true mean the code throw directly an error starting from the first error and doesn't check other key
                         abortEarly: false
                     },
                     // if the joi validate failed, have to declare failAction to custom error messages
                     failAction: (request, h, err) => {
-
+                        
                         // errors object will be the object who contains all the error messages (in french)
                         const errors = {};
                         const details = err.details;

@@ -1,8 +1,7 @@
+// import omit from 'object.omit';
 import { actions } from 'src/store/actions';
 
 const initialState = {
-  email: 'tony0@gmail.com',
-  password: 'azertyui',
   search: {
     remote: '',
     language: '',
@@ -22,12 +21,6 @@ const initialState = {
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
-    case actions.SYNC_LOGIN: {
-      return {
-        ...state,
-        [action.name]: action.value,
-      };
-    }
     case actions.GET_AUTHENTIFIED: {
       return {
         ...state,
@@ -35,12 +28,7 @@ export default (state = initialState, action = {}) => {
       };
     }
     case actions.GET_LOGOUT: {
-      console.log('reducer logout')
-      return {
-        ...state,
-        user: '',
-        email: '',
-      };
+      return omit({ ...state }, 'user');
     }
     case actions.GET_USERS_LIST: {
       return {
@@ -49,9 +37,11 @@ export default (state = initialState, action = {}) => {
       };
     }
     case actions.GET_FILTERS_LIST: {
+      console.log(action)
       return {
         ...state,
         filters: action.filters,
+        usersData: action.maxUser,
       };
     }
     case actions.SUBMIT_FILTERS_SEARCH: {
@@ -74,6 +64,9 @@ export default (state = initialState, action = {}) => {
         ...state,
         errors: action.errors,
       };
+    }
+    case actions.CLEAR_ERRORS_MSG: {
+      return omit({ ...state }, 'errors');
     }
     default: {
       return state;

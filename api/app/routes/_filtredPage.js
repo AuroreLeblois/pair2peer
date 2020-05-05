@@ -59,11 +59,11 @@ module.exports = {
             method: 'POST',
             path: '/search',
             options: {
-                // auth: {
-                //     strategy: 'base',
-                //     mode: 'required',
-                //     scope: ['user', 'admin']
-                // },
+                auth: {
+                    strategy: 'base',
+                    mode: 'required',
+                    scope: ['user', 'admin']
+                },
                 description: 'Target of the filter, find all matches',
                 tags: ['api', 'filter'],
                 validate: {

@@ -36,11 +36,11 @@ module.exports = {
             method: 'POST',
             path: '/admin',
             options: {
-                // auth: {
-                //     strategy: 'base',
-                //     mode: 'required',
-                //     scope: 'admin'
-                // },
+                auth: {
+                    strategy: 'base',
+                    mode: 'required',
+                    scope: 'admin'
+                },
                 description: 'Target\'s admin page to add language or it_language',
                 tags: ['api', 'admin'],
                 validate: {

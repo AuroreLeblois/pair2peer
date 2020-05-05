@@ -42,7 +42,7 @@ module.exports = {
                      else{
                          const messages= await db.query(`SELECT script, "date" FROM usr_message_chat 
                                                         WHERE chat_id=$1`,[chatExists.rows[0].id]);
-                        return h.code(200);
+                        return h.response(messages.rows).code(200);
                      }
                
             }
