@@ -1,4 +1,4 @@
-/* label {
+label {
   display: flex;
   color:white;
   margin: auto;
@@ -21,11 +21,7 @@
   margin: auto;
 }
 
-<<<<<<< HEAD
 .text-input {
   display: flex;
   align-content: space-around;
 }
-=======
-} */
->>>>>>> 8d040ffd098036e558c8769f6e735bd1317fcd7b

@@ -1,43 +1,22 @@
+
 // == Import
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 // import ReactDOM from 'react-dom';
 import { Formik, Form, useField } from 'formik';
+// ES2015 module syntax
+import { Form, Field } from '@progress/kendo-react-form';
 import './styles.css';
 // import styled from '@emotion/styled';
-
 import * as Yup from 'yup';
-
-
 // Semantic
 import { Button, Checkbox } from 'semantic-ui-react';
 
-/**
-// Validation ==> On passera directement par Yup pour la validation des forms
 
-const validate = values => {
-  const errors = {};
-  if (!values.firstName) {
-    errors.firstName = 'Required';
-  } else if (values.firstName.length > 15) {
-    errors.firstName = 'Must be 15 characters or less';
-  }
 
-  if (!values.lastName) {
-    errors.lastName = 'Required';
-  } else if (values.lastName.length > 20) {
-    errors.lastName = 'Must be 20 characters or less';
-  }
+//************************************************* */
 
-  if (!values.email) {
-    errors.email = 'Required';
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Invalid email address';
-  }
 
-  return errors;
-};
-*/
 const MyTextInput = ({ label, ...props }) => {
   // useField () renvoie [formik.getFieldProps (), formik.getFieldMeta ()]
   // que nous pouvons étendre sur <input> et remplacer ErrorMessage.
@@ -91,6 +70,18 @@ const StyledLabel = styled.label`
 
 
 const Signup = () => {
+
+  // Les hooks
+  const [pseudo, setPseudo] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [country, setCountry] = React.useState("");
+  const [city, setCity] = React.useState("");
+
+
+
+
+
   return (
     <Formik
       initialValues={
@@ -141,6 +132,9 @@ const Signup = () => {
           })
         })
       }
+
+
+
       onSubmit = {
         (values, { setSubmitting } ) => {
           setTimeout(() => {
@@ -168,6 +162,8 @@ const Signup = () => {
             }}
             type="email"
             placeholder="jane@formik.com"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
           />
           <MyTextInput
             label="Mot de passe"
