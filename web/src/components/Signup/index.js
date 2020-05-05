@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 // import ReactDOM from 'react-dom';
 import { Formik, Form, useField } from 'formik';
 // ES2015 module syntax
-import { Form, Field } from '@progress/kendo-react-form';
+// import { Form, Field } from '@progress/kendo-react-form';
 import './styles.css';
 // import styled from '@emotion/styled';
 import * as Yup from 'yup';
@@ -198,7 +198,13 @@ const Signup = () => {
             J'accepte les conditions d'utilisations
           </MyCheckbox> */}
 
-          <button className="ui button" type="submit">S'inscrire</button>
+          <button 
+          className="ui button" 
+          type="submit" 
+          onClick={() => setEmail(email)}
+          >
+            S'inscrire
+          </button>
         </Form>
     </Formik>
   );
