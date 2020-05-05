@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const db = require('../models/db');
 const Joi = require('@hapi/joi');
 const Wreck = require('@hapi/wreck');
-require('dotenv').config();
+const User = require('../models/User.model')
 
 module.exports = {
     name: 'logs pages',
@@ -34,40 +34,20 @@ module.exports = {
                     })
                 }
             },
-            handler: async (request, h) => {
+            handler: (request, h) => {
     
                 const { email, password } = request.payload;
+                // use User model to log
+                const info = User.login(email, password);
 
-                // test if the email exist
-                const visitor = await db.query(`SELECT * FROM usr WHERE email = $1`, [email]);
-                const user = visitor.rows[0];
-    
-                // build a formated object error message like native Hapi
-                const errorList = {
-                    statusCode: 400,
-                    error: 'Bad Request',
-                    message: {}
-                };
-
-                // create specific error message depend on the data
-                if (!user) {
-                    errorList.message.errorEmail = 'Cet email n\'existe pas';
-                    errorList.message.errorPassword = 'Mauvais mot de passe';
-                };
-                if (user && !await bcrypt.compare(password, user.password)) {
-                    errorList.message.errorPassword = 'Mauvais mot de passe';
-                };
-                
-                // return error message if exists 
-                if (errorList.message.errorEmail || errorList.message.errorPassword) {
-                    return h.response(errorList).code(400);
+                if (info.statusCode) {
+                    // if error, send error messages
+                    return h.response(info).code(400);
+                } else {
+                    // if success, set the cookie and send user informations
+                    request.cookieAuth.set({ email });
+                    return info;
                 }
-                // if the process passed all the verifications, it will set a cookie for the authentification (server.js)
-                request.cookieAuth.set({email});
-
-                // send all informations about the user logged for the front in react
-                const userInfos = await db.query(`SELECT * FROM usr_profile WHERE email = $1`, [email]) 
-                return userInfos.rows[0];
             }
         });
 
@@ -112,7 +92,7 @@ module.exports = {
                         passwordConfirm: Joi.ref('password'),
                         country: Joi.string().trim().required(),
                         city: Joi.string().trim().required(),
-                        remote: Joi.string().required()
+                        remote: Joi.string().required(),
                     }),
                     options: {
                         // false mean I go through each key (payload) even if one error appears
@@ -147,65 +127,21 @@ module.exports = {
                     }
                 }
             },
-            handler: async (request, h) => {
+            handler: (request, h) => {
 
                 const { email, pseudo, password, country, city, remote } = request.payload;
-                const registered = await db.query('SELECT pseudo FROM usr WHERE email = $1', [email]);
-                const nameRegistered = await db.query('SELECT pseudo FROM usr');
+                // use User model to signup
+                const info = User.signup(email, pseudo, password, country, city, remote)
 
-                const api = await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}&apiKey=${process.env.APIKEY}`, {
-                    json: true
-                });
-
-                // build an error object who will contain all the specific error messages based on Hapi native error message
-                const errorList = {
-                    statusCode: 400,
-                    error: 'Bad Request',
-                    message: {}
-                };
-
-                // check if the address'input goes wrong
-                if (!api.payload.items[0]) {
-                    errorList.message.wrongAddress = 'Le pays ou la ville n\'existe pas';
-                };
-
-                // check the errors that I cannot verify inside the failAction 
-                if (registered.rows[0]) {
-                    errorList.message.emailUsed = 'Cet email existe déjà';
-                };
-
-                for (let registered of nameRegistered.rows) {
-                    if (pseudo.toLowerCase() === registered.pseudo.toLowerCase()) {
-                        errorList.message.usernameUsed = 'Ce nom d\'utilisateur existe déjà';
-                    }
-                };
-
-                if (errorList.message.usernameUsed
-                    || errorList.message.emailUsed
-                    || errorList.message.wrongAddress) {
-                    return h.response(errorList).code(400);
-                };
-
-                // collect the address and coordinates through the API
-                const { address, position } = api.payload.items[0];
-
-                // hash the password and add salt to prevent hacking
-                const hashPassword = bcrypt.hashSync(password, 10);
-
-                // create a new user
-                const newRegistered = await db.query('SELECT * FROM add_usr($1, $2, $3)', [email, pseudo, hashPassword]);
-
-                const userId = newRegistered.rows[0].id;
-
-                // bind some descriptions to the new user
-                const newRegisteredDetail = await db.query('SELECT * FROM add_usr_detail($1, $2, $3, $4, $5, $6)', [userId, address.countryName.toLowerCase(), address.city.toLowerCase(), position.lat, position.lng, remote]);
-
-                // collect user informations to send to the front
-                const newUser = await db.query('SELECT * FROM usr_profile WHERE id = $1', [userId]);
-
-                const newUserProfile = newUser.rows[0]
-                return newUserProfile;
+                if (info.statusCode) {
+                    // if error, send error messages
+                    return h.response(info).code(400);
+                } else {
+                    // if success, send new user's informations
+                    return info;
+                }
             }
-        })
+        });
+
     }
 }

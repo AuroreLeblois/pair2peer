@@ -1,5 +1,6 @@
 const db = require('../models/db');
 const Joi = require('@hapi/joi');
+const Admin = require('../models/Admin.model');
 
 module.exports = {
     name: 'admin pages',
@@ -32,14 +33,14 @@ module.exports = {
         });
 
         server.route({
-            method : 'POST',
+            method: 'POST',
             path: '/admin',
             options: {
-                auth: {
-                    strategy: 'base',
-                    mode: 'required',
-                    scope: 'admin'
-                },
+                // auth: {
+                //     strategy: 'base',
+                //     mode: 'required',
+                //     scope: 'admin'
+                // },
                 description: 'Target\'s admin page to add language or it_language',
                 tags: ['api', 'admin'],
                 validate: {
@@ -49,48 +50,15 @@ module.exports = {
                     })
                 }
             },
-            handler: async (request, h) => {
+            handler: (request, h) => {
 
-                const query = request.payload;
-
-                let language = await db.query('SELECT * FROM all_language');
-                let it_language = await db.query('SELECT * FROM all_it_language');
-
-                // if key doesn't have any value, the pair key-value will be remove of the object
-                for (let item in query) {
-                    if (!query[item]) {
-                        delete query[item];
-                    } else {
-                        query[item] = query[item].toLowerCase();
-                    }
-                };
-
-                const keys = Object.keys(query);
-                const values = Object.values(query);
-
-                // depend to the query, it will insert the value
-                for (let index = 0; index < keys.length; index++) {
-                    // it will check if the it_language is already here into the database
-                    if (keys[index] === 'it_language' && !it_language.rows[0].name.includes(values[index])) {
-                        await db.query(`INSERT INTO it_lang (name) VALUES ('${values[index]}')`)
-                    // if will check if the language is already here into the database
-                    } else if (keys[index] === 'language' && !language.rows[0].name.includes(values[index])) {
-                        await db.query(`INSERT INTO lang (name) VALUES ('${values[index]}')`)
-                    }
-                };
-
-                // we have to call again to visualize the increase
-                language = await db.query('SELECT * FROM all_language');
-                it_language = await db.query('SELECT * FROM all_it_language');
-
-                // it will prepare the response to the front
-                const info = {};
-                info.language = language.rows[0].name;
-                info.it_language = it_language.rows[0].name
+                // use Admin model to add language or it_language
+                const info = Admin.add(request.payload);
 
                 return info;
             }
         });
+
         server.route({
             method: 'GET',
             path: '/admin/lang/{langName}',
