@@ -58,7 +58,35 @@ const Signup = () => {
   const [passwordConfirm, setPasswordConfirm] = React.useState("");
   const [country, setCountry] = React.useState("");
   const [city, setCity] = React.useState("");
-  const [remote, setRemote] = React.useState('false');
+
+
+  const [remote, setRemote] = React.useState({
+    getInitialState: function() {
+      return {
+        isChecked: false
+      };
+    },
+    toggleChange: function() {
+      this.setState({
+        isChecked: !this.state.isChecked
+      }, function() {
+        console.log(this.state);
+      }.bind(this));
+    },
+    render: function() {
+      return (
+        <label>
+          <input
+            type="checkbox"
+            checked={this.state.isChecked}
+            onChange={this.toggleChange} />
+          Check Me!
+        </label>
+      );
+    }
+
+
+  })
 
 
   const handleSubmit = (données, événement) => {
@@ -195,14 +223,14 @@ const Signup = () => {
           onChange={e => setCity(e.target.value)}
         />
         <p> Je veux travailler en remote </p>
-          <Radio
+          <Checkbox
             label='Oui'
             name='remote'
             value='true'
             checked={remote === true}
-            onClick={e => setRemote(e.target.value)}
+            onClick={e => setRemote(!e.target.value)}
           />
-          <Radio
+          <Checkbox
             label='Non'
             name='remote'
             value='false'
