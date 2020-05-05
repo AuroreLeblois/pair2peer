@@ -87,28 +87,28 @@ module.exports = {
                 const userCity=userDetails.rows[0].city;
                 //les données du formulaire:
                 //les données utilisateur brutes
-                let password= request.payload.password;
-                let birthyear= request.payload.birthyear;
-                let picture= request.payload.picture;
-                let country= request.payload.country;
-                let city= request.payload.city;
-                let remote= request.payload.remote;
-                let experience= request.payload.experience;
-                let description= request.payload.description;
-                let validatePassword= request.payload.validatePassword;
-                let changeMyEmail= request.payload.email;
-                let validateEmail= request.payload.validateEmail;
-                let pseudo= request.payload.pseudo;
-                let linkedinLink=request.payload.linkedinLink;
+                const password= request.payload.password;
+                const birthyear= request.payload.birthyear;
+                const picture= request.payload.picture;
+                const country= request.payload.country;
+                const city= request.payload.city;
+                const remote= request.payload.remote;
+                const experience= request.payload.experience;
+                const description= request.payload.description;
+                const validatePassword= request.payload.validatePassword;
+                const changeMyEmail= request.payload.email;
+                const validateEmail= request.payload.validateEmail;
+                const pseudo= request.payload.pseudo;
+                const linkedinLink=request.payload.linkedinLink;
                 //les langues
-                let selectedLang= [request.payload.languages];
+                const selectedLang= [request.payload.languages];
                 //les it
-                let itlangs = [request.payload.itLanguages];
-                let itLevel= [request.payload.itLevels];
+                const itlangs = [request.payload.itLanguages];
+                const itLevel= [request.payload.itLevels];
                 //on peut me trouver via le filtre?
-                let searchMe= request.payload.searchable;
+                const searchMe= request.payload.searchable;
                 //les dispos
-                let disponibility= request.payload.disponibility;
+                const disponibility= request.payload.disponibility;
                 
                 //petit console.log(request.payload) pour vérifier tout ça
                 console.log(request.payload);
@@ -183,7 +183,7 @@ module.exports = {
                         //il n'existe pas=> on insert
                          if(!detailExist.rows[0]){
                              console.log(`je n'ai pas trouvé de correspondance=>j'insère`)
-                             await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id,birthyear, picture, decription, experience, latitude, longitude, disponibility, linkedin_link)
+                             await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id, "birthyear", picture, description, experience, latitude, longitude, disponibility, linkedin_link)
                                             VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7, $8, $9, $10, $11,$12);`
                                             ,[city, country, remote, userID, birthyear, picture, description,experience, latitude, longitude, disponibility, linkedinLink]);
                     }//sinon on update
@@ -193,7 +193,7 @@ module.exports = {
                                             SET "city"=$1 , 
                                             "country"=$2 ,
                                             "remote"=$3 ,
-                                            birthyear=$4 ,
+                                            "birthyear"=$4 ,
                                             picture= $5 ,
                                             description=$6 ,
                                             experience=$7,
@@ -234,7 +234,7 @@ module.exports = {
                         const langExists= await db.query(`SELECT id 
                                                       FROM lang
                                                       WHERE "name" LIKE $1`, [lang]);
-                        let langID= langExists.rows[0].id;
+                        const langID= langExists.rows[0].id;
     
                         const userKnowsLang= await db.query(`SELECT usr_id, lang_id 
                                                             FROM usr_speaks_lang
@@ -253,7 +253,7 @@ module.exports = {
                         const itLangExists = await db.query(`SELECT id 
                                                         FROM it_lang
                                                         WHERE "name" LIKE $1`, [itLang]);
-                        let itLangID= itLangExists.rows[0].id;
+                        const itLangID= itLangExists.rows[0].id;
     
                         const userKnowsIt= await db.query(`SELECT usr_id, it_lang_id 
                                                            FROM usr_knows_it_lang
@@ -296,16 +296,16 @@ module.exports = {
                         }
                     };
                         //si il y a des erreurs
-                        if(error.length>0){
-                            return h.response(error).code(400);
-                        }
+                        // if(error.length>0){
+                        //     return h.response(error).code(400);
+                        // }
                         //sinon on renvoie les nouvelles infos
-                        else{
+                        // else{
                             const newResult = await db.query(`SELECT * FROM usr WHERE "id" = $1` ,[userID]);
                             const newProfile= await db.query(`SELECT * FROM usr_profile WHERE pseudo=$1 `,[newResult.rows[0].pseudo]);
                             const newPlace= await db.query(`SELECT * FROM usr_map WHERE pseudo=$1`, [newResult.rows[0].pseudo]);
                             return  {newPlace, newProfile};
-                        }
+                        // }
                         //si le champs est vide=> ne rien faire
                     }
                 });
