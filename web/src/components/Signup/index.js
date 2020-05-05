@@ -78,7 +78,16 @@ const Signup = () => {
   const [country, setCountry] = React.useState("");
   const [city, setCity] = React.useState("");
 
+  const handleSubmit = (données, événement) => {
+    console.log (`
+      Courriel: $ {data.email}
+      Mot de passe: $ {data.password}
+      Pays: $ {data.country}
+      Conditions acceptées: $ {data.acceptedTerms}
+    `);
 
+    event.preventDefault ();
+  };
 
 
 
@@ -146,7 +155,10 @@ const Signup = () => {
       // Possibilité de faire un forEach de l'objet Yup pour construire chaque form ??
     >
       
-      <Form className = "ui form">
+      <Form 
+      className = "ui form"
+      onSubmit = { handleSubmit }
+      >
           <MyTextInput
             label="Pseudo"
             name="pseudo"
