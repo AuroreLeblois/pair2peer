@@ -25,3 +25,7 @@ label {
   display: flex;
   align-content: space-around;
 }
+
+p {
+  color: white;
+}

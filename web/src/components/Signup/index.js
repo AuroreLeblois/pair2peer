@@ -10,8 +10,7 @@ import './styles.css';
 // import styled from '@emotion/styled';
 import * as Yup from 'yup';
 // Semantic
-import { Button, Checkbox } from 'semantic-ui-react';
-
+import { Button, Checkbox, Radio } from 'semantic-ui-react';
 
 
 //************************************************* */
@@ -50,25 +49,6 @@ const MyCheckbox = ({ children, ...props }) => {
   );
 };
 
-
-
-// A faire OU utiliser semantic Ui
-/** 
-const StyledSelect = styled.select`
-  /** ... * /
-`;
-
-const StyledErrorMessage = styled.div`
-  color: red;
-`;
-
-const StyledLabel = styled.label`
- /** ...* /
-`;
-
-*/
-
-
 const Signup = () => {
 
   // Les hooks
@@ -78,6 +58,8 @@ const Signup = () => {
   const [passwordConfirm, setPasswordConfirm] = React.useState("");
   const [country, setCountry] = React.useState("");
   const [city, setCity] = React.useState("");
+  const [remote, setRemote] = React.useState('false');
+
 
   const handleSubmit = (données, événement) => {
     console.log (`
@@ -87,6 +69,7 @@ const Signup = () => {
       Confirmation de mot de passe: ${passwordConfirm}
       Pays: ${country}
       Ville: ${city}
+      Remote: ${remote}
     `);
 
     event.preventDefault ();
@@ -126,9 +109,7 @@ const Signup = () => {
             email: Yup.string()
             .email('Invalid email address')
             .required('Obligatoire'),
-            remote: Yup.boolean()
-            .required('Obligatoire')
-            .oneOf([true], 'You must accept the terms and conditions.'),
+            remote: Yup.boolean(),
             //acceptedTerms: Yup.boolean()
             //.required('Required')
             //.oneOf([true], 'You must accept the terms and conditions.'), // Pour une future Charte de bonne conduite par exemple
@@ -144,6 +125,8 @@ const Signup = () => {
           })
         })
       }
+
+
       onSubmit = {
         (values, { setSubmitting } ) => {
           setTimeout(() => {
@@ -211,11 +194,22 @@ const Signup = () => {
           value={city}
           onChange={e => setCity(e.target.value)}
         />
-          <MyCheckbox
-            name="remote"
-            type="checkbox"            
-          >Voulez-vous travailler en remote ?
-          </MyCheckbox>
+        <p> Je veux travailler en remote </p>
+          <Radio
+            label='Oui'
+            name='remote'
+            value='true'
+            checked={remote === true}
+            onClick={e => setRemote(e.target.value)}
+          />
+          <Radio
+            label='Non'
+            name='remote'
+            value='false'
+            checked={remote === false}
+            onClick={e => setRemote(e.target.value)}
+          />
+
           {/* <MyCheckbox name="acceptedTerms">
             J'accepte les conditions d'utilisations
           </MyCheckbox> */}
@@ -223,7 +217,17 @@ const Signup = () => {
           <button 
           className="ui button" 
           type="submit" 
-          onClick={() => setEmail(email)}
+          onClick={() => {
+            setPseudo(pseudo)
+            setEmail(email)
+            setPassword(password)
+            setPasswordConfirm(passwordConfirm)
+            setCountry(country)
+            setCity(city)
+            setRemote(remote)
+
+          }
+          }
           >
             S'inscrire
           </button>
