@@ -75,15 +75,18 @@ const Signup = () => {
   const [pseudo, setPseudo] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [passwordConfirm, setPasswordConfirm] = React.useState("");
   const [country, setCountry] = React.useState("");
   const [city, setCity] = React.useState("");
 
   const handleSubmit = (données, événement) => {
     console.log (`
-      Courriel: $ {data.email}
-      Mot de passe: $ {data.password}
-      Pays: $ {data.country}
-      Conditions acceptées: $ {data.acceptedTerms}
+      Pseudo: ${pseudo}
+      Mail: ${email}
+      Mot de passe: ${password}
+      Confirmation de mot de passe: ${passwordConfirm}
+      Pays: ${country}
+      Ville: ${city}
     `);
 
     event.preventDefault ();
@@ -141,9 +144,6 @@ const Signup = () => {
           })
         })
       }
-
-
-
       onSubmit = {
         (values, { setSubmitting } ) => {
           setTimeout(() => {
@@ -164,6 +164,8 @@ const Signup = () => {
             name="pseudo"
             type="text"
             placeholder="Jane57"
+            value={pseudo}
+            onChange={e => setPseudo(e.target.value)}
           />
           <MyTextInput
             label="Mail"
@@ -182,24 +184,32 @@ const Signup = () => {
             name="password"
             type="password"
             placeholder=""
+            value={password}
+            onChange={e => setPassword(e.target.value)}
           />
           <MyTextInput
             label="Confirmation de mot de passe"
             name="passwordConfirm"
             type="password"
             placeholder=""
+            value={passwordConfirm}
+            onChange={e => setPasswordConfirm(e.target.value)}
           />
           <MyTextInput
             label="Pays"
             name="country"
             type="text"
             placeholder="France"
+            value={country}
+            onChange={e => setCountry(e.target.value)}
           />
           <MyTextInput
           label="Ville"
           name="city"
           type="text"
           placeholder="Strasbourg"
+          value={city}
+          onChange={e => setCity(e.target.value)}
         />
           <MyCheckbox
             name="remote"
