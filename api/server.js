@@ -32,11 +32,11 @@ const db = require('./app/models/db');
 
             const user = visitor.rows[0];
             
-            // if (user.role === 'user') { 
-            //     return { valid: user !== undefined, credentials: {scope: 'user'} };
-            // } else if (user.role === 'admin') {
-            //     return { valid: user !== undefined, credentials: {scope: 'admin'} };
-            // };
+            if (user.role === 'user') { 
+                return { valid: user !== undefined, credentials: {scope: 'user'} };
+            } else if (user.role === 'admin') {
+                return { valid: user !== undefined, credentials: {scope: 'admin'} };
+            };
         }
     });
 
