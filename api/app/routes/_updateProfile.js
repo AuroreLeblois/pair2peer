@@ -28,7 +28,7 @@ module.exports = {
                 const itLang= itLangs.rows;
                 const Langs= await db.query(`SELECT * FROM all_language`);
                 const Lang= Langs.rows;
-                const result = await db.query(`SELECT * FROM usr WHERE email = $1`, [email]);
+                const result = await db.query(`SELECT * FROM usr_profile WHERE email = $1`, [email]);
                 const user= result.rows[0];
                return  {user, itLang, Lang};
             }
@@ -56,7 +56,8 @@ module.exports = {
                         birthyear: Joi.number(),
                         description: Joi.string(),
                         experience: Joi.number(),
-                        disponibility: Joi.number()
+                        disponibility: Joi.number(),
+                        linkedinLink: Joi.string()
                     })
                 },
                 description: 'handle update user profile',
