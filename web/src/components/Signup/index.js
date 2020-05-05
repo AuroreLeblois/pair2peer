@@ -217,6 +217,7 @@ const Signup = () => {
             name='remote'
             value='false'
             checked={radioValue === 'false'}
+            onClick={e => setRemote(e.target.value === false)}
 
             onChange={handleRadioChange}
           />
