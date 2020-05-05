@@ -58,7 +58,9 @@ module.exports = {
                         description: Joi.string().allow(' '),
                         experience: Joi.number(),
                         disponibility: Joi.number(),
-                        linkedinLink: Joi.string()
+                        linkedinLink: Joi.string(),
+                        // languages: Joi.array().items(Joi.string()),
+                        // itLang: Joi.string().items(Joi.string())
                     })
                 },
                 description: 'handle update user profile',
