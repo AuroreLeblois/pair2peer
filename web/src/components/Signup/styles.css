@@ -1,17 +1,27 @@
 label {
   display: flex;
   color:white;
+  margin: auto;
+  padding: auto;
+  align-content: space-around;
 }
 
-
-.ui {
-  margin: 10px;
-  padding: 10px;
+.container {
+  display: flex;
+  align-content: center;
 }
 
+.ui.form {
+  margin: auto;
+  padding: 150px;
+}
 
 .ui.button {
   display: block; 
   margin: auto;
+}
 
+.text-input {
+  display: flex;
+  align-content: space-around;
 }
