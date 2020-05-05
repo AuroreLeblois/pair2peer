@@ -111,7 +111,7 @@ module.exports = {
                     ||pseudo!== null
                     ||pseudo.length>0 && pseudo.toLowerCase()!==result.rows[0].pseudo){
                     //oui mais le pseudo doit être unique
-                    pseudoExists= await db.query(`SELECT pseudo FROM usr WHERE pseudo= $1;` ,[pseudo.toLowerCase()]);
+                    const pseudoExists= await db.query(`SELECT pseudo FROM usr WHERE pseudo= $1;` ,[pseudo.toLowerCase()]);
                     if(!pseudoExists.rows[0]){
                     await db.query(`UPDATE usr SET pseudo= ${pseudo.toLowerCase()} WHERE usr.id= $1;`[userID]);
                     }
@@ -225,9 +225,10 @@ module.exports = {
                 //si l'utilisateur rentre une langue
                 if(selectedLang.length >0){
                     for (let lang of selectedLang){
-                        const langID= await db.query(`SELECT id 
+                        const langExists= await db.query(`SELECT id 
                                                       FROM lang
                                                       WHERE "name" LIKE $1`, [lang]);
+                        let langID= langExists.rows[0].id;
     
                         const userKnowsLang= await db.query(`SELECT usr_id, lang_id 
                                                             FROM usr_speaks_lang
@@ -243,9 +244,10 @@ module.exports = {
                 if(itLangs.length>0){
                     for (let itLang of itLangs){
                     
-                        const itLangID = await db.query(`SELECT id 
+                        const itLangExists = await db.query(`SELECT id 
                                                         FROM it_lang
-                                                        WHERE "name" LIKE %$1`, [itLang]);
+                                                        WHERE "name" LIKE $1`, [itLang]);
+                        let itLangID= itLangExists.rows[0].id;
     
                         const userKnowsIt= await db.query(`SELECT usr_id, it_lang_id 
                                                            FROM usr_knows_it_lang
