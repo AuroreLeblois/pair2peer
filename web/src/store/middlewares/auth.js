@@ -1,6 +1,6 @@
 /* eslint-disable no-fallthrough */
 import axios from 'axios';
-import { actions, getAuthentified, syncLogin } from 'src/store/actions';
+import { actions, getAuthentified, syncLogin, displayErrorsMessages } from 'src/store/actions';
 import { API_URI } from 'src/store/utils';
 
 export default (store) => (next) => (action) => {
@@ -15,8 +15,11 @@ export default (store) => (next) => (action) => {
         .then((res) => {
           store.dispatch(getAuthentified(action.history, res.data));
           store.dispatch(syncLogin('password', ''));
+          store.dispatch(displayErrorsMessages(''));
         })
         .catch((err) => {
+          const data = err.response.data
+          store.dispatch(displayErrorsMessages(data.message));
           console.log(err);
         });
       return;
