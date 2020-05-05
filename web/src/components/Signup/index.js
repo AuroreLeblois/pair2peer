@@ -7,10 +7,11 @@ import { Formik, Form, useField } from 'formik';
 // ES2015 module syntax
 // import { Form, Field } from '@progress/kendo-react-form';
 import './styles.css';
-// import styled from '@emotion/styled';
 import * as Yup from 'yup';
+
 // Semantic
-import { Button, Checkbox, Radio } from 'semantic-ui-react';
+import { Checkbox, Radio } from 'semantic-ui-react';
+
 
 
 //************************************************* */
@@ -31,6 +32,7 @@ const MyTextInput = ({ label, ...props }) => {
   );
 };
 
+/** 
 const MyCheckbox = ({ children, ...props }) => {
   // On dit a useField quel type d'input c'est
   // puisque React traite les radios et les cases à cocher différemment
@@ -48,7 +50,7 @@ const MyCheckbox = ({ children, ...props }) => {
     </>
   );
 };
-
+*/
 const Signup = () => {
 
   // Les hooks
@@ -58,12 +60,10 @@ const Signup = () => {
   const [passwordConfirm, setPasswordConfirm] = React.useState("");
   const [country, setCountry] = React.useState("");
   const [city, setCity] = React.useState("");
+  const [remote, setRemote] = React.useState(false);
+  const [radioValue, setRadioValue] = useState();
 
-
-  const [remote, setRemote] = React.useState('false');
-  
-
-  const handleSubmit = (données, événement) => {
+  const handleSubmit = () => {
     console.log (`
       pseudo: ${pseudo}
       mail: ${email}
@@ -73,9 +73,13 @@ const Signup = () => {
       city: ${city}
       remote: ${remote}
     `);
-
     event.preventDefault ();
   };
+
+  const handleRadioChange = (evt, result) => {
+    setRadioValue(result.value);
+  };
+  
 
 
   return (
@@ -88,8 +92,8 @@ const Signup = () => {
           passwordConfirm:'',
           country:'',
           city:'',
-          remote:'false',
-          role:'defaut ??',
+          remote:'',
+          role:'',
           // acceptedTerms: false, // Pour la checkbox
         }
       }
@@ -126,7 +130,6 @@ const Signup = () => {
           })
         })
       }
-
 
       onSubmit = {
         (values, { setSubmitting } ) => {
@@ -194,25 +197,31 @@ const Signup = () => {
           placeholder="Strasbourg"
           value={city}
           onChange={e => setCity(e.target.value)}
-        />
-        <p> Je veux travailler en remote </p>
+          />
+
+
+
+          <p> Je veux travailler en remote </p>
+
           <Radio
             label='Oui'
             name='remote'
             value='true'
+            checked={radioValue === 'true'}
+            onChange={handleRadioChange}
             onClick={e => setRemote(!e.target.value)}
           />
+
           <Radio
             label='Non'
             name='remote'
             value='false'
-            onClick={evt => setRemote(evt.target.value)}
+            checked={radioValue === 'false'}
+            onClick={e => setRemote(e.target.value === false)}
+
+            onChange={handleRadioChange}
           />
-
-          {/* <MyCheckbox name="acceptedTerms">
-            J'accepte les conditions d'utilisations
-          </MyCheckbox> */}
-
+        
           <button 
           className="ui button" 
           type="submit" 

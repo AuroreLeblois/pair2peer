@@ -1,9 +1,9 @@
 /* eslint-disable no-plusplus */
 // == Import npm
 import React from 'react';
-import { Button, Form, Input, Select, Grid } from 'semantic-ui-react';
+import { Form, Input, Select } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { firstLetterToUppercase, API_URI } from 'src/store/utils';
+import { firstLetterToUppercase } from 'src/store/utils';
 import { syncSearchInputs } from 'src/store/actions';
 
 // == Import

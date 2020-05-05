@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "checkbox": "^0.0.1",
     "omit": "^1.0.1"
   }
 }
