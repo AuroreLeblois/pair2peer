@@ -1,11 +1,27 @@
 // == Import npm
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Form, Input, Header } from 'semantic-ui-react';
+import { Form, Input, Header, Dropdown } from 'semantic-ui-react';
+import { firstLetterToUppercase } from 'src/store/utils';
+
+
+// == Import component
+import ITSkills from './itSkills';
 
 // == Composant
 const ProfileEdit = () => {
-  const user = useSelector((state) => state.user);
+  let key = 1;
+  const { user, filters } = useSelector((state) => state);
+
+  const langOptions = () => (
+    filters.language.map((language) => ({
+      key: key++,
+      text: firstLetterToUppercase(language),
+      value: language,
+    }))
+  );
+
+  console.log(langOptions());
 
   return (
     <>
@@ -69,6 +85,20 @@ const ProfileEdit = () => {
           placeholder="Gender"
           search
         /> */}
+        <ITSkills it_language={user.it_language} it_lvl={user.level} />
+        <Header as="h6" inverted>Langues</Header>
+        <Dropdown
+          placeholder="Langues que vous maîtrisez"
+          options={langOptions()}
+          search
+          multiple
+          selection
+          fluid
+          allowAdditions
+          value={user.language}
+          // onAddItem
+          // onChange
+        />
       </Form>
     </>
   );
