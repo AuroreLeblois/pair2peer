@@ -14,11 +14,11 @@ module.exports = {
             method: 'GET',
             path: '/update/profile',
             options: {
-                // auth: {
-                //     strategy: 'base',
-                //     mode: 'required',
-                //     scope: ['user', 'admin']
-                // },
+                auth: {
+                    strategy: 'base',
+                    mode: 'required',
+                    scope: ['user', 'admin']
+                },
                 description: 'User\'s profile update page',
                 tags: ['api', 'profile', 'form']
             },
@@ -267,16 +267,15 @@ module.exports = {
                         }
                     }
                     };
-
                         //si il y a des erreurs
                         if(error.length>0){
-                            return error
+                            return h.response(error).code(400);
                         }
                         //sinon on renvoie les nouvelles infos
                         else{
                             const newResult = await db.query(`SELECT * FROM usr WHERE "id" = $1` ,[userID]);
-                            const newProfile= await db.query(`SELECT * FROM usr_profile WHERE usr.pseudo=$1 `,[newResult.rows[0].pseudo]);
-                            const newPlace= await db.query(`SELECT * FROM usr_map WHERE usr.pseudo=$1`, [newResult.rows[0].pseudo])
+                            const newProfile= await db.query(`SELECT * FROM usr_profile WHERE pseudo=$1 `,[newResult.rows[0].pseudo]);
+                            const newPlace= await db.query(`SELECT * FROM usr_map WHERE pseudo=$1`, [newResult.rows[0].pseudo])
                             return  {newPlace, newProfile};
                         }
                         //si le champs est vide=> ne rien faire
