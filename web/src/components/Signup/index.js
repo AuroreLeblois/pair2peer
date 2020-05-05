@@ -58,7 +58,7 @@ const Signup = () => {
   const [passwordConfirm, setPasswordConfirm] = React.useState("");
   const [country, setCountry] = React.useState("");
   const [city, setCity] = React.useState("");
-  const [remote, setRemote] = React.useState("");
+  const [remote, setRemote] = React.useState('false');
 
 
   const handleSubmit = (données, événement) => {
@@ -125,6 +125,8 @@ const Signup = () => {
           })
         })
       }
+
+
       onSubmit = {
         (values, { setSubmitting } ) => {
           setTimeout(() => {
@@ -207,6 +209,7 @@ const Signup = () => {
             checked={remote === false}
             onClick={e => setRemote(e.target.value)}
           />
+
           {/* <MyCheckbox name="acceptedTerms">
             J'accepte les conditions d'utilisations
           </MyCheckbox> */}
@@ -214,7 +217,17 @@ const Signup = () => {
           <button 
           className="ui button" 
           type="submit" 
-          onClick={() => setEmail(email)}
+          onClick={() => {
+            setPseudo(pseudo)
+            setEmail(email)
+            setPassword(password)
+            setPasswordConfirm(passwordConfirm)
+            setCountry(country)
+            setCity(city)
+            setRemote(remote)
+
+          }
+          }
           >
             S'inscrire
           </button>
