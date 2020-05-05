@@ -12,12 +12,13 @@ export const actions = {
   SUBMIT_FILTERS_SEARCH: 'actions/SUBMIT_FILTERS_SEARCH',
   SYNC_SEARCH_INPUTS: 'actions/SYNC_SEARCH_INPUTS',
   DISPLAY_ERRORS_MSG: 'actions/DISPLAY_ERRORS_MSG',
+  CLEAR_ERRORS_MSG: 'actions/CLEAR_ERRORS_MSG',
 };
 
 // == Actions creator
 
-export const submitLogin = (history) => (
-  { type: actions.SUBMIT_LOGIN, history }
+export const submitLogin = (history, data) => (
+  { type: actions.SUBMIT_LOGIN, history, data }
 );
 
 export const submitLogout = (history) => (
@@ -36,9 +37,10 @@ export const getUsersList = (users) => (
   { type: actions.GET_USERS_LIST, users }
 );
 
-export const getFiltersList = (filters) => (
-  { type: actions.GET_FILTERS_LIST, filters }
-);
+export const getFiltersList = (filters, maxUser) => {
+  console.log(maxUser)
+  return { type: actions.GET_FILTERS_LIST, filters, maxUser }
+};
 
 export const submitFiltersSearch = (users) => (
   { type: actions.SUBMIT_FILTERS_SEARCH, users }

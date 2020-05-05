@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, Form, Grid, Input } from 'semantic-ui-react';
 import { submitLogin } from 'src/store/actions';
-import { useInputChange } from './useInputChange';
+import useInputChange from 'src/store/hooks/useInputChange';
 
 // == Import
 
@@ -17,8 +17,7 @@ const Login = () => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    console.log(input)
-    dispatch(submitLogin(history));
+    dispatch(submitLogin(history, input));
   };
 
   return (
@@ -31,7 +30,7 @@ const Login = () => {
             type="text"
             name="email"
             placeholder="Email"
-            onChange={useInputChange}
+            onChange={handleInputChange}
           />
           <Form.Field
             control={Input}
@@ -39,7 +38,7 @@ const Login = () => {
             type="password"
             name="password"
             placeholder="Mot de passe"
-            onChange={useInputChange}
+            onChange={handleInputChange}
           />
           <Button type="submit">Connexion</Button>
         </Form>

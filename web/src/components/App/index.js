@@ -1,7 +1,10 @@
 // == Import npm
-import React, { useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useCallback, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Route, Switch, Redirect } from 'react-router-dom';
+import { getFiltersList } from 'src/store/actions';
+import { API_URI } from 'src/store/utils';
+import axios from 'axios';
 
 
 // == Import
@@ -17,6 +20,7 @@ import './styles.css';
 
 // == Composant
 const App = () => {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const loginCheck = useCallback((path, component) => {
     if (!user) {
@@ -24,6 +28,31 @@ const App = () => {
     }
     return component;
   }, [user]);
+
+  // Req to get filters list
+  const getFilters = () => {
+    axios.get(
+      `${API_URI}/`,
+      { withCredentials: true },
+    )
+      .then((res) => {
+        const data = res.data;
+        console.log(data)
+        const filtersList = {};
+        const usersData = {};
+        filtersList.it_language = data.it_language;
+        filtersList.language = data.language;
+        filtersList.localisation = data.localisation;
+        usersData.maxUser = data.maxUser;
+        console.log(usersData)
+        dispatch(getFiltersList(filtersList, usersData));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(getFilters, []);
 
 
   return (
