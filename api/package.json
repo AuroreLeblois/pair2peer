@@ -6,9 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:web": "cd web/ && yarn start",
-
     "start": "PGDATABASE=apotest PGPASSWORD=apotest PGUSER=apotest node-dev server.js",
-    "startBis": "PGDATABASE=apotheosePP PGPASSWORD=js4life node server.js"
+    "start:api": "PGDATABASE=apotheosePP PGPASSWORD=js4life node server.js"
 
   },
   "repository": {

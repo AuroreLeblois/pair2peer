@@ -67,12 +67,12 @@ const Results = () => {
   );
 
   return (
-    <Grid>
+    <Grid stretched>
       <Grid.Row centered>
         <Message attached color="black">{usersData.maxUsers} développeurs disponibles</Message>
       </Grid.Row>
-      <Grid.Row>
-        <Card.Group itemsPerRow={4}>
+      <Grid.Row stretched>
+        <Card.Group stackable itemsPerRow={4}>
           <Cards users={usersData.users} />
         </Card.Group>
       </Grid.Row>

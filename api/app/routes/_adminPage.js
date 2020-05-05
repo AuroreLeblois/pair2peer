@@ -164,6 +164,11 @@ module.exports = {
                     mode: 'required',
                     scope: ['admin']
                 },
+                validate: {
+                    params: Joi.object({
+                        langName: Joi.string().required()
+                    })
+                },
                 description: 'handle delete lang',
                 tags: ['api', 'language', 'delete']
             },

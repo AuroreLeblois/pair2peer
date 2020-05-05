@@ -1,6 +1,6 @@
 // == Import npm
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, Form, Grid, Input } from 'semantic-ui-react';
 import { syncLogin, submitLogin } from 'src/store/actions';
@@ -11,6 +11,7 @@ import { syncLogin, submitLogin } from 'src/store/actions';
 const Login = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const { errors } = useSelector((state) => state);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();

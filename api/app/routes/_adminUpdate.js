@@ -42,6 +42,14 @@ module.exports = {
                         mode: 'required',
                         scope: ['admin']
                     },
+                    validate: {
+                        params: Joi.object({
+                            pseudo: Joi.string().required()
+                        }),
+                        payload: Joi.object({
+                            setRole: Joi.string().required()
+                        })
+                    },
                     description: ' Handle User\'s profile update page for admin',
                     tags: ['api', 'profile', 'patch profile']
                 },
@@ -93,6 +101,11 @@ module.exports = {
                         strategy: 'base',
                         mode: 'required',
                         scope: ['admin']
+                    },
+                    validate: {
+                        params: Joi.object({
+                            pseudo: Joi.string().required()
+                        }),
                     },
                     description: 'DELETE User\'s profile update page for admin',
                     tags: ['api', 'profile', 'delete profile']
