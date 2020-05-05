@@ -60,34 +60,8 @@ const Signup = () => {
   const [city, setCity] = React.useState("");
 
 
-  const [remote, setRemote] = React.useState({
-    getInitialState: function() {
-      return {
-        isChecked: false
-      };
-    },
-    toggleChange: function() {
-      this.setState({
-        isChecked: !this.state.isChecked
-      }, function() {
-        console.log(this.state);
-      }.bind(this));
-    },
-    render: function() {
-      return (
-        <label>
-          <input
-            type="checkbox"
-            checked={this.state.isChecked}
-            onChange={this.toggleChange} />
-          Check Me!
-        </label>
-      );
-    }
-
-
-  })
-
+  const [remote, setRemote] = React.useState('false');
+  
 
   const handleSubmit = (données, événement) => {
     console.log (`
@@ -104,7 +78,6 @@ const Signup = () => {
   };
 
 
-
   return (
     <Formik
       initialValues={
@@ -115,7 +88,7 @@ const Signup = () => {
           passwordConfirm:'',
           country:'',
           city:'',
-          remote:'',
+          remote:'false',
           role:'defaut ??',
           // acceptedTerms: false, // Pour la checkbox
         }
@@ -223,19 +196,17 @@ const Signup = () => {
           onChange={e => setCity(e.target.value)}
         />
         <p> Je veux travailler en remote </p>
-          <Checkbox
+          <Radio
             label='Oui'
             name='remote'
             value='true'
-            checked={remote === true}
             onClick={e => setRemote(!e.target.value)}
           />
-          <Checkbox
+          <Radio
             label='Non'
             name='remote'
             value='false'
-            checked={remote === false}
-            onClick={e => setRemote(e.target.value)}
+            onClick={evt => setRemote(evt.target.value)}
           />
 
           {/* <MyCheckbox name="acceptedTerms">
@@ -253,9 +224,8 @@ const Signup = () => {
             setCountry(country)
             setCity(city)
             setRemote(remote)
-
           }
-          }
+        }
           >
             S'inscrire
           </button>
