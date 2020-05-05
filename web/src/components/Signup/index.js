@@ -63,13 +63,13 @@ const Signup = () => {
 
   const handleSubmit = (données, événement) => {
     console.log (`
-      Pseudo: ${pseudo}
-      Mail: ${email}
-      Mot de passe: ${password}
-      Confirmation de mot de passe: ${passwordConfirm}
-      Pays: ${country}
-      Ville: ${city}
-      Remote: ${remote}
+      pseudo: ${pseudo}
+      mail: ${email}
+      password: ${password}
+      passwordConfirm: ${passwordConfirm}
+      country: ${country}
+      city: ${city}
+      remote: ${remote}
     `);
 
     event.preventDefault ();
