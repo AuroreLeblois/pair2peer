@@ -15,7 +15,7 @@ export default (store) => (next) => (action) => {
         .then((res) => {
           // Redirection to '/', user in reponse to reducer state
           store.dispatch(getAuthentified(action.history, res.data));
-          store.dispatch(syncLogin('password', ''));
+          // store.dispatch(syncLogin('password', ''));
           store.dispatch(displayErrorsMessages(''));
         })
         .catch((err) => {

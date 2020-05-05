@@ -3,7 +3,6 @@ export const API_URI = 'http://localhost:3000';
 
 // == Actions types
 export const actions = {
-  SYNC_LOGIN: 'action/SYNC_LOGIN',
   SUBMIT_LOGIN: 'actions/SUBMIT_LOGIN',
   SUBMIT_LOGOUT: 'actions/SUBMIT_LOGOUT',
   GET_LOGOUT: 'actions/GET_LOGOUT',
@@ -16,10 +15,6 @@ export const actions = {
 };
 
 // == Actions creator
-
-export const syncLogin = (name, value) => (
-  { type: actions.SYNC_LOGIN, name, value }
-);
 
 export const submitLogin = (history) => (
   { type: actions.SUBMIT_LOGIN, history }
