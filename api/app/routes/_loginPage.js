@@ -112,8 +112,7 @@ module.exports = {
                         passwordConfirm: Joi.ref('password'),
                         country: Joi.string().trim().required(),
                         city: Joi.string().trim().required(),
-                        remote: Joi.string().required(),
-                        role: Joi.string().required()
+                        remote: Joi.string().required()
                     }),
                     options: {
                         // false mean I go through each key (payload) even if one error appears
