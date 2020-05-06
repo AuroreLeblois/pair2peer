@@ -56,7 +56,7 @@ module.exports = {
                         remote: Joi.boolean().required(),
                         city: Joi.string().required(),
                         country: Joi.string().required(),
-                        birthyear: Joi.number().allow(''),
+                        birthyear: Joi.string().allow(''),
                         description: Joi.string().allow(''),
                         experience: Joi.number().allow(''),
                         disponibility: Joi.number(),
@@ -87,28 +87,28 @@ module.exports = {
                 const userCity=userDetails.rows[0].city;
                 //les données du formulaire:
                 //les données utilisateur brutes
-                let password= request.payload.password;
+                const password= request.payload.password;
                 let birthyear= request.payload.birthyear;
-                let picture= request.payload.picture;
-                let country= request.payload.country;
-                let city= request.payload.city;
-                let remote= request.payload.remote;
-                let experience= request.payload.experience;
-                let description= request.payload.description;
-                let validatePassword= request.payload.validatePassword;
-                let changeMyEmail= request.payload.email;
-                let validateEmail= request.payload.validateEmail;
-                let pseudo= request.payload.pseudo;
-                let linkedinLink=request.payload.linkedinLink;
+                const picture= request.payload.picture;
+                const country= request.payload.country;
+                const city= request.payload.city;
+                const remote= request.payload.remote;
+                const experience= request.payload.experience;
+                const description= request.payload.description;
+                const validatePassword= request.payload.validatePassword;
+                const changeMyEmail= request.payload.email;
+                const validateEmail= request.payload.validateEmail;
+                const pseudo= request.payload.pseudo;
+                const linkedinLink=request.payload.linkedinLink;
                 //les langues
-                let selectedLang= [request.payload.languages];
+                const selectedLang= [request.payload.languages];
                 //les it
-                let itlangs = [request.payload.itLanguages];
-                let itLevel= [request.payload.itLevels];
+                const itlangs = [request.payload.itLanguages];
+                const itLevel= [request.payload.itLevels];
                 //on peut me trouver via le filtre?
-                let searchMe= request.payload.searchable;
+                const searchMe= request.payload.searchable;
                 //les dispos
-                let disponibility= request.payload.disponibility;
+                const disponibility= request.payload.disponibility;
                 
                 //petit console.log(request.payload) pour vérifier tout ça
                 console.log(request.payload);
@@ -179,30 +179,32 @@ module.exports = {
                         console.log(latitude);
                         const longitude= api.payload.items[0].position.lng;
                         console.log(longitude);
+                        birthyear='01-01-'+birthyear;
+                        console.log(birthyear);
                         const detailExist= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
                         //il n'existe pas=> on insert
                          if(!detailExist.rows[0]){
                              console.log(`je n'ai pas trouvé de correspondance=>j'insère`)
-                             await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id,birthyear, picture, decription, experience, latitude, longitude, disponibility, linkedin_link)
+                             await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id, "birthyear", picture, description, experience, latitude, longitude, disponibility, linkedin_link)
                                             VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7, $8, $9, $10, $11,$12);`
                                             ,[city, country, remote, userID, birthyear, picture, description,experience, latitude, longitude, disponibility, linkedinLink]);
                     }//sinon on update
                          else{
                              console.log(`j'ai trouvé une correspondance=>j'update`)
                              await db.query(`UPDATE usr_detail
-                                            SET "city"=$1 , 
-                                            "country"=$2 ,
-                                            "remote"=$3 ,
-                                            birthyear=$4 ,
-                                            picture= $5 ,
+                                            SET "city"=$1, 
+                                            "country"=$2,
+                                            "remote"=$3,
+                                            "birthyear"=$4,
+                                            picture=$5,
                                             description=$6 ,
                                             experience=$7,
                                             latitude=$8,
                                             longitude=$9,
                                             disponibility=$10,
                                             linkedin_link=$11
-                                            WHERE usr_id=$1`,
-                                            [city, country, remote, birthyear,
+                                            WHERE usr_id=$12`,
+                                            [city, country, remote,birthyear,
                                             picture, description, experience, latitude, longitude,disponibility,linkedinLink,userID]);
                                             console.log(`update usr_detail ok`)
                                         };
@@ -215,12 +217,15 @@ module.exports = {
             //sinon on dit ce qu'il manque à l'utilisateur
                 else{
                     if(city===null||city===undefined){
+                        console.log(`ville non définie`)
                         error.push(`Il vous faut définir votre ville`);
                     }
                     if(country===null||country===undefined){
+                        console.log(`pays non défini`)
                         error.push(`Merci de définir votre pays`);
                     }
                     if(remote===null||remote===undefined){
+                        console.log(`remote non défini`)
                         error.push(`Merci de nous dire si vous souhaitez travailler en remote`);
                     }
                 }
@@ -234,7 +239,7 @@ module.exports = {
                         const langExists= await db.query(`SELECT id 
                                                       FROM lang
                                                       WHERE "name" LIKE $1`, [lang]);
-                        let langID= langExists.rows[0].id;
+                        const langID= langExists.rows[0].id;
     
                         const userKnowsLang= await db.query(`SELECT usr_id, lang_id 
                                                             FROM usr_speaks_lang
@@ -253,7 +258,7 @@ module.exports = {
                         const itLangExists = await db.query(`SELECT id 
                                                         FROM it_lang
                                                         WHERE "name" LIKE $1`, [itLang]);
-                        let itLangID= itLangExists.rows[0].id;
+                        const itLangID= itLangExists.rows[0].id;
     
                         const userKnowsIt= await db.query(`SELECT usr_id, it_lang_id 
                                                            FROM usr_knows_it_lang
@@ -295,11 +300,11 @@ module.exports = {
                             error.push('Désolé...Ce pseudo est déjà pris! ');
                         }
                     };
-                        //si il y a des erreurs
+                        // si il y a des erreurs
                         if(error.length>0){
                             return h.response(error).code(400);
                         }
-                        //sinon on renvoie les nouvelles infos
+                        // sinon on renvoie les nouvelles infos
                         else{
                             const newResult = await db.query(`SELECT * FROM usr WHERE "id" = $1` ,[userID]);
                             const newProfile= await db.query(`SELECT * FROM usr_profile WHERE pseudo=$1 `,[newResult.rows[0].pseudo]);
