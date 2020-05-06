@@ -46,14 +46,19 @@
 
 
 
-	// Clique sur map 
+	// Clique sur map pour récup Lat/Long
 	var popup = L.popup();
 
+	// Clique sur map créant un cercle de ?? km/m autour
+	var zone = L.circleMarker();
+
+	
 	function onMapClick(e) {
 		popup
 		.setLatLng(e.latlng)
 		.setContent("Vous avez cliqué à " + e.latlng.toString())
 		.openOn(mymap);
+		
 	}
 
 	mymap.on('click', onMapClick);
