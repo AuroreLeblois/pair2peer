@@ -50,10 +50,10 @@ module.exports = {
                     })
                 }
             },
-            handler: (request, h) => {
+            handler: async (request, h) => {
 
                 // use Admin model to add language or it_language
-                const info = Admin.add(request.payload);
+                const info = await Admin.add(request.payload);
 
                 return info;
             }

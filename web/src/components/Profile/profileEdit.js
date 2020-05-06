@@ -1,7 +1,7 @@
 // == Import npm
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Form, Input, Header, Dropdown, Radio } from 'semantic-ui-react';
+import { Form, Input, Header, Dropdown, Radio, Button } from 'semantic-ui-react';
 import { firstLetterToUppercase } from 'src/store/utils';
 import useInputChange from 'src/store/hooks/useInputChange';
 
@@ -129,10 +129,7 @@ const ProfileEdit = () => {
             checked={radioValue === 'true'}
             onChange={handleRadioChange}
           />
-        </Form.Field>
-        <Form.Field>
           <Radio
-            size="small"
             label="Rencontre"
             name="remote"
             value="false"
@@ -140,6 +137,7 @@ const ProfileEdit = () => {
             onChange={handleRadioChange}
           />
         </Form.Field>
+        <Button type="submit">Sauvegarder</Button>
       </Form>
     </>
   );

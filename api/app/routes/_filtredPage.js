@@ -81,11 +81,11 @@ module.exports = {
                     })
                 }
             },
-            handler: (request, h) => {
+            handler: async (request, h) => {
 
                 const { page_nb, user_nb } = request.query;
                 // use Search model to filter
-                const info = Search.filter(request.payload, page_nb, user_nb);
+                const info = await Search.filter(request.payload, page_nb, user_nb);
 
                 return info;
             }
