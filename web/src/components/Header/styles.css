@@ -4,8 +4,5 @@
 
 .logo {
   font-family: 'Fira Code', monospace;
-}
-
-.primary {
-  color: $primaryColor;
+  padding-left: .7rem;
 }

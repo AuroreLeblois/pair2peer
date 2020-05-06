@@ -1,18 +1,12 @@
 .app {
-  width: 70%;
   margin:auto;
   display: flex;
-  min-height: 100vh;
   flex-direction: column;
   background-color: #363738;
 }
 
 .app img {
   max-width: 150px;
-}
-
-.container {
-  flex: 1;
 }
 
 .profile-container {
