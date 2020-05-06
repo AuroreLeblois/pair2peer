@@ -129,10 +129,7 @@ const ProfileEdit = () => {
             checked={radioValue === 'true'}
             onChange={handleRadioChange}
           />
-        </Form.Field>
-        <Form.Field>
           <Radio
-            size="small"
             label="Rencontre"
             name="remote"
             value="false"
