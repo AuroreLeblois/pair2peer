@@ -3,6 +3,7 @@ import axios from 'axios';
 import { actions, getAuthentified, displayErrorsMessages, getLogout } from 'src/store/actions';
 import { API_URI } from 'src/store/utils';
 
+
 export default (store) => (next) => (action) => {
   switch (action.type) {
     case actions.SUBMIT_LOGIN: {
@@ -37,6 +38,7 @@ export default (store) => (next) => (action) => {
         });
       return;
     }
+
     default: {
       next(action);
     }

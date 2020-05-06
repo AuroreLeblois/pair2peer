@@ -1,23 +1,21 @@
 // == Import npm
-import React, { useEffect, useState } from 'react';
-// import { Formik, Form, useField } from 'formik';
-import * as Yup from 'yup';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Radio, Form, Button, Input, Header, Grid } from 'semantic-ui-react';
 
 const Signup = () => {
 
   // Les hooks
-  const [pseudo, setPseudo] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [passwordConfirm, setPasswordConfirm] = React.useState("");
-  const [country, setCountry] = React.useState("");
-  const [city, setCity] = React.useState("");
+  const [pseudo, setPseudo] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [passwordConfirm, setPasswordConfirm] = React.useState('');
+  const [country, setCountry] = React.useState('');
+  const [city, setCity] = React.useState('');
   const [radioValue, setRadioValue] = useState();
 
-  const handleSubmit = () => {
-    event.preventDefault ();
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
     const newUser = {
       pseudo,
       email,
@@ -45,67 +43,8 @@ const Signup = () => {
   const handleRadioChange = (evt, result) => {
     setRadioValue(result.value);
   };
-  
 
   return (
-      // <Formik
-      //   initialValues={
-      //   {
-      //     pseudo:'',
-      //     email: '',
-      //     password:'',
-      //     passwordConfirm:'',
-      //     country:'',
-      //     city:'',
-      //     remote:'',
-      //     // role:'',
-      //     // acceptedTerms: false, // Pour la checkbox
-      //   }
-      // }
-
-      // // Gerer coté back mais possibilité de rajout en front ??
-      // validationSchema = {
-      //   Yup.object (
-      //     {
-      //       pseudo: Yup.string()
-      //       .max(15)
-      //       .required('Obligatoire'),
-      //       country: Yup.string()
-      //       .max(15)
-      //       .required('Obligatoire'),
-      //       city: Yup.string()
-      //       .max(15)
-      //       .required('Obligatoire'),
-      //       email: Yup.string()
-      //       .email('Invalid email address')
-      //       .required('Obligatoire'),
-      //       remote: Yup.boolean(),
-      //       //acceptedTerms: Yup.boolean()
-      //       //.required('Required')
-      //       //.oneOf([true], 'You must accept the terms and conditions.'), // Pour une future Charte de bonne conduite par exemple
-      //     }
-      //   ).shape({
-      //     password: Yup.string().required("Obligatoire"),
-      //     passwordConfirm: Yup.string().when("password", {
-      //       is: val => (val && val.length > 0 ? true : false),
-      //       then: Yup.string().oneOf(
-      //         [Yup.ref("password")],
-      //         "Both password need to be the same"
-      //       )
-      //     })
-      //   })
-      // }
-
-      // onSubmit = {
-      //   (values, { setSubmitting } ) => {
-      //     setTimeout(() => {
-      //       alert(JSON.stringify(values, null, 2));
-      //       setSubmitting(false);
-      //     }, 400
-      //     );
-      //   }}
-      // >
-      
     <Grid centered>
       <Grid.Column width={8}>
         <Form
@@ -120,7 +59,7 @@ const Signup = () => {
               label="Pseudo"
               name="pseudo"
               placeholder="Jane57"
-              onChange={e => setPseudo(e.target.value)}
+              onChange={(e) => setPseudo(e.target.value)}
             />
             <Form.Field
               control={Input}
@@ -128,7 +67,7 @@ const Signup = () => {
               name="email"
               type="email"
               placeholder="Email"
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </Form.Group>
           <Form.Group widths="equal">
@@ -139,7 +78,7 @@ const Signup = () => {
               type="password"
               placeholder=""
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <Form.Field
               control={Input}
@@ -148,7 +87,7 @@ const Signup = () => {
               type="password"
               placeholder=""
               value={passwordConfirm}
-              onChange={e => setPasswordConfirm(e.target.value)}
+              onChange={(e) => setPasswordConfirm(e.target.value)}
             />
           </Form.Group>
           <Form.Group widths="equal">
@@ -159,7 +98,7 @@ const Signup = () => {
               type="text"
               placeholder="France"
               value={country}
-              onChange={e => setCountry(e.target.value)}
+              onChange={(e) => setCountry(e.target.value)}
             />
             <Form.Field
               control={Input}
@@ -168,7 +107,7 @@ const Signup = () => {
               type="text"
               placeholder="Strasbourg"
               value={city}
-              onChange={e => setCity(e.target.value)}
+              onChange={(e) => setCity(e.target.value)}
             />
           </Form.Group>
 
