@@ -129,7 +129,7 @@ module.exports = {
 
                 const { email, pseudo, password, country, city, remote } = request.payload;
                 // use User model to signup
-                const info = await User.signup(email, pseudo, password, country, city, remote)
+                const info = await User.signup(email, pseudo, password, country, city, remote);
 
                 if (info.statusCode) {
                     // if error, send error messages
