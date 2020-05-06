@@ -49,7 +49,7 @@ module.exports = {
                         password: Joi.string().allow(''),
                         validatePassword: Joi.ref('password'),
                         pseudo: Joi.string().allow(''),
-                        firstEmail: Joi.string().email().required(),
+                        // firstEmail: Joi.string().email().required(),
                         email: Joi.string().email().allow(''),
                         validateEmail: Joi.string().email().allow(''),
                         searchable: Joi.boolean().required(),
@@ -73,8 +73,8 @@ module.exports = {
                 //un tableau d'erreurs vide
                 let error= [];
                 //le cookie email pour retrouver l'user
-                // const email= request.state.cookie.email;
-                const email= request.payload.firstEmail;
+                const email= request.state.cookie.email;
+                // const email= request.payload.firstEmail;
                 console.log(email);
                 //on retrouve l'user de suite pour ne pas avoir à le refaire plus tard
                 const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
