@@ -71,23 +71,21 @@ const Signup = () => {
     // ******************************************************************************
     // AXIOS ?
     const newUser = {
-      "pseudo": "pseudo",
-      "mail": "email",
-      password: password,
-      passwordConfirm: passwordConfirm,
-      country: country,
-      city: city,
-      remote: remote,
     };
 
-    axios.post(`http://localhost:3000/signup`, {
+    axios.post(
+      `http://localhost:3000/signup`,
+    {
       newUser
     })
-    .then(function (response) {
-      console.log(response);
+    .then((res) => {
+      const data = res.data
+      const newUser = {};
+      
     })
     .catch(function (error) {
       console.log(error);
+      console.log("bonjour je suis l\'erreur");
     });
 
   };
