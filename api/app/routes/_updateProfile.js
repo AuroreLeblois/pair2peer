@@ -56,7 +56,7 @@ module.exports = {
                         remote: Joi.boolean().required(),
                         city: Joi.string().required(),
                         country: Joi.string().required(),
-                        birthyear: Joi.number().allow(''),
+                        birthyear: Joi.string().allow(''),
                         description: Joi.string().allow(''),
                         experience: Joi.number().allow(''),
                         disponibility: Joi.number(),
@@ -88,7 +88,7 @@ module.exports = {
                 //les données du formulaire:
                 //les données utilisateur brutes
                 const password= request.payload.password;
-                const birthyear= request.payload.birthyear;
+                let birthyear= request.payload.birthyear;
                 const picture= request.payload.picture;
                 const country= request.payload.country;
                 const city= request.payload.city;
@@ -179,6 +179,8 @@ module.exports = {
                         console.log(latitude);
                         const longitude= api.payload.items[0].position.lng;
                         console.log(longitude);
+                        birthyear='01-01-'+birthyear;
+                        console.log(birthyear);
                         const detailExist= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
                         //il n'existe pas=> on insert
                          if(!detailExist.rows[0]){
@@ -190,19 +192,19 @@ module.exports = {
                          else{
                              console.log(`j'ai trouvé une correspondance=>j'update`)
                              await db.query(`UPDATE usr_detail
-                                            SET "city"=$1 , 
-                                            "country"=$2 ,
-                                            "remote"=$3 ,
-                                            "birthyear"=$4 ,
-                                            picture= $5 ,
+                                            SET "city"=$1, 
+                                            "country"=$2,
+                                            "remote"=$3,
+                                            "birthyear"=$4,
+                                            picture=$5,
                                             description=$6 ,
                                             experience=$7,
                                             latitude=$8,
                                             longitude=$9,
                                             disponibility=$10,
                                             linkedin_link=$11
-                                            WHERE usr_id=$1`,
-                                            [city, country, remote, birthyear,
+                                            WHERE usr_id=$12`,
+                                            [city, country, remote,birthyear,
                                             picture, description, experience, latitude, longitude,disponibility,linkedinLink,userID]);
                                             console.log(`update usr_detail ok`)
                                         };
@@ -215,12 +217,15 @@ module.exports = {
             //sinon on dit ce qu'il manque à l'utilisateur
                 else{
                     if(city===null||city===undefined){
+                        console.log(`ville non définie`)
                         error.push(`Il vous faut définir votre ville`);
                     }
                     if(country===null||country===undefined){
+                        console.log(`pays non défini`)
                         error.push(`Merci de définir votre pays`);
                     }
                     if(remote===null||remote===undefined){
+                        console.log(`remote non défini`)
                         error.push(`Merci de nous dire si vous souhaitez travailler en remote`);
                     }
                 }
@@ -295,17 +300,17 @@ module.exports = {
                             error.push('Désolé...Ce pseudo est déjà pris! ');
                         }
                     };
-                        //si il y a des erreurs
-                        // if(error.length>0){
-                        //     return h.response(error).code(400);
-                        // }
-                        //sinon on renvoie les nouvelles infos
-                        // else{
+                        // si il y a des erreurs
+                        if(error.length>0){
+                            return h.response(error).code(400);
+                        }
+                        // sinon on renvoie les nouvelles infos
+                        else{
                             const newResult = await db.query(`SELECT * FROM usr WHERE "id" = $1` ,[userID]);
                             const newProfile= await db.query(`SELECT * FROM usr_profile WHERE pseudo=$1 `,[newResult.rows[0].pseudo]);
                             const newPlace= await db.query(`SELECT * FROM usr_map WHERE pseudo=$1`, [newResult.rows[0].pseudo]);
                             return  {newPlace, newProfile};
-                        // }
+                        }
                         //si le champs est vide=> ne rien faire
                     }
                 });
