@@ -54,7 +54,7 @@ const Header = () => {
             </Navbar.Item>
           </Link>
           <Link to="/logout">
-            <Navbar.Item onClick={() => setActiveNavbar(!activeNavbar)}>
+            <Navbar.Item onClick={handleLogout}>
               Déconnexion
             </Navbar.Item>
           </Link>

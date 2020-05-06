@@ -1,8 +1,8 @@
 // == Import npm
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Columns } from 'semantic-ui-react';
 import { firstLetterToUppercase } from 'src/store/utils';
+import { Columns, Card, Media, Image, Heading, Content } from 'react-bulma-components';
 
 // == Import
 import ProfileEdit from './profileEdit';
@@ -36,8 +36,12 @@ const Profile = () => {
     //     <ProfileEdit />
     //   </Grid.Column>
     // </Grid>
-    <Columns gapless>
+    <Columns>
       <Columns.Column>
+        <Image size="128x128" rounded src={user.picture} />
+      </Columns.Column>
+      <Columns.Column size="three-quarters">
+        <ProfileEdit />
       </Columns.Column>
     </Columns>
   );
