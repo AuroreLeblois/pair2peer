@@ -2,7 +2,6 @@
 import axios from 'axios';
 import { actions, getAuthentified, displayErrorsMessages, getLogout } from 'src/store/actions';
 import { API_URI } from 'src/store/utils';
-import cssnano from 'cssnano';
 
 export default (store) => (next) => (action) => {
   switch (action.type) {

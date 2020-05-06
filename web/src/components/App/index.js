@@ -39,14 +39,12 @@ const App = () => {
     )
       .then((res) => {
         const data = res.data;
-        console.log(data)
         const filtersList = {};
         const usersData = {};
         filtersList.it_language = data.it_language;
         filtersList.language = data.language;
         filtersList.localisation = data.localisation;
         usersData.maxUser = data.maxUser;
-        console.log(usersData)
         dispatch(getFiltersList(filtersList, usersData));
       })
       .catch((err) => {
