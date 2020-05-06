@@ -356,9 +356,10 @@ module.exports = {
                     await db.query(`DELETE FROM usr_knows_it_lang
                                    where usr_id=$1`,[userID])
                 }
-                    
+                const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
+                return newUser
             }
-            
+           
                 });
                 }
         }
