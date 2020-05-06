@@ -1,4 +1,4 @@
-// import omit from 'object.omit';
+import omit from 'object.omit';
 import { actions } from 'src/store/actions';
 
 const initialState = {

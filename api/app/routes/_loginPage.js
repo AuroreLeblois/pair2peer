@@ -31,11 +31,11 @@ module.exports = {
                     })
                 }
             },
-            handler: (request, h) => {
+            handler: async (request, h) => {
     
                 const { email, password } = request.payload;
                 // use User model to log
-                const info = User.login(email, password);
+                const info = await User.login(email, password);
 
                 if (info.statusCode) {
                     // if error, send error messages
@@ -125,11 +125,11 @@ module.exports = {
                     }
                 }
             },
-            handler: (request, h) => {
+            handler: async (request, h) => {
 
                 const { email, pseudo, password, country, city, remote } = request.payload;
                 // use User model to signup
-                const info = User.signup(email, pseudo, password, country, city, remote)
+                const info = await User.signup(email, pseudo, password, country, city, remote);
 
                 if (info.statusCode) {
                     // if error, send error messages
