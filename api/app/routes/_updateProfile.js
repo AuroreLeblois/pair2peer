@@ -56,7 +56,7 @@ module.exports = {
                         remote: Joi.boolean().required(),
                         city: Joi.string().required(),
                         country: Joi.string().required(),
-                        birthyear: Joi.string().allow(''),
+                        birthyear: Joi.number().allow(''),
                         description: Joi.string().allow(''),
                         experience: Joi.number().allow(''),
                         disponibility: Joi.number(),
@@ -118,10 +118,9 @@ module.exports = {
                 //le mot de passe
                 //on compare le mdp avec la validation si mdp changé
                 //déjà est ce que le user a rentré un mdp?
-                if(password!== null
-                    ||password!== undefined
-                    ||password.length>0){
+                if(password.length>0){
                     console.log('un mot de passe a été saisie!')
+                    console.log(password.length)
                     //est ce que le mdp fait bien 8 caractères au moins?
                     if(password.length>=8){
                         console.log('le mdp est supérieur à 8 caractères')
@@ -129,9 +128,10 @@ module.exports = {
                         if(password===validatePassword){
                             console.log('le mdp est le meme que la validation')
                             const hashPassword = bcrypt.hashSync(password, 10);
+                            console.log(hashPassword);
                             await db.query(`UPDATE usr
-                                            SET "password"= ${hashPassword} 
-                                            WHERE "id"=${userID}`);
+                                            SET "password"= $1
+                                            WHERE "id"=$2`,[hashPassword, userID]);
                         }
                         else{
                             error.push('La validation et le mot de passe sont différents.');
@@ -141,25 +141,37 @@ module.exports = {
                 };
                 //l'email
                 //est-ce que le champs email est rempli et différent du cookie?
-                if(changeMyEmail!== null
-                    ||changeMyEmail!== undefined
-                    ||changeMyEmail.length>0
-                    ||changeMyEmail!==email&& changeMyEmail===validateEmail){
+                if(changeMyEmail.length>0
+                    &&changeMyEmail!==email&& changeMyEmail===validateEmail
+                    ){
                     console.log('un email a été saisie et est différent+validation ok')
                     //ok mais c'est un email?
                     if(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(changeMyEmail)===true){
                     //dans ce cas on va update le profil
                     console.log(`c'est bien un email`)
                     await db.query(`UPDATE usr 
-                                    SET "email"=$1 
-                                    WHERE usr.id=$1`, [changeMyEmail, userID]);
+                    SET "email"=$1 
+                    WHERE "id"=$2`, [changeMyEmail, userID]);
                     }
                     //sinon on prévient l'user
+                };
+                if(pseudo.length>0 && pseudo.toLowerCase()!==result.rows[0].pseudo){
+                       console
+                    //oui mais le pseudo doit être unique
+                    console.log(`je rentre dans la vérification du pseudo`);
+                    console.log(pseudo.length);
+                    console.log(`le pseudo est: ${pseudo}`)
+                    const pseudoExists= await db.query(`SELECT pseudo FROM usr WHERE pseudo= $1;` ,[pseudo]);
+                    if(!pseudoExists.rows[0]){
+                        console.log(`aucun pseudo équivalent`);
+                        await db.query(`UPDATE usr SET pseudo=$1 WHERE "id"=$2;`,[pseudo,userID]);
+                        console.log(`j'ai update le pseudo`);
+                    }
+                    //si le pseudo existe=> on le dit à l'utilisateur
                     else{
-                        error.push(`L'email saisie est invalide ou n'est pas équivalent à la validation.`);
+                        error.push('Désolé...Ce pseudo est déjà pris! ');
                     }
                 };
-               
                 
                 //si l'user change son détail=> usr_detail
                 //avant on vérifie que les input "required" sont conformes
@@ -206,7 +218,7 @@ module.exports = {
                                             WHERE usr_id=$12`,
                                             [city, country, remote,birthyear,
                                             picture, description, experience, latitude, longitude,disponibility,linkedinLink,userID]);
-                                            console.log(`update usr_detail ok`)
+                                            console.log(`update des détails utilisateur ok`)
                                         };
                     
                     }
@@ -214,7 +226,7 @@ module.exports = {
                    
                     
                 }
-            //sinon on dit ce qu'il manque à l'utilisateur
+            // sinon on dit ce qu'il manque à l'utilisateur
                 else{
                     if(city===null||city===undefined){
                         console.log(`ville non définie`)
@@ -229,11 +241,43 @@ module.exports = {
                         error.push(`Merci de nous dire si vous souhaitez travailler en remote`);
                     }
                 }
-            
+                    
+                        // si il y a des erreurs
+                        if(error.length>0){
+                            console.log(error)
+                            return h.response(error).code(400);
+                        }
+                        // sinon on renvoie les nouvelles infos
+                        else{
+                            const newResult = await db.query(`SELECT * FROM usr WHERE "id" = $1` ,[userID]);
+                            const newProfile= await db.query(`SELECT * FROM usr_profile WHERE pseudo=$1 `,[newResult.rows[0].pseudo]);
+                            const newPlace= await db.query(`SELECT * FROM usr_map WHERE pseudo=$1`, [newResult.rows[0].pseudo]);
+                            const newPl= newPlace.rows[0];
+                            const newPro= newProfile.rows[0];
+                            return  {newPl, newPro};
+                        }
+                        //si le champs est vide=> ne rien faire
+                    }
+                });
 
-
-                //si l'utilisateur rentre une langue
-                if(selectedLang.length >0){
+                server.route({
+                    method: 'PATCH',
+                    path: '/profile/lang',
+                    options: {
+                        auth: {
+                            strategy: 'base',
+                            mode: 'required',
+                            scope: ['user', 'admin']
+                        },
+                        description: 'handle update user profile lang',
+                tags: ['api', 'profile', 'validation']
+            },
+            handler: async (request, h) => {
+                //les langues
+                const selectedLang= request.payload.languages;
+                
+                 //si l'utilisateur rentre une langue
+                 if(selectedLang){
                     console.log(`il y a des langues`)
                     for (let lang of selectedLang){
                         const langExists= await db.query(`SELECT id 
@@ -250,10 +294,28 @@ module.exports = {
                         }
                     }
                     
-                };
+                }
+            }
+        });
+
+        server.route({
+            method: 'PATCH',
+            path: '/profile/it_lang',
+            options: {
+                auth: {
+                    strategy: 'base',
+                    mode: 'required',
+                    scope: ['user', 'admin']
+                },
+                description: 'handle update user profile it_lang',
+        tags: ['api', 'profile', 'validation']
+            },
+        handler: async (request, h) => {
+        //les it
+            const itlangs = request.payload.itLanguages;
+            const itLevel= request.payload.itLevels;
                 //si l'utilisateur entre un it langage => insert//update user knows it lang
-                if(itLangs.length>0){
-                    for (let itLang of itLangs){
+                if(itLangs){
                     
                         const itLangExists = await db.query(`SELECT id 
                                                         FROM it_lang
@@ -281,41 +343,9 @@ module.exports = {
 
                         }
                     }
-                    };
-                    if(pseudo!== undefined
-                        ||pseudo!== null
-                        ||pseudo.length>3 && pseudo.toLowerCase()!==result.rows[0].pseudo
-                        ||!!pseudo){
-                           
-                        //oui mais le pseudo doit être unique
-                        console.log(`je rentre dans la vérification du pseudo`);
-                        const pseudoExists= await db.query(`SELECT pseudo FROM usr WHERE pseudo= $1;` ,[pseudo]);
-                        if(!pseudoExists.rows[0]){
-                            console.log(`aucun pseudo équivalent`);
-                            await db.query(`UPDATE usr SET pseudo=${pseudo} WHERE "id"=$2;`,[userID]);
-                            console.log(`j'ai update le pseudo`);
-                        }
-                        //si le pseudo existe=> on le dit à l'utilisateur
-                        else{
-                            error.push('Désolé...Ce pseudo est déjà pris! ');
-                        }
-                    };
-                        // si il y a des erreurs
-                        if(error.length>0){
-                            return h.response(error).code(400);
-                        }
-                        // sinon on renvoie les nouvelles infos
-                        else{
-                            const newResult = await db.query(`SELECT * FROM usr WHERE "id" = $1` ,[userID]);
-                            const newProfile= await db.query(`SELECT * FROM usr_profile WHERE pseudo=$1 `,[newResult.rows[0].pseudo]);
-                            const newPlace= await db.query(`SELECT * FROM usr_map WHERE pseudo=$1`, [newResult.rows[0].pseudo]);
-                            return  {newPlace, newProfile};
-                        }
-                        //si le champs est vide=> ne rien faire
                     }
+                
+            
                 });
-
-               //to do:rangement
-
-            }
+                }
         }
