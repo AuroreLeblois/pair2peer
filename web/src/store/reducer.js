@@ -37,7 +37,6 @@ export default (state = initialState, action = {}) => {
       };
     }
     case actions.GET_FILTERS_LIST: {
-      console.log(action)
       return {
         ...state,
         filters: action.filters,
@@ -71,6 +70,5 @@ export default (state = initialState, action = {}) => {
     default: {
       return state;
     }
-    
   }
 };

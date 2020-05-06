@@ -14,6 +14,7 @@ export const actions = {
   DISPLAY_ERRORS_MSG: 'actions/DISPLAY_ERRORS_MSG',
   CLEAR_ERRORS_MSG: 'actions/CLEAR_ERRORS_MSG',
   UPDATE_PROFILE: 'actions/UPDATE_PROFILE',
+  SUBMIT_SIGNUP: 'actions/SUBMIT_SIGNUP',
 };
 
 // == Actions creator
@@ -56,4 +57,8 @@ export const displayErrorsMessages = (errors) => (
 
 export const updateProfile = (data) => (
   { type: actions.UPDATE_PROFILE, data }
-)
+);
+
+export const submitSignup = (history, data) => (
+  { type: actions.SUBMIT_SIGNUP, history, data }
+);

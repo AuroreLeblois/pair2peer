@@ -30,7 +30,7 @@ const Header = () => {
     <>
       <Navbar.Item renderAs="div">
         <Link to="/signup">
-          <Button color="info" light onClick={() => setActiveNavbar(!activeNavbar)}>Inscription</Button>
+          <Button color="info" onClick={() => setActiveNavbar(!activeNavbar)}>Inscription</Button>
         </Link>
       </Navbar.Item>
       <Navbar.Item renderAs="div">
@@ -49,12 +49,12 @@ const Header = () => {
         </Navbar.Link>
         <Navbar.Dropdown>
           <Link to="/profile">
-            <Navbar.Item onClick={() => setActiveNavbar(!activeNavbar)}>
+            <Navbar.Item renderAs="div" onClick={() => setActiveNavbar(!activeNavbar)}>
               Profile
             </Navbar.Item>
           </Link>
           <Link to="/logout">
-            <Navbar.Item onClick={handleLogout}>
+            <Navbar.Item renderAs="div" onClick={handleLogout}>
               Déconnexion
             </Navbar.Item>
           </Link>
@@ -80,29 +80,29 @@ const Header = () => {
         <Navbar.Menu>
           <Navbar.Container position="end">
             <Navbar.Container>
-              <Navbar.Item onClick={() => setActiveNavbar(!activeNavbar)}>
+              <Navbar.Item renderAs="div" onClick={() => setActiveNavbar(!activeNavbar)}>
                 <Link to="/">
                   <Heading subtitle size={6}>
                     Accueil
                   </Heading>
                 </Link>
               </Navbar.Item>
-              <Navbar.Item onClick={() => setActiveNavbar(!activeNavbar)}>
+              <Navbar.Item renderAs="div" onClick={() => setActiveNavbar(!activeNavbar)}>
                 <Link to="/map">
                   <Heading subtitle size={6}>Carte</Heading>
                 </Link>
               </Navbar.Item>
-              <Navbar.Item onClick={() => setActiveNavbar(!activeNavbar)}>
+              <Navbar.Item renderAs="div" onClick={() => setActiveNavbar(!activeNavbar)}>
                 <Link to="/about">
                   <Heading subtitle size={6}>A Propos</Heading>
                 </Link>
               </Navbar.Item>
-              <Navbar.Item onClick={() => setActiveNavbar(!activeNavbar)}>
+              <Navbar.Item renderAs="div" onClick={() => setActiveNavbar(!activeNavbar)}>
                 <Link to="/contact">
                   <Heading subtitle size={6}>Contact</Heading>
                 </Link>
               </Navbar.Item>
-              <Navbar.Item onClick={() => setActiveNavbar(!activeNavbar)}>
+              <Navbar.Item renderAs="div" onClick={() => setActiveNavbar(!activeNavbar)}>
                 <Link to="/search">
                   <Heading subtitle size={6}>Rechercher</Heading>
                 </Link>

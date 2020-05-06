@@ -1,10 +1,13 @@
 // == Import npm
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { Radio, Form, Button, Input, Header, Grid } from 'semantic-ui-react';
+import { submitSignup } from 'src/store/actions';
 
 const Signup = () => {
-
+  const history = useHistory();
+  const dispatch = useDispatch();
   // Les hooks
   const [pseudo, setPseudo] = React.useState('');
   const [email, setEmail] = React.useState('');
@@ -12,7 +15,7 @@ const Signup = () => {
   const [passwordConfirm, setPasswordConfirm] = React.useState('');
   const [country, setCountry] = React.useState('');
   const [city, setCity] = React.useState('');
-  const [radioValue, setRadioValue] = useState();
+  const [remote, setRemote] = useState();
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -23,25 +26,13 @@ const Signup = () => {
       passwordConfirm,
       country,
       city,
-      remote: radioValue,
+      remote,
     };
-    console.log(newUser)
-    axios.post(
-      'http://localhost:3000/signup',
-      newUser,
-      { withCredentials: true },
-    )
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-        console.log(err.response);
-      });
+    dispatch(submitSignup(history, newUser));
   };
 
   const handleRadioChange = (evt, result) => {
-    setRadioValue(result.value);
+    setRemote(result.value);
   };
 
   return (
@@ -117,7 +108,7 @@ const Signup = () => {
               label="Oui"
               name="remote"
               value="true"
-              checked={radioValue === 'true'}
+              checked={remote === 'true'}
               onChange={handleRadioChange}
             />
           </Form.Field>
@@ -126,7 +117,7 @@ const Signup = () => {
               label="Non"
               name="remote"
               value="false"
-              checked={radioValue === 'false'}
+              checked={remote === 'false'}
               onChange={handleRadioChange}
             />
           </Form.Field>

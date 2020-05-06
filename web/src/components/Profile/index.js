@@ -1,14 +1,15 @@
 // == Import npm
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { firstLetterToUppercase } from 'src/store/utils';
-import { Columns, Card, Media, Image, Heading, Content } from 'react-bulma-components';
+import { Columns, Image, Media, Container, Heading, Hero, Form, Button, Box } from 'react-bulma-components';
 
 // == Import
 import ProfileEdit from './profileEdit';
 
 // == Composant
 const Profile = () => {
+  const [activeTab, setActiveTab] = useState();
   const user = useSelector((state) => state.user);
   console.log(user);
 
@@ -36,13 +37,29 @@ const Profile = () => {
     //     <ProfileEdit />
     //   </Grid.Column>
     // </Grid>
-    <Columns>
-      <Columns.Column>
-        <Image size="128x128" rounded src={user.picture} />
+    <Columns gapless>
+      <Columns.Column />
+
+      <Columns.Column size={3} >
+        <Columns.Column style={{ textAlign: 'center' }}>
+          <Heading renderAs="p" size={4}>Profil Utilisateur</Heading>
+        </Columns.Column>
+        <Columns.Column>
+          <Button isStatic={activeTab} color="info" fullwidth onClick={() => setActiveTab(!activeTab)}>Général</Button>
+        </Columns.Column>
+        <Columns.Column>
+          <Button isStatic={!activeTab} color="info" fullwidth onClick={() => setActiveTab(!activeTab)}>Avancé</Button>
+        </Columns.Column>
       </Columns.Column>
-      <Columns.Column size="three-quarters">
-        <ProfileEdit />
+
+      <Columns.Column size={8}>
+        <Box>
+          <ProfileEdit />
+        </Box>
       </Columns.Column>
+
+
+      <Columns.Column />
     </Columns>
   );
 };

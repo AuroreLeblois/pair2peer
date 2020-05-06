@@ -57,7 +57,7 @@ const App = () => {
 
   return (
     <div className="app">
-      <Hero color="light" gradient size="fullheight" withNavbar>
+      <Hero color="light" size="fullheight">
         <Hero.Head>
           <Header />
         </Hero.Head>
