@@ -78,9 +78,8 @@ const Signup = () => {
     {
       newUser
     })
-    .then((res) => {
-      const data = res.data
-      const newUser = {};
+    .then((response) => {
+      console.log(response);
       
     })
     .catch(function (error) {
