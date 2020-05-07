@@ -7,8 +7,17 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" />
 	<script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"></script>
-
+	<link type="text/css" rel="stylesheet" href="styles.css">
 	
+
+
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.Default.css" />
+
+  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js"></script>
+</head> 
 </head>
 
 
@@ -16,48 +25,163 @@
 
 <body>
 
-	<div id="mapid" style="width: 500px; height: 300px;"></div>
+	<div id="mapid" style="width: 700px; height: 400px;"></div>
 
 	<script>
 	
-
+////////////////////////////////////////////////////////////////////////////////////////
 	// CENTRAGE DE LA MAP
 
-	// Attention avec geojson.io on recup les valeurs inversés. ([Lat/long], taille du zoom)
+	// Attention avec geojson.io on recup les valeurs inversés. ([Lat/long] BRUTES, taille du zoom)
 
-	var mymap = L.map('mapid')
+	var map = L.map('mapid')
 	.setView([48.84664340683584,2.3455810546875], 12);
 	
-	
-	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ2lpcyIsImEiOiJjazl2YmRheXgwNmVwM21sZW80NG55ZTRnIn0.P1pdw_RxFZK96QYO4bOTqg', {
+////////////////////////////////////////////////////////////////////////////////////////
+	// RECUPERATION DE LA MAP 
+
+	var stamenToner = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ2lpcyIsImEiOiJjazl2YmRheXgwNmVwM21sZW80NG55ZTRnIn0.P1pdw_RxFZK96QYO4bOTqg', {
 	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
     id: 'mapbox/streets-v11',
 	tileSize: 512,
 	zoomOffset: -1,
-    accessToken:'pk.eyJ1IjoiZ2lpcyIsImEiOiJjazl2YmRheXgwNmVwM21sZW80NG55ZTRnIn0.P1pdw_RxFZK96QYO4bOTqg',
-	}).addTo(mymap);
+	accessToken:'pk.eyJ1IjoiZ2lpcyIsImEiOiJjazl2YmRheXgwNmVwM21sZW80NG55ZTRnIn0.P1pdw_RxFZK96QYO4bOTqg',
+	ext: 'png'
+	}).addTo(map);
 	
 
+
+
+	 map.addLayer(stamenToner);
+
+
+////////////////////////////////////////////////////////////////////////////////////////
 	// CERCLE DE RECHERCHE 
 
 	// Cercle pouvant représenter le cercle de recherche d'un utilisateur ??? 
-	// 50km = cercle de rayon 50 etc ???
+	// 50km = cercle de rayon 50000 METRES etc ???
 
 	L.circle([48.84664340683584,2.3455810546875], 2000, {
 		color:'#FFF',
 		fillColor:'#f03',
-		fillOpacity: 0.5
-	}).addTo(mymap).bindPopup("Zone de recherche");
+		fillOpacity: 0.2,
+		stroke:false,
+	}).addTo(map).bindPopup("Zone de recherche");
 
-
+//////////////////////////////////////////////////////////////////////////////////////
 	// MARQUEUR DE POSITION 
 
-	// Données brutes remplaçables par la suite ? Lors de l'inscription / login / recherche
-	L.marker([48.84664340683584,2.3455810546875])
-		.addTo(mymap)
-		.bindPopup("Vous etes ici");
+	// Création d'un marqueur perso
+	var icon = L.icon({
+		iconUrl:'icon.png',
+		iconSize:[50,50], // Taille de l'icon 
+		iconAnchor:[25,50], // Pour que le marqueur reste en place 
+		popupAnchor:[0,-43] // Pour mettre le popup juste au dessus du marqueur 
+	});
 
+
+
+	// Données brutes remplaçables par la suite ? Lors de l'inscription / login / recherche
+	L.marker([48.84664340683584,2.3455810546875],
+		{icon:icon}
+		).addTo(map)
+		 .bindPopup("Vous êtes ici")
+		 .openPopup(); // Message pop instant
+
+// TEST POUR CLUSTER 
+
+	var markers = new L.markerClusterGroup();
+
+	markers.addLayer(L.marker([50.85463321252134, 10.85463321252134],
+		{icon:icon})
+		// Rajouter des marqueurs ici
+	).addTo(map).bindPopup("Vous êtes ici");
+
+	markers.addLayer(L.marker([52.85463321252134, 12.85463321252134],
+		{icon:icon})
+		// Rajouter des marqueurs ici
+	).addTo(map).bindPopup("Vous êtes ici");
+
+	markers.addLayer(L.marker([51.85463321252134, 11.85463321252134],
+		{icon:icon})
+		// Rajouter des marqueurs ici
+	).addTo(map).bindPopup("Vous êtes ici");
+
+	markers.addLayer(L.marker([51.25503952021694,11.766357421875],
+		{icon:icon})
+		// Rajouter des marqueurs ici
+	).addTo(map).bindPopup("Vous êtes ici");
+
+
+	markers.addLayer(L.marker([59.85463321252542, 20.85463321252213],
+		{icon:icon})
+		// Rajouter des marqueurs ici
+	).addTo(map).bindPopup("Vous êtes ici");
+
+	markers.addLayer(L.marker([52.85463321252879, 9.85463321252321],
+		{icon:icon})
+		// Rajouter des marqueurs ici
+	).addTo(map).bindPopup("Vous êtes ici");
+
+	markers.addLayer(L.marker([55.85463321252685, 12.85463321252369],
+		{icon:icon})
+		// Rajouter des marqueurs ici
+	).addTo(map).bindPopup("Vous êtes ici");
+
+	markers.addLayer(L.marker([54.25503952021987,10.766357421158],
+		{icon:icon})
+		// Rajouter des marqueurs ici
+	).addTo(map).bindPopup("Vous êtes ici");
+	map.addLayer(markers);
+
+	// var cities = getCities();
+	// for (var i = 0; i < cities.length; i++) {
+    // 		var latLng = new L.LatLng(cities[i][1], cities[i][2]);
+    // 		var marker = new L.Marker(latLng, {title: cities[i][0]});
+    // 		markersCluster.addLayer(marker);
+	// }
+
+	// map.addLayer(markersCluster);
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+	// PERSONNALISATION DES MARKERS
+
+	var markersClusterCustom = new L.MarkerClusterGroup({
+    	iconCreateFunction: function(cluster) {
+        var digits = (cluster.getChildCount()+'').length;
+        return L.divIcon({ 
+            html: cluster.getChildCount(), 
+            className: 'cluster digits-'+digits,
+            iconSize: null 
+        });
+    }
+});
+//////////////////////////////////////////////////////////////////////////////////////
+	// LAYER GROUPS
+
+	
+
+	// var cities = [
+	// 	L.marker([48.777912755501845, 2.4609375]).addTo(map),
+    // 	L.marker([48.82268881260476, 2.5124359130859375]).addTo(map),
+    // 	L.marker([48.791937839651546, 2.61611938476562548]).addTo(map),
+	// 	L.marker([48.68960056688, 2.6144027709960938]).addTo(map)
+	// ]
+
+	// var markersCluster = new L.MarkerClusterGroup();
+
+	// var cities = getCities();
+	// for (var i = 0; i < cities.length; i++) {
+    // 	var latLng = new L.LatLng(cities[i][1], cities[i][2]);
+    // 	var marker = new L.Marker(latLng, {title: cities[i][0]});
+    // 	markersCluster.addLayer(marker);
+	// }
+
+	// map.addLayer(markersCluster);
+
+////////////////////////////////////////////////////////////////////////////////////////
 
 	// Clique sur map pour récup Lat/Long
 	var popup = L.popup();
@@ -70,13 +194,13 @@
 		popup
 		.setLatLng(e.latlng)
 		.setContent("Vous avez cliqué à " + e.latlng.toString())
-		.openOn(mymap);
+		.openOn(map);
 		
 	}
 
-	mymap.on('click', onMapClick);
+	map.on('click', onMapClick);
 
 	</script>
-	
+
 </body>
 </html>

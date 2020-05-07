@@ -2,6 +2,8 @@
   "dependencies": {
     "axios": "^0.19.2",
     "checkbox": "^0.0.1",
+    "leaflet-markercluster": "^0.2.2",
+    "leaflet.markercluster": "^1.4.1",
     "omit": "^1.0.1"
   }
 }
