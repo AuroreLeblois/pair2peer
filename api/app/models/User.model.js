@@ -108,5 +108,36 @@ module.exports = class User {
         const newUser = await db.query('SELECT * FROM usr_profile WHERE id = $1', [userId]);
 
         return newUser.rows[0];
+    };
+
+    // ####               ####
+    // ##   Delete method   ##
+    // ####               ####
+    static async delete(email) {
+
+        await db.query('DELETE FROM usr WHERE email = $1', [email]);
+    };
+
+    // ####    Other      ####
+    // ##      profile      ##
+    // ####    method     ####
+    static async oprofile(pseudo) {
+
+        const user = await db.query(`SELECT * FROM usr_profile WHERE pseudo = $1`, [pseudo]);
+
+        const error = {
+            statusCode: 400,
+            error: 'Bad request',
+            message: {}
+        };
+
+        // if the user doesn't exist, it will return an error
+        if (!user.rows[0]) {
+            error.message.unknownUser = 'Profil introuvable';
+            return error;
+        } else {
+            return user.rows[0]
+        }  
     }
+
 };

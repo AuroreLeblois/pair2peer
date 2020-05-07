@@ -1,12 +1,10 @@
-const vision = require('@hapi/vision');
-const inert = require('@hapi/inert');
 const db = require('../models/db');
 const Joi = require('@hapi/joi');
+const User = require('../models/User.model');
 
 module.exports = {
     name: 'get profile pages',
     register: async (server) => {
-        await server.register([vision, inert]);
 
         server.route({
             method: 'GET',
@@ -21,26 +19,35 @@ module.exports = {
                 tags: ['api', 'profile', 'info']
             },
             handler: async (request, h) => {
-                // passage de true string en true boolean 
-                // => utile pour modifier oui ou non remote dans 'POST'
-                // console.log(JSON.parse("true"))
 
+                // normally the front have access to these informations by post /login into the state
                 const email = request.state.cookie.email;
-                const result = await db.query(`SELECT * FROM usr WHERE email = $1`, [email]);
-
-                const userID = result.rows[0].id;
-                if(!userID){
-                    return 'profil introuvable'
-                }
-                else{
-                    const result= await db.query(`SELECT * FROM usr_profile
-                                                WHERE "id"=$1;`, [userID]);
-                    const user= result.rows[0];
-                return h.response(user);
-                }
+                const user = await db.query(`SELECT * FROM usr_profile WHERE email = $1`, [email]);
+                // no need to check if the user exist, because if the user want to access this path, he have to be logged
+                return user.rows[0];
             }
         });
 
+        server.route({
+            method: 'DELETE',
+            path: '/profile',
+            options: {
+                auth: {
+                    strategy: 'base',
+                    mode: 'required',
+                    scope: ['user', 'admin']
+                },
+                description: 'User\'s profile',
+                tags: ['api', 'profile', 'delete']
+            },
+            handler: async (request, h) => {
+                
+                // collect email through cookie and then delete the user
+                const email = request.state.cookie.email;
+                await User.delete(email);
+                return h.redirect('/');
+            }
+        });
 
         server.route({
             method: 'GET',
@@ -60,23 +67,20 @@ module.exports = {
                 }
             },
             handler: async (request, h) => {
-                const pseudo = request.params.pseudo;
-                const result= await db.query(`SELECT * FROM usr WHERE pseudo =$1`, [pseudo]);
 
-                const userID = result.rows[0].id;
-                if(!userID){
-                    return 'profil introuvable'
-                }
-                else{
-                    const result= await db.query(`SELECT * FROM usr_profile
-                                                 WHERE "id"=$1;`, [userID]);
-                    const user= result.rows[0];
-                return h.response(user);
-                }
+                const { pseudo } = request.params;
+                // use User model to see other user profile
+                const profile = await User.oprofile(pseudo);
                 
+                if (profile.statusCode) {
+                    // if error, send error messages
+                    return h.response(profile).code(400);
+                } else {
+                    // if success, send user informations
+                    return profile;
+                };
             } 
-        });
-    
+        }); 
 
-}
+    }
 }
