@@ -9,3 +9,7 @@
   background-color: #fff;
   height: 100% !important;
 }
+
+.is-4 {
+  display: inline-flex;
+}

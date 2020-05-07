@@ -49,26 +49,6 @@ const ProfileEdit = () => {
     <>
       <Columns.Column>
         <Container>
-          <Media>
-            <Media.Item renderAs="figure" position="left">
-              <Image size={128} rounded src={user.picture} />
-            </Media.Item>
-            <Media.Content>
-              <Hero>
-                <Hero.Body>
-                  <Container>
-                    <Heading renderAs="p" size={5}>{firstLetterToUppercase(user.pseudo)}</Heading>
-                    <Heading renderAs="p" subtitle size={6}>{firstLetterToUppercase(user.city)}, {firstLetterToUppercase(user.country)}</Heading>
-                  </Container>
-                </Hero.Body>
-              </Hero>
-            </Media.Content>
-          </Media>
-        </Container>
-      </Columns.Column>
-
-      <Columns.Column>
-        <Container>
           <form>
             <Form.Field>
               <Form.Field.Body>

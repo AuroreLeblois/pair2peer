@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { Grid, Card, Pagination, Message } from 'semantic-ui-react';
+import { Columns, Pagination } from 'react-bulma-components';
 
 // == import utils/actions
 import { API_URI } from 'src/store/utils';
@@ -28,8 +28,8 @@ const Results = () => {
 
   const dispatch = useDispatch();
 
-  const onChange = (evt, pageInfo) => {
-    setActivePage(pageInfo.activePage);
+  const handleChange = (page) => {
+    setActivePage(page)
   };
 
   const getUsersData = () => {
@@ -67,21 +67,31 @@ const Results = () => {
   );
 
   return (
-    <Grid stretched>
-      <Grid.Row centered>
-        <Message attached color="black">{usersData.maxUsers} développeurs disponibles</Message>
-      </Grid.Row>
-      <Grid.Row stretched>
-        <Card.Group stackable itemsPerRow={4}>
-          <Cards users={usersData.users} />
-        </Card.Group>
-      </Grid.Row>
-      <Grid.Row textAlign="right">
-        <Grid.Column>
-          <PaginationComponent />
-        </Grid.Column>
-      </Grid.Row>
-    </Grid>
+    // <Grid stretched>
+    //   <Grid.Row centered>
+    //     <Message attached color="black">{usersData.maxUsers} développeurs disponibles</Message>
+    //   </Grid.Row>
+    //   <Grid.Row stretched>
+    //     <Card.Group stackable itemsPerRow={4}>
+    //       <Cards users={usersData.users} />
+    //     </Card.Group>
+    //   </Grid.Row>
+    //   <Grid.Row textAlign="right">
+    //     <Grid.Column>
+    //       <PaginationComponent />
+    //     </Grid.Column>
+    //   </Grid.Row>
+    // </Grid>
+    <>
+      <Columns>
+        <Cards users={usersData.users} />
+      </Columns>
+      <Columns>
+        <Columns.Column>
+          <Pagination current={activePage} total={maxPage} onChange={handleChange} delta={maxPage} />
+        </Columns.Column>
+      </Columns>
+    </>
   );
 };
 

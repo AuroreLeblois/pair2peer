@@ -24,7 +24,6 @@ const Header = () => {
   };
 
   const { user } = useSelector((state) => state);
-  console.log(user)
 
   const NoUser = () => (
     <>
