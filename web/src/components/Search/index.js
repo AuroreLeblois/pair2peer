@@ -1,7 +1,6 @@
 // == Import npm
 import React from 'react';
-import { Columns, Container } from 'react-bulma-components';
-
+import { Columns, Content } from 'react-bulma-components';
 
 // == Import
 import Filter from './filter';
@@ -12,8 +11,10 @@ const Search = () => {
   return (
     <Columns>
       <Columns.Column>
-        <Columns>
-          <Filter />
+        <Columns gapless>
+          <Content style={{ textAlign: 'center' }}>
+            <Filter />
+          </Content>
         </Columns>
         <Columns>
           <Columns.Column />

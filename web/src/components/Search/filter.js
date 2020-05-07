@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { firstLetterToUppercase } from 'src/store/utils';
 import { syncSearchInputs } from 'src/store/actions';
-import { Form, Columns, Container } from 'react-bulma-components';
+import { Form, Columns, Container, Content } from 'react-bulma-components';
 
 // == Import
 
@@ -107,9 +107,6 @@ const Filter = () => {
   };
 
   return (
-    <>
-    <Columns.Column size={1} />
-    <Columns.Column size={1} />
     <form>
       <Form.Field>
         <Form.Field.Body>
@@ -165,7 +162,6 @@ const Filter = () => {
         </Form.Field.Body>
       </Form.Field>
     </form>
-    </>
   );
 };
 

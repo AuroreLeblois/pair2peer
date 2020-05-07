@@ -13,3 +13,8 @@
 .is-4 {
   display: inline-flex;
 }
+
+.picture-profile {
+  display: flex;
+  justify-content: center;
+}
