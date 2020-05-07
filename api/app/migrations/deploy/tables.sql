@@ -73,8 +73,7 @@ CREATE TABLE usr_message_chat (
     script TEXT,
     "date" TIMESTAMPTZ,
     usr_id INT NOT NULL REFERENCES usr(id) ON DELETE CASCADE,
-    chat_id INT NOT NULL REFERENCES chat(id) ON DELETE CASCADE,
-    UNIQUE (usr_id, chat_id)
+    chat_id INT NOT NULL REFERENCES chat(id) ON DELETE CASCADE
 );
 
 
