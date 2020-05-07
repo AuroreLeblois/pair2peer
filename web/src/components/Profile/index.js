@@ -52,29 +52,27 @@ const Profile = () => {
       </Columns.Column>
 
       <Columns.Column size={8}>
-      <Box>
-        <Columns.Column>
-        
-          <Container className="picture-profile">
-            <Media>
-              <Media.Item renderAs="figure" position="left">
-                <Image size={128} rounded src={user.picture} />
-              </Media.Item>
-              <Media.Content>
-                <Hero>
-                  <Hero.Body>
-                    <Container>
-                      <Heading renderAs="p" size={5}>{firstLetterToUppercase(user.pseudo)}</Heading>
-                      <Heading renderAs="p" subtitle size={6}>{firstLetterToUppercase(user.city)}, {firstLetterToUppercase(user.country)}</Heading>
-                    </Container>
-                  </Hero.Body>
-                </Hero>
-              </Media.Content>
-            </Media>
-          </Container>
-        </Columns.Column>
-        <Columns.Column />
-        
+        <Box>
+          <Columns.Column>
+            <Container className="picture-profile">
+              <Media>
+                <Media.Item renderAs="figure" position="left">
+                  <Image size={128} rounded src={user.picture} />
+                </Media.Item>
+                <Media.Content>
+                  <Hero>
+                    <Hero.Body>
+                      <Container>
+                        <Heading renderAs="p" size={5}>{firstLetterToUppercase(user.pseudo)}</Heading>
+                        <Heading renderAs="p" subtitle size={6}>{firstLetterToUppercase(user.city)}, {firstLetterToUppercase(user.country)}</Heading>
+                      </Container>
+                    </Hero.Body>
+                  </Hero>
+                </Media.Content>
+              </Media>
+            </Container>
+          </Columns.Column>
+          <Columns.Column />
           <ProfileEdit />
         </Box>
       </Columns.Column>

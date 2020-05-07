@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Radio, Form, Button, Input, Header, Grid } from 'semantic-ui-react';
 import { submitSignup } from 'src/store/actions';
+import { Columns, Form, Button, Container, Box } from 'react-bulma-components';
 
 const Signup = () => {
   const history = useHistory();
@@ -15,7 +15,7 @@ const Signup = () => {
   const [passwordConfirm, setPasswordConfirm] = React.useState('');
   const [country, setCountry] = React.useState('');
   const [city, setCity] = React.useState('');
-  const [remote, setRemote] = useState();
+  const [remote, setRemote] = useState('');
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -31,104 +31,86 @@ const Signup = () => {
     dispatch(submitSignup(history, newUser));
   };
 
-  const handleRadioChange = (evt, result) => {
-    setRemote(result.value);
+  const handleRadioChange = (evt) => {
+    const target = evt.target
+    setRemote(target.value);
   };
 
   return (
-    <Grid centered>
-      <Grid.Column width={8}>
-        <Form
-          inverted
-          className="ui form"
-          onSubmit={handleSubmit}
-          size="tiny"
-        >
-          <Form.Group widths="equal">
-            <Form.Field
-              control={Input}
-              label="Pseudo"
-              name="pseudo"
-              placeholder="Jane57"
-              onChange={(e) => setPseudo(e.target.value)}
-            />
-            <Form.Field
-              control={Input}
-              label="Mail"
-              name="email"
-              type="email"
-              placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group widths="equal">
-            <Form.Field
-              control={Input}
-              label="Mot de passe"
-              name="password"
-              type="password"
-              placeholder=""
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Form.Field
-              control={Input}
-              label="Confirmation de mot de passe"
-              name="passwordConfirm"
-              type="password"
-              placeholder=""
-              value={passwordConfirm}
-              onChange={(e) => setPasswordConfirm(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group widths="equal">
-            <Form.Field
-              control={Input}
-              label="Pays"
-              name="country"
-              type="text"
-              placeholder="France"
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-            />
-            <Form.Field
-              control={Input}
-              label="Ville"
-              name="city"
-              type="text"
-              placeholder="Strasbourg"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-            />
-          </Form.Group>
+    <Columns gapless>
+      <Columns.Column />
+      <Box>
+        <Columns.Column>
+          <form onSubmit={handleSubmit}>
+            <Form.Field>
+              <Form.Field.Body>
+                <Form.Field>
+                  <Form.Control>
+                    <Form.Label>Pseudo</Form.Label>
+                    <Form.Input name="name" type="text" value={pseudo} onChange={(e) => setPseudo(e.target.value)} />
+                  </Form.Control>
+                </Form.Field>
+                <Form.Field>
+                  <Form.Control>
+                    <Form.Label>Email</Form.Label>
+                    <Form.Input name="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                  </Form.Control>
+                </Form.Field>
+              </Form.Field.Body>
+            </Form.Field>
 
-          <Header as="h6" inverted> Je veux travailler en remote </Header>
-          <Form.Field>
-            <Radio
-              label="Oui"
-              name="remote"
-              value="true"
-              checked={remote === 'true'}
-              onChange={handleRadioChange}
-            />
-          </Form.Field>
-          <Form.Field>
-            <Radio
-              label="Non"
-              name="remote"
-              value="false"
-              checked={remote === 'false'}
-              onChange={handleRadioChange}
-            />
-          </Form.Field>
-          <Button
-            type="submit"
-          >
-            S'inscrire
-          </Button>
-        </Form>
-      </Grid.Column>
-    </Grid>
+            <Form.Field>
+              <Form.Field.Body>
+                <Form.Field>
+                  <Form.Control>
+                    <Form.Label>Mot de passe</Form.Label>
+                    <Form.Input name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                  </Form.Control>
+                </Form.Field>
+                <Form.Field>
+                  <Form.Control>
+                    <Form.Label>Confirmer le mot de passe</Form.Label>
+                    <Form.Input name="passwordConfirm" type="password" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
+                  </Form.Control>
+                </Form.Field>
+              </Form.Field.Body>
+            </Form.Field>
+
+            <Form.Field>
+              <Form.Field.Body>
+                <Form.Field>
+                  <Form.Control>
+                    <Form.Label>Ville</Form.Label>
+                    <Form.Input name="city" type="text" value={city} onChange={(e) => setCity(e.target.value)} />
+                  </Form.Control>
+                </Form.Field>
+                <Form.Field>
+                  <Form.Control>
+                    <Form.Label>Pays</Form.Label>
+                    <Form.Input name="country" type="text" value={country} onChange={(e) => setCountry(e.target.value)} />
+                  </Form.Control>
+                </Form.Field>
+              </Form.Field.Body>
+            </Form.Field>
+            <Form.Field>
+              <Form.Label>Comment souhaitez-vous travailler ?</Form.Label>
+              <Form.Control>
+                <Form.Radio value="true" name="remote" checked={remote === 'true'} onChange={handleRadioChange}>
+                  Remote
+                </Form.Radio>
+                <Form.Radio value="false" name="remote" checked={remote === 'false'} onChange={handleRadioChange}>
+                  Rencontre
+                </Form.Radio>
+              </Form.Control>
+            </Form.Field>
+            <Button.Group position="right">
+              <Button type="submit" color="info">Valider</Button>
+            </Button.Group>
+          </form>
+        </Columns.Column>
+      </Box>
+      <Columns.Column />
+    </Columns>
   );
 };
 
