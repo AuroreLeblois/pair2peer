@@ -93,6 +93,19 @@ CREATE VIEW all_country_city AS (
 	FROM usr_detail
 	GROUP BY country
 );
-
+CREATE view all_my_message_in_chat AS
+    SELECT
+    usr_message_chat.script as "message",
+    usr_message_chat.date,
+    usr_message_chat.usr_id as"usr_id",
+    usr_message_chat.chat_id,
+    chat_serial
+    FROM usr_message_chat
+    JOIN chat ON chat.id= usr_message_chat.chat_id
+    GROUP BY chat_id,
+    chat_serial,
+    usr_message_chat.date,
+    "message",
+    usr_id;
 
 COMMIT;

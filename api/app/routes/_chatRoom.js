@@ -36,9 +36,17 @@ module.exports = {
                     if(!chatExists.rows[0]){
                         error.push("Cette chatroom n'existe pas ou a été suprimée");
                         
-                         return h.response(error).code(400);
+                         return h.response(error).code(404);
                      }
                      else{
+                         //on verifie que le user soit dans la chatroom pour éviter les indésirables
+                         const usrInChat= await db.query(`SELECT * FROM all_my_message_in_chat
+                                                            WHERE usr_id=$1`,[me.rows[0].id]);
+                        if(!usrInChat.rows[0]){
+                            error.push("Vous n'êtes pas invité sur cette chatroom!")
+                            return h.response(error).code(403);
+                            
+                        }
                          const deleteMessage= await db.query(`SELECT * FROM usr_message_chat
                                                               WHERE chat_id=$1
                                                               AND (NOW()-"date")>'30 days'`,[chatExists.rows[0].id]);
@@ -47,8 +55,8 @@ module.exports = {
                                             WHERE chat_id=$1
                                             AND (NOW()-"date")>'30 days`,[chatExists.rows[0].id]);
                         }
-                         const messages= await db.query(`SELECT * FROM usr_message_chat 
-                                                        WHERE chat_id=$1`,[chatExists.rows[0].id]);
+                         const messages= await db.query(`SELECT * FROM all_my_message_in_chat
+                                                         WHERE chat_id=$1;`,[chatExists.rows[0].id]);
                         
                         return messages.rows;
                      }
@@ -104,7 +112,7 @@ module.exports = {
                     else{
                         await db.query(`INSERT INTO usr_message_chat ( usr_id, chat_id) VALUES($1,$2)`,[invitedID, ChatID]);
                         await db.query(`INSERT INTO usr_message_chat ( usr_id, chat_id) VALUES($1,$2)`,[myID, ChatID]);
-                        const messages= await db.query(`SELECT * FROM usr_message_chat 
+                        const messages= await db.query(`SELECT * FROM all_my_message_in_chat 
                                                         WHERE chat_id=$1`,[ChatID]);
                         
                         return messages.rows;
@@ -114,7 +122,7 @@ module.exports = {
         
         });
         server.route({
-            //create a chat room
+            //add new user to chatroom
             method: 'POST',
             path: '/chatroom/{chatName}',
             options: {
@@ -146,10 +154,58 @@ module.exports = {
                 chatID= chatExists.rows[0].id;
                const me= await db.query(`SELECT * FROM usr WHERE email=$1`,[email]);
                 const myID= me.rows[0].id;
-                await db.query(`INSERT INTO usr_message_chat (script, usr_id, chat_id, "date") 
-                                VALUES($1,$2,$3,NOW())`[message, myID, chatID]);
+                 const newMessage=await db.query(`INSERT INTO usr_message_chat (script, usr_id, chat_id, "date") 
+                                                 VALUES($1,$2,$3,NOW()) RETURNING *`[message, myID, chatID]);
+                return newMessage.rows;
             }
         
+        });
+        server.route({
+            //create a chat room
+            method: 'UPDATE',
+            path: '/chatroom/{chatName}',
+            options: {
+                auth: {
+                    strategy: 'base',
+                    mode: 'required',
+                    scope: ['user', 'admin']
+                },
+                validate: {
+                    params: Joi.object({
+                        chatSerial: Joi.string().required()
+                    }),
+                    payload: Joi.object({
+                       newChatter: Joi.string()
+                    //    email: Joi.string().email().required()
+                    }),
+                },
+                description: 'add new chatter to chat room',
+                tags: ['api', 'chatroom']
+            },
+            handler: async function (request, h) {
+               const chatSerial= request.params.chatSerial;
+               const newChatter= request.payload.newChatter;
+               const email= request.state.cookie.email;
+                const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`,[chatSerial]);
+                if(!chatExists.rows[0]){
+                    return h.code(404)
+                }
+
+                chatID= chatExists.rows[0].id;
+                const me= await db.query(`SELECT * FROM usr 
+                                            WHERE email=$1`,[email]);
+                const myID= me.rows[0].id;
+                const usrInChat= await db.query(`SELECT * FROM all_my_message_in_chat
+                                                 WHERE usr_id=$1`,[me.rows[0].id]);
+                    if(!usrInChat.rows[0]){
+                        error.push("Vous n'êtes pas invité sur cette chatroom!")
+                        return h.response(error).code(403);
+
+                    }
+                 const newMessage=await db.query(`INSERT INTO usr_message_chat ( usr_id, chat_id) 
+                                                VALUES($1,$2) RETURNING *`[ myID, chatID]);
+                 return newMessage.rows;
+            }
         
         });
 
