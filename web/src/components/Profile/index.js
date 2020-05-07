@@ -11,7 +11,6 @@ import ProfileEdit from './profileEdit';
 const Profile = () => {
   const [activeTab, setActiveTab] = useState();
   const user = useSelector((state) => state.user);
-  console.log(user);
 
   return (
     // <Grid relaxed="very" centered>
