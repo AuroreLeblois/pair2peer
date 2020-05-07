@@ -71,9 +71,11 @@ CREATE TABLE chat (
 CREATE TABLE usr_message_chat (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     script TEXT,
-    "date" TIMESTAMPTZ NOT NULL,
+    "date" TIMESTAMPTZ,
     usr_id INT NOT NULL REFERENCES usr(id) ON DELETE CASCADE,
-    chat_id INT NOT NULL REFERENCES chat(id) ON DELETE CASCADE
+    chat_id INT NOT NULL REFERENCES chat(id) ON DELETE CASCADE,
+    UNIQUE (usr_id, chat_id)
 );
+
 
 COMMIT;

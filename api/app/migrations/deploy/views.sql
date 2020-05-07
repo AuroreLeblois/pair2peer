@@ -94,4 +94,5 @@ CREATE VIEW all_country_city AS (
 	GROUP BY country
 );
 
+
 COMMIT;
