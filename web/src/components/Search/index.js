@@ -1,7 +1,6 @@
 // == Import npm
 import React from 'react';
-import { Grid, Divider, Pagination } from 'semantic-ui-react';
-
+import { Columns, Content } from 'react-bulma-components';
 
 // == Import
 import Filter from './filter';
@@ -10,14 +9,19 @@ import Results from './results';
 // == Composant
 const Search = () => {
   return (
-    <Grid>
-      <Grid.Row>
-        <Filter />
-      </Grid.Row>
-      <Grid.Row>
+    <Columns>
+      <Columns.Column>
+        <Columns gapless>
+          <Content style={{ textAlign: 'center' }}>
+            <Filter />
+          </Content>
+        </Columns>
+        <Columns>
+          <Columns.Column />
+        </Columns>
         <Results />
-      </Grid.Row>
-    </Grid>
+      </Columns.Column>
+    </Columns>
   );
 };
 

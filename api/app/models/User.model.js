@@ -56,7 +56,8 @@ module.exports = class User {
         const nameRegistered = await db.query('SELECT pseudo FROM usr');
 
         // use extern API to find coordinates
-        const api = await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}&apiKey=${process.env.APIKEY}`, {
+        console.log(process.env.APIKEY)
+        const api = await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}&apiKey='${process.env.APIKEY}'`, {
             json: true
         });
         

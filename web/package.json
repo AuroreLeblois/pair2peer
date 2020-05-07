@@ -47,12 +47,17 @@
     "webpack-merge": "*"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.28",
+    "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "@fortawesome/react-fontawesome": "^0.1.9",
     "axios": "^0.19.2",
     "formik": "^2.1.4",
     "leaflet": "^1.6.0",
     "object.omit": "^3.0.0",
+    "omit": "^1.0.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
+    "react-bulma-components": "^3.2.0",
     "react-dom": "^16.13.1",
     "react-google-recaptcha": "^2.0.1",
     "react-redux": "^7.2.0",
