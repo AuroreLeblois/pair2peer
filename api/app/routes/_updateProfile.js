@@ -61,6 +61,8 @@ module.exports = {
                         experience: Joi.number().allow(''),
                         disponibility: Joi.number(),
                         linkedinLink: Joi.string().allow(''),
+                        facebook_link: Joi.string().allow(''),
+                        github_link: Joi.string().allow(''),
                         // languages: Joi.array().items(Joi.string()),
                         // itLang: Joi.string().items(Joi.string())
                     })
@@ -75,14 +77,10 @@ module.exports = {
                 //le cookie email pour retrouver l'user
                 const email= request.state.cookie.email;
                 // const email= request.payload.firstEmail;
-                console.log(email);
                 //on retrouve l'user de suite pour ne pas avoir à le refaire plus tard
                 const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
-                console.log(`user trouvé!`)
                 const userID= result.rows[0].id;
-                console.log(userID)
                 const userDetails= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
-                console.log(`detail trouvé`)
                 const userCountry= userDetails.rows[0].country;
                 const userCity=userDetails.rows[0].city;
                 //les données du formulaire:
@@ -100,6 +98,8 @@ module.exports = {
                 const validateEmail= request.payload.validateEmail;
                 const pseudo= request.payload.pseudo;
                 const linkedinLink=request.payload.linkedinLink;
+                const facebook_link= request.payload.facebook_link;
+                const github_link= request.payload.github_link;
                 //les langues
                 const selectedLang= [request.payload.languages];
                 //les it
@@ -110,8 +110,6 @@ module.exports = {
                 //les dispos
                 const disponibility= request.payload.disponibility;
                 
-                //petit console.log(request.payload) pour vérifier tout ça
-                console.log(request.payload);
                 //si l'utisateur change des infos=> update user table
                 //le pseudo
                 
@@ -119,16 +117,11 @@ module.exports = {
                 //on compare le mdp avec la validation si mdp changé
                 //déjà est ce que le user a rentré un mdp?
                 if(password.length>0){
-                    console.log('un mot de passe a été saisie!')
-                    console.log(password.length)
                     //est ce que le mdp fait bien 8 caractères au moins?
                     if(password.length>=8){
-                        console.log('le mdp est supérieur à 8 caractères')
                         //est ce que le mdp ===  validation?
                         if(password===validatePassword){
-                            console.log('le mdp est le meme que la validation')
                             const hashPassword = bcrypt.hashSync(password, 10);
-                            console.log(hashPassword);
                             await db.query(`UPDATE usr
                                             SET "password"= $1
                                             WHERE "id"=$2`,[hashPassword, userID]);
@@ -200,9 +193,9 @@ module.exports = {
                         //il n'existe pas=> on insert
                          if(!detailExist.rows[0]){
                              console.log(`je n'ai pas trouvé de correspondance=>j'insère`)
-                             await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id, "birthyear", picture, description, experience, latitude, longitude, disponibility, linkedin_link)
-                                            VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7, $8, $9, $10, $11,$12);`
-                                            ,[city, country, remote, userID, birthyear, picture, description,experience, latitude, longitude, disponibility, linkedinLink]);
+                             await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id, "birthyear", picture, description, experience, latitude, longitude, disponibility, linkedin_link, facebook_link, github_link)
+                                            VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7, $8, $9, $10, $11,$12,$13, $14);`
+                                            ,[city, country, remote, userID, birthyear, picture, description,experience, latitude, longitude, disponibility, linkedinLink, facebook_link,github_link]);
                     }//sinon on update
                          else{
                              console.log(`j'ai trouvé une correspondance=>j'update`)
@@ -217,11 +210,12 @@ module.exports = {
                                             latitude=$8,
                                             longitude=$9,
                                             disponibility=$10,
-                                            linkedin_link=$11
-                                            WHERE usr_id=$12`,
+                                            linkedin_link=$11,
+                                            facebook_link=$12,
+                                            github_link=$13
+                                            WHERE usr_id=$14`,
                                             [city, country, remote,birthyear,
-                                            picture, description, experience, latitude, longitude,disponibility,linkedinLink,userID]);
-                                            console.log(`update des détails utilisateur ok`)
+                                            picture, description, experience, latitude, longitude,disponibility,linkedinLink, facebook_link,github_link,userID]);
                                         };
                     
                     }
@@ -230,7 +224,6 @@ module.exports = {
             // sinon on dit ce qu'il manque à l'utilisateur
                 else{
                     if(city===null||city===undefined){
-                        console.log(`ville non définie`)
                         error.push(`Il vous faut définir votre ville`);
                     }
                     if(country===null||country===undefined){
@@ -357,7 +350,7 @@ module.exports = {
                                    where usr_id=$1`,[userID])
                 }
                 const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
-                return newUser
+                return newUser;
             }
            
                 });
