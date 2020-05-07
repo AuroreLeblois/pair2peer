@@ -53,19 +53,6 @@ const Results = () => {
 
   useEffect(getUsersData, [activePage, search]);
 
-  const PaginationComponent = () => (
-    <Pagination
-      activePage={activePage}
-      onPageChange={onChange}
-      boundaryRange={0}
-      ellipsisItem={null}
-      firstItem={null}
-      lastItem={null}
-      siblingRange={1}
-      totalPages={maxPage}
-    />
-  );
-
   return (
     // <Grid stretched>
     //   <Grid.Row centered>

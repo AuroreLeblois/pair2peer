@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { getFiltersList } from 'src/store/actions';
 import { API_URI } from 'src/store/utils';
-import { Container, Hero } from 'react-bulma-components';
+import { Container, Hero, Progress } from 'react-bulma-components';
 import axios from 'axios';
 
 

@@ -44,10 +44,10 @@ const Profile = () => {
           <Heading renderAs="p" size={4}>Profil Utilisateur</Heading>
         </Columns.Column>
         <Columns.Column>
-          <Button isStatic={!activeTab} color="info" fullwidth onClick={() => setActiveTab(!activeTab)}>Général</Button>
+          <Button isStatic={!activeTab} color="danger" fullwidth onClick={() => setActiveTab(!activeTab)}>Général</Button>
         </Columns.Column>
         <Columns.Column>
-          <Button isStatic={activeTab} color="info" fullwidth onClick={() => setActiveTab(!activeTab)}>Avancé</Button>
+          <Button isStatic={activeTab} color="danger" fullwidth onClick={() => setActiveTab(!activeTab)}>Avancé</Button>
         </Columns.Column>
       </Columns.Column>
 

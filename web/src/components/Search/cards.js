@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { firstLetterToUppercase } from 'src/store/utils';
-import { Card, Media, Content, Heading, Form, Tag, Image, Columns, Hero, Container } from 'react-bulma-components';
+import { Card, Media, Content, Heading, Form, Tag, Image, Columns, Hero, Container, Progress } from 'react-bulma-components';
 
 const Cards = ({ users }) => {
+  let key = 1;
+
   if (!users) {
     return null;
   }
 
   return users.map((user) => (
-    <Columns.Column key={user.pseudo} size={4}>
+    <Columns.Column key={key++} size={4}>
       <Card>
         <Card.Content>
           <Media>
@@ -30,7 +32,7 @@ const Cards = ({ users }) => {
             <Media.Item>
               <Tag.Group>
                 {user.language.map((language) => (
-                  <Tag key={language}>{firstLetterToUppercase(language)}</Tag>
+                  <Tag key={key++}>{firstLetterToUppercase(language)}</Tag>
                 ))}
               </Tag.Group>
             </Media.Item>
@@ -42,12 +44,12 @@ const Cards = ({ users }) => {
             <Media.Item>
               <Form.Field multiline kind="group">
                 {user.it_language.map((label) => (
-                  <Form.Control key={label.name}>
-                    <Tag.Group gapless>
+                  <Fragment key={key++}>
+                    <Form.Control>
                       <Tag color="dark">{firstLetterToUppercase(label.name)}</Tag>
-                      <Tag color="info">{label.level}</Tag>
-                    </Tag.Group>
-                  </Form.Control>
+                    </Form.Control>
+                    <Progress color="danger" size="small" value={label.level} max={10} />
+                  </Fragment>
                 ))}
               </Form.Field>
             </Media.Item>

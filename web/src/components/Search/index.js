@@ -1,6 +1,7 @@
 // == Import npm
 import React from 'react';
-import { Columns, Content } from 'react-bulma-components';
+import { useSelector } from 'react-redux';
+import { Columns, Content, Container, Heading } from 'react-bulma-components';
 
 // == Import
 import Filter from './filter';
@@ -11,10 +12,17 @@ const Search = () => {
   return (
     <Columns>
       <Columns.Column>
+        <Columns>
+          <Container>
+            <Content>
+              <Heading size={3}>Trouvez le mate qu'il vous faut !</Heading>
+            </Content>
+          </Container>
+        </Columns>
+        <Columns.Column />
+
         <Columns gapless>
-          <Content style={{ textAlign: 'center' }}>
-            <Filter />
-          </Content>
+          <Filter />
         </Columns>
         <Columns>
           <Columns.Column />

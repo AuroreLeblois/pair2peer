@@ -10,7 +10,7 @@ import './styles.scss';
 // == Composant
 const Footer = () => {
   return (
-    <Hero size="small" color="info">
+    <Hero size="small" color="dark">
       <Hero.Body>
         <Container>
           <Content size="small" style={{ textAlign: 'center' }}>

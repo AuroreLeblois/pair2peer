@@ -1,13 +1,15 @@
 // == Import npm
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, Link } from 'react-router-dom';
 import { submitSignup } from 'src/store/actions';
-import { Columns, Form, Button, Container, Box } from 'react-bulma-components';
+import { Columns, Form, Button, Box, Container, Content, Heading } from 'react-bulma-components';
 
 const Signup = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const { usersData } = useSelector((state) => state)
+
   // Les hooks
   const [pseudo, setPseudo] = React.useState('');
   const [email, setEmail] = React.useState('');
@@ -37,61 +39,67 @@ const Signup = () => {
   };
 
   return (
-    <Columns gapless>
+    <Columns>
       <Columns.Column />
-      <Box>
-        <Columns.Column>
+      <Columns.Column>
+        <Columns>
+          <Container>
+            <Content style={{ textAlign: "center" }}>
+              <Heading size={3}>Inscription</Heading>
+              <Heading subtitle size={6}>Rejoignez les {usersData.maxUser} développeurs enregistrés !</Heading>
+            </Content>
+          </Container>
+        </Columns>
+        <Columns.Column />
+        <Box>
           <form onSubmit={handleSubmit}>
             <Form.Field>
-              <Form.Field.Body>
-                <Form.Field>
-                  <Form.Control>
-                    <Form.Label>Pseudo</Form.Label>
-                    <Form.Input name="name" type="text" value={pseudo} onChange={(e) => setPseudo(e.target.value)} />
-                  </Form.Control>
-                </Form.Field>
-                <Form.Field>
-                  <Form.Control>
-                    <Form.Label>Email</Form.Label>
-                    <Form.Input name="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                  </Form.Control>
-                </Form.Field>
-              </Form.Field.Body>
+              <Form.Field>
+                <Form.Control>
+                  <Form.Label>Pseudo</Form.Label>
+                  <Form.Input name="name" type="text" value={pseudo} onChange={(e) => setPseudo(e.target.value)} />
+                </Form.Control>
+              </Form.Field>
+
+              <Form.Field>
+                <Form.Control>
+                  <Form.Label>Email</Form.Label>
+                  <Form.Input name="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                </Form.Control>
+              </Form.Field>
             </Form.Field>
 
             <Form.Field>
-              <Form.Field.Body>
-                <Form.Field>
-                  <Form.Control>
-                    <Form.Label>Mot de passe</Form.Label>
-                    <Form.Input name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                  </Form.Control>
-                </Form.Field>
-                <Form.Field>
-                  <Form.Control>
-                    <Form.Label>Confirmer le mot de passe</Form.Label>
-                    <Form.Input name="passwordConfirm" type="password" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
-                  </Form.Control>
-                </Form.Field>
-              </Form.Field.Body>
+              <Form.Field>
+                <Form.Control>
+                  <Form.Label>Mot de passe</Form.Label>
+                  <Form.Input name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                </Form.Control>
+              </Form.Field>
+
+              <Form.Field>
+                <Form.Control>
+                  <Form.Label>Confirmer le mot de passe</Form.Label>
+                  <Form.Input name="passwordConfirm" type="password" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
+                </Form.Control>
+              </Form.Field>
             </Form.Field>
 
             <Form.Field>
-              <Form.Field.Body>
-                <Form.Field>
-                  <Form.Control>
-                    <Form.Label>Ville</Form.Label>
-                    <Form.Input name="city" type="text" value={city} onChange={(e) => setCity(e.target.value)} />
-                  </Form.Control>
-                </Form.Field>
-                <Form.Field>
-                  <Form.Control>
-                    <Form.Label>Pays</Form.Label>
-                    <Form.Input name="country" type="text" value={country} onChange={(e) => setCountry(e.target.value)} />
-                  </Form.Control>
-                </Form.Field>
-              </Form.Field.Body>
+              <Form.Field>
+                <Form.Control>
+                  <Form.Label>Ville</Form.Label>
+                  <Form.Input name="city" type="text" value={city} onChange={(e) => setCity(e.target.value)} />
+                </Form.Control>
+              </Form.Field>
+              <Form.Field>
+                <Form.Control>
+                  <Form.Label>Pays</Form.Label>
+                  <Form.Input name="country" type="text" value={country} onChange={(e) => setCountry(e.target.value)} />
+                </Form.Control>
+              </Form.Field>
             </Form.Field>
+
             <Form.Field>
               <Form.Label>Comment souhaitez-vous travailler ?</Form.Label>
               <Form.Control>
@@ -104,11 +112,20 @@ const Signup = () => {
               </Form.Control>
             </Form.Field>
             <Button.Group position="right">
-              <Button type="submit" color="info">Valider</Button>
+              <Button type="submit" color="success">Valider</Button>
             </Button.Group>
           </form>
-        </Columns.Column>
-      </Box>
+          <Columns.Column />
+          <Columns.Column />
+          <Columns>
+            <Container>
+              <Content style={{ textAlign: 'center' }}>
+                <Heading subtitle size={6}><Link to="/login">Déjà inscrit ?</Link></Heading>
+              </Content>
+            </Container>
+          </Columns>
+        </Box>
+      </Columns.Column>
       <Columns.Column />
     </Columns>
   );
