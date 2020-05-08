@@ -11,7 +11,7 @@ module.exports = {
         server.route({
             //get existing chat room
             method: 'GET',
-            path: '/chatroom/{chatName}',
+            path: '/chatroom/{chatSerial}',
             options: {
                 auth: {
                     strategy: 'base',
@@ -57,7 +57,7 @@ module.exports = {
                         }
                          const messages= await db.query(`SELECT * FROM all_my_message_in_chat
                                                          WHERE chat_id=$1
-                                                         ORDER BY "date" DESC;`,[chatExists.rows[0].id]);
+                                                         ORDER BY "date" ASC;`,[chatExists.rows[0].id]);
                         return h.response(messages.rows[0]).code(200);
                      }
                
@@ -126,7 +126,7 @@ module.exports = {
                                 
                         const messages= await db.query(`SELECT * FROM all_my_message_in_chat 
                                                         WHERE chat_id=$1 
-                                                        ORDER BY "date" DESC`,[ChatID]);
+                                                        ORDER BY "date" ASC`,[ChatID]);
                         
                         return h.response(messages.rows).code(200);
                 }
@@ -137,17 +137,17 @@ module.exports = {
         server.route({
             //post new message
             method: 'POST',
-            path: '/chatroom/{chatName}',
+            path: '/chatroom/{chatSerial}',
             options: {
-                // auth: {
-                //     strategy: 'base',
-                //     mode: 'required',
-                //     scope: ['user', 'admin']
-                // },
+                auth: {
+                    strategy: 'base',
+                    mode: 'required',
+                    scope: ['user', 'admin']
+                },
                 validate: {
-                //     params: Joi.object({
-                //         chatSerial: Joi.string()
-                //     }),
+                    params: Joi.object({
+                        chatSerial: Joi.string()
+                    }),
                     payload: Joi.object({
                        message:Joi.string().required()
                     }),
@@ -156,8 +156,7 @@ module.exports = {
                 tags: ['api', 'chatroom']
             },
             handler: async function (request, h) {
-                //  const chatSerial= request.params.chatSerial;
-                const chatSerial='edbff1'
+                const chatSerial= request.params.chatSerial;
                const message= request.payload.message;
             //  const email= request.state.cookie.email;
                 const email= 'awawexd@hotmail.fr';
@@ -171,17 +170,17 @@ module.exports = {
              
                const me= await db.query(`SELECT * FROM usr WHERE email=$1`,[email]);
                 const myID= me.rows[0].id;
-                console.log(message, myID,chatID)
-                await db.query(`INSERT INTO usr_message_chat(script,usr_id,chat_id) VALUES($1,$2,$3);`[message,myID,chatID]);
+                console.log(myID);
+                const newMessage=await db.query(`INSERT INTO usr_message_chat("date",script,usr_id,chat_id) VALUES(NOW(),$1,$2,$3)RETURNING *;`,[message,myID,chatID]);
                                                  console.log(`insert ok`)
-                return h.response().code(200);
+                return h.response(newMessage.rows).code(200);
             }
         
         });
         server.route({
            //add new user to chatroom
             method: 'PATCH',
-            path: '/chatroom/{chatName}',
+            path: '/chatroom/{chatSerial}',
             options: {
                 auth: {
                     strategy: 'base',
@@ -200,14 +199,10 @@ module.exports = {
                 tags: ['api', 'chatroom','update']
             },
             handler: async function (request, h) {
-            //    const chatSerial= request.params.chatSerial;
-            const chatSerial= 'edbff1'
+               const chatSerial= request.params.chatSerial;
                const newChatter= request.payload.newChatter;
                console.log(chatSerial, newChatter)
-            //    const email= request.state.cookie.email;
-
-               const email= 'awawexd@hotmail.fr';
-               console.log(chatSerial)
+               const email= request.state.cookie.email;
                 const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`,[chatSerial]);
                 if(!chatExists.rows[0]){
                     const error=`chat not found `
