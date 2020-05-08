@@ -13,7 +13,7 @@ CREATE TABLE usr (
 
 CREATE TABLE usr_detail (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    picture TEXT,
+    picture TEXT DEFAULT 'https://i.imgur.com/XaJAGxg.jpg',
     country TEXT NOT NULL,
     city TEXT NOT NULL,
     latitude DOUBLE PRECISION,
