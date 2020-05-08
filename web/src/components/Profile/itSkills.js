@@ -1,7 +1,7 @@
 // == Import npm
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
-import { Form, Heading, Progress, Columns, Container, Content, Tag } from 'react-bulma-components';
+import { Form, Heading, Progress, Columns, Container, Content, Tag, Button } from 'react-bulma-components';
 import { firstLetterToUppercase } from 'src/store/utils';
 
 // == Composant
@@ -55,18 +55,31 @@ const ITSkills = () => {
     </Container>
   );
 
+  // const ModalIT = () => (
+
+  // );
+
+  // const ModalLang = () => (
+
+  // );
+
   return (
     <Columns.Column>
+      <Button.Group position="right">
+        <Button color="danger">Editer les compétences</Button>
+        <Button color="danger">Editer les langues</Button>
+      </Button.Group>
+      <Columns.Column />
       <Container>
         <Content style={{ textAlign: 'center' }}>
           <Heading renderAs="p" size={5}>Compétences</Heading>
         </Content>
-        <ITButton />
+        {(user.it_language) ? <ITButton /> : null }
         <Columns.Column />
         <Content style={{ textAlign: 'center' }}>
           <Heading renderAs="p" size={5}>Langues</Heading>
         </Content>
-        <Languages />
+        {(user.language) ? <Languages /> : null }
       </Container>
     </Columns.Column>
   );
