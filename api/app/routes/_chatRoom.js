@@ -13,25 +13,23 @@ module.exports = {
             method: 'GET',
             path: '/chatroom/{chatName}',
             options: {
-                // auth: {
-                //     strategy: 'base',
-                //     mode: 'required',
-                //     scope: ['user', 'admin']
-                // },
+                auth: {
+                    strategy: 'base',
+                    mode: 'required',
+                    scope: ['user', 'admin']
+                },
                 validate: {
                     params: Joi.object({
-                       chatSerial: Joi.string().required(),
+                        chatSerial: Joi.string()
+                        .pattern(new RegExp('^[a-zA-Z0-9]{6}$')).required()
                     }),
                 },
                 description: 'ChatRoom with people',
                 tags: ['api', 'chatroom']
             },
             handler: async function (request, h) {
-                console.log(`je rentre dans le handler`)
                 const error= [];
-                const myEmail= 'awawexd@hotmail.fr';
-                console.log(myEmail);
-                // const myEmail= request.state.cookie.email;
+                const myEmail= request.state.cookie.email;
                 const me= await db.query(`SELECT * FROM usr WHERE email=$1`,[myEmail]);
                 const chatCode= request.params.chatSerial;
                 const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`, [chatCode]);
@@ -60,7 +58,6 @@ module.exports = {
                          const messages= await db.query(`SELECT * FROM all_my_message_in_chat
                                                          WHERE chat_id=$1
                                                          ORDER BY "date" DESC;`,[chatExists.rows[0].id]);
-                        console.log(`je suis là`)
                         return h.response(messages.rows[0]).code(200);
                      }
                
@@ -148,7 +145,7 @@ module.exports = {
                 // },
                 validate: {
                     params: Joi.object({
-                        chatSerial: Joi.string().alphanum().min(6).max(6).required()
+                        chatSerial: Joi.string().alphanum().min(6).max(6)
                     }),
                     payload: Joi.object({
                        message:Joi.string().required()
@@ -158,6 +155,7 @@ module.exports = {
                 tags: ['api', 'chatroom']
             },
             handler: async function (request, h) {
+                console.log(`coucou`)
                const chatSerial= request.params.chatSerial;
                const message= request.payload.message;
             //    const email= request.state.cookie.email;
@@ -187,7 +185,7 @@ module.exports = {
                 },
                 validate: {
                     params: Joi.object({
-                        chatSerial: Joi.string().required()
+                        chatSerial: Joi.string().alphanum(),
                     }),
                     payload: Joi.object({
                        newChatter: Joi.string()
@@ -199,13 +197,16 @@ module.exports = {
             handler: async function (request, h) {
                const chatSerial= request.params.chatSerial;
                const newChatter= request.payload.newChatter;
-               const email= request.state.cookie.email;
-               //const email= request.payload.email;
+               console.log(chatSerial, newChatter)
+            //    const email= request.state.cookie.email;
+               const email= 'awawexd@hotmail.fr';
+               console.log(chatSerial)
                 const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`,[chatSerial]);
                 if(!chatExists.rows[0]){
-                    return h.code(404);
+                    const error=`chat not found `
+                    return h.response(error).code(404);
                 }
-
+                console.log(`j'ai trouvé la chatid`)
                 chatID= chatExists.rows[0].id;
                 const me= await db.query(`SELECT * FROM usr 
                                             WHERE email=$1`,[email]);
