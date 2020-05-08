@@ -57,7 +57,7 @@ module.exports = class User {
 
         // use extern API to find coordinates
         console.log(process.env.APIKEY)
-        const api = await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}&apiKey='${process.env.APIKEY}'`, {
+        const api = await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}&apiKey=${process.env.APIKEY}`, {
             json: true
         });
         
