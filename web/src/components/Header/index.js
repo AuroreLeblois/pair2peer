@@ -44,7 +44,7 @@ const Header = () => {
     <>
       <Navbar.Item dropdown hoverable>
         <Navbar.Link renderAs="div">
-          {firstLetterToUppercase(user.pseudo)}
+          {user.pseudo}
         </Navbar.Link>
         <Navbar.Dropdown>
           <Link to="/profile">

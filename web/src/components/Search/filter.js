@@ -55,23 +55,32 @@ const Filter = () => {
 
   // Object for country select input options
   const CountryOptions = () => {
-    return filters.localisation.map((localisation) => (
-      <option key={localisation.country} name={localisation.country} value={localisation.country}>{firstLetterToUppercase(localisation.country)}</option>
-    ));
+    if (filters.localisation) {
+      return filters.localisation.map((localisation) => (
+        <option key={localisation.country} name={localisation.country} value={localisation.country}>{firstLetterToUppercase(localisation.country)}</option>
+      ));
+    }
+    return null;
   };
 
   // Object for it_language select input options
   const ItOptions = () => {
-    return filters.it_language.map((language) => (
-      <option key={language} value={language}>{firstLetterToUppercase(language)}</option>
-    ));
+    if (filters.it_language) {
+      return filters.it_language.map((language) => (
+        <option key={language} value={language}>{firstLetterToUppercase(language)}</option>
+      ));
+    }
+    return null;
   };
 
   // Object for language select input options
   const LangOptions = () => {
-    return filters.language.map((language) => (
-      <option key={language} value={language}>{firstLetterToUppercase(language)}</option>
-    ));
+    if (filters.language) {
+      return filters.language.map((language) => (
+        <option key={language} value={language}>{firstLetterToUppercase(language)}</option>
+      ));
+    }
+    return null;
   };
   const LvlOptions = () => {
     return (

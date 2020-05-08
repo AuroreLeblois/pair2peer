@@ -64,7 +64,7 @@ const Profile = () => {
                   <Hero>
                     <Hero.Body>
                       <Container>
-                        <Heading renderAs="p" size={5}>{firstLetterToUppercase(user.pseudo)}</Heading>
+                        <Heading renderAs="p" size={5}>{user.pseudo}</Heading>
                         <Heading renderAs="p" subtitle size={6}>{firstLetterToUppercase(user.city)}, {firstLetterToUppercase(user.country)}</Heading>
                       </Container>
                     </Hero.Body>

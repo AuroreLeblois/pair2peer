@@ -166,10 +166,9 @@ module.exports = {
                 tags: ['api', 'admin', 'it_lang']
             },
             handler:async (request, h) => {
-
                 // send basic informations to the front
                 const ITLang = request.params.it_lang; 
-                const it_lang = await db.query('SELECT "id" FROM it_lang WHERE "name"=$1',[ITLang]);
+                const it_lang = await db.query('SELECT "id","name" FROM it_lang WHERE "name"=$1',[ITLang]);
 
                 const iTLanguage = it_lang.rows[0];
 

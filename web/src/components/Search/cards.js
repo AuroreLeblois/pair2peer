@@ -5,6 +5,26 @@ import { Card, Media, Content, Heading, Form, Tag, Image, Columns, Hero, Contain
 const Cards = ({ users }) => {
   let key = 1;
 
+  const ItLabels = ({ user }) => {
+    return user.it_language.map((label) => (
+      <Fragment key={key++}>
+        <Form.Control>
+          <Tag color="dark">{firstLetterToUppercase(label.name)}</Tag>
+        </Form.Control>
+        <Progress color="danger" size="small" value={label.level} max={10} />
+      </Fragment>
+    ));
+  };
+
+  const LanguagesLabels = ({ user }) => {
+    if (user.language) {
+      return user.language.map((language) => (
+        <Tag key={key++}>{firstLetterToUppercase(language)}</Tag>
+      ));
+    }
+    return null;
+  };
+
   if (!users) {
     return null;
   }
@@ -31,26 +51,17 @@ const Cards = ({ users }) => {
           <Media>
             <Media.Item>
               <Tag.Group>
-                {user.language.map((language) => (
-                  <Tag key={key++}>{firstLetterToUppercase(language)}</Tag>
-                ))}
+                <LanguagesLabels user={user} />
               </Tag.Group>
             </Media.Item>
           </Media>
           <Content>
-            {user.description}
+            {(user.description) ? user.description : null}
           </Content>
           <Media>
             <Media.Item>
               <Form.Field multiline kind="group">
-                {user.it_language.map((label) => (
-                  <Fragment key={key++}>
-                    <Form.Control>
-                      <Tag color="dark">{firstLetterToUppercase(label.name)}</Tag>
-                    </Form.Control>
-                    <Progress color="danger" size="small" value={label.level} max={10} />
-                  </Fragment>
-                ))}
+                <ItLabels user={user} />
               </Form.Field>
             </Media.Item>
           </Media>

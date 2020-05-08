@@ -8,6 +8,7 @@ DROP VIEW
     usr_map,
     all_language,
     all_it_language,
-    all_country_city;
+    all_country_city,
+    all_my_message_in_chat;
 
 COMMIT;

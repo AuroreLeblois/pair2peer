@@ -117,12 +117,12 @@ module.exports = {
                 const user= result.rows[0];
                 const userID= result.rows[0].id;
                 if(!user){
-                    return h.response.code(400);
+                    return h.response().code(400);
                 }
                 else{
                     await db.query(`DELETE FROM usr
                                     WHERE "id"=$1`, [userID]);
-                    return `Profil de ${pseudo} supprimé`
+                    return h.response().code(200);
                 }
                 }
             });
