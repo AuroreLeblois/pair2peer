@@ -30,7 +30,6 @@ module.exports = {
                 
                 const myEmail= request.state.cookie.email;
                 const me= await db.query(`SELECT * FROM usr WHERE email=$1`,[myEmail]);
-                const myName= me.rows[0].pseudo;
                 const chatCode= request.params.chatSerial;
                 const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`, [chatCode]);
                     if(!chatExists.rows[0]){
@@ -56,7 +55,8 @@ module.exports = {
                                             AND (NOW()-"date")>'30 days`,[chatExists.rows[0].id]);
                         }
                          const messages= await db.query(`SELECT * FROM all_my_message_in_chat
-                                                         WHERE chat_id=$1;`,[chatExists.rows[0].id]);
+                                                         WHERE chat_id=$1
+                                                         ORDER BY "date" DESC;`,[chatExists.rows[0].id]);
                         
                         return messages.rows;
                      }
@@ -89,40 +89,49 @@ module.exports = {
                 const chatName= request.payload.chatName;
                 error=[];
                 if(chatName.toLowerCase().includes('truncate')
-                    ||chatName.toLowerCase().includes('drop')
-                    ||chatName.toLowerCase().includes('database')){
+                    ||chatName.toLowerCase().includes('drop table')
+                    ||chatName.toLowerCase().includes('database')
+                    ||chatName.toLowerCase().includes('delete from')
+                    ||chatName.toLowerCase().includes('*')){
                    error.push(`invalid name for chat room`);
-                   return h.response(error).code(403)
+                   return h.response(error).code(403);
                 }
                 else{
                     const invitedInfo= await db.query(`SELECT * FROM usr WHERE pseudo=$1`,[invited]);
+                    if(!invitedInfo.rows[0]){
+                        error.push("invalid user name")
+                        return h.response(error).code(404)
+                    }
                     const invitedID= invitedInfo.rows[0].id;
+
                     const myEmail= request.state.cookie.email;
                     // const myEmail= request.payload.email;
                     const me= await db.query(`SELECT * FROM usr WHERE email=$1`,[myEmail]);
                     const myID= me.rows[0].id;
-                 //maintenant que l'on trouve 2 utilisateurs
-                    //on verifie si il ont une chat room en commun avant d'en créer une
-                
+                    //maintenant que l'on trouve 2 utilisateurs
+                    //on créer la chat room
                     const newChat= await db.query(`INSERT INTO chat ("name")VALUES ($1) RETURNING *`,[chatName]);
                     const ChatID= newChat.rows[0].id;
                     if(error.lenght>0){
                         return h.response(error).code(400);
                     }
                     else{
-                        await db.query(`INSERT INTO usr_message_chat ( usr_id, chat_id) VALUES($1,$2)`,[invitedID, ChatID]);
-                        await db.query(`INSERT INTO usr_message_chat ( usr_id, chat_id) VALUES($1,$2)`,[myID, ChatID]);
+                        await db.query(`INSERT INTO usr_message_chat ( usr_id, chat_id, "date") 
+                                        VALUES($1,$2, NOW(),)`,[invitedID, ChatID]);
+                        await db.query(`INSERT INTO usr_message_chat ( usr_id, chat_id, "date") 
+                                        VALUES($1,$2, NOW())`,[myID, ChatID]);
                         const messages= await db.query(`SELECT * FROM all_my_message_in_chat 
-                                                        WHERE chat_id=$1`,[ChatID]);
+                                                        WHERE chat_id=$1 
+                                                        ORDER BY "date" DESC`,[ChatID]);
                         
-                        return messages.rows;
+                        return h.response(messages.rows).code(200);
                 }
             }
         }
         
         });
         server.route({
-            //add new user to chatroom
+            //post new message
             method: 'POST',
             path: '/chatroom/{chatName}',
             options: {
@@ -156,12 +165,12 @@ module.exports = {
                 const myID= me.rows[0].id;
                  const newMessage=await db.query(`INSERT INTO usr_message_chat (script, usr_id, chat_id, "date") 
                                                  VALUES($1,$2,$3,NOW()) RETURNING *`[message, myID, chatID]);
-                return newMessage.rows;
+                return h.response(newMessage.rows).code(200);
             }
         
         });
         server.route({
-            //create a chat room
+           //add new user to chatroom
             method: 'UPDATE',
             path: '/chatroom/{chatName}',
             options: {
@@ -188,7 +197,7 @@ module.exports = {
                const email= request.state.cookie.email;
                 const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`,[chatSerial]);
                 if(!chatExists.rows[0]){
-                    return h.code(404)
+                    return h.code(404);
                 }
 
                 chatID= chatExists.rows[0].id;
@@ -202,10 +211,22 @@ module.exports = {
                         return h.response(error).code(403);
 
                     }
-                 const newMessage=await db.query(`INSERT INTO usr_message_chat ( usr_id, chat_id) 
-                                                VALUES($1,$2) RETURNING *`[ myID, chatID]);
-                 return newMessage.rows;
+                const newInvited= await db.query(`SELECT * FROM usr WHERE pseudo=$1`,[newChatter])
+                if(!newInvited.rows[0]){
+                    error.push(`Cannot find user ${newChatter}`)
+                    return h.response(error).code(404);
+                }
+                else{
+
+                const newChatterID= newInvited.rows[0].id;
+                await db.query(`INSERT INTO usr_message_chat ( usr_id, chat_id, "date") 
+                                                VALUES($1,$2, NOW())`[newChatterID, chatID]);
+                
+                const messages= await db.query(`SELECT * FROM all_my_message_in_chat
+                                                WHERE chat_id=$1`,[chatID])
+                 return h.response(messages.rows).code(200);
             }
+        }
         
         });
 

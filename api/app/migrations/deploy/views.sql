@@ -99,13 +99,16 @@ CREATE view all_my_message_in_chat AS
     usr_message_chat.date,
     usr_message_chat.usr_id as"usr_id",
     usr_message_chat.chat_id,
-    chat_serial
+    chat_serial,
+	pseudo
     FROM usr_message_chat
     JOIN chat ON chat.id= usr_message_chat.chat_id
+	JOIN usr ON usr_id=usr.id
     GROUP BY chat_id,
     chat_serial,
     usr_message_chat.date,
     "message",
-    usr_id;
+    usr_id,
+	pseudo;
 
 COMMIT;
