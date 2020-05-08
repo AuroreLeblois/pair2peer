@@ -18,10 +18,10 @@ module.exports = {
                     mode: 'required',
                     scope: ['user', 'admin']
                 },
+              
                 validate: {
                     params: Joi.object({
                         chatSerial: Joi.string()
-                        .pattern(new RegExp('^[a-zA-Z0-9]{6}$')).required()
                     }),
                 },
                 description: 'ChatRoom with people',
@@ -74,6 +74,7 @@ module.exports = {
                     mode: 'required',
                     scope: ['user', 'admin']
                 },
+               
                 validate: {
                     payload: Joi.object({
                        nameForChatRoom: Joi.string().required(),
@@ -104,8 +105,8 @@ module.exports = {
                         return h.response(error).code(404)
                     }
                     const invitedID= invitedInfo.rows[0].id;
-                   const myEmail= request.state.cookie.email;
-                    
+                 const myEmail= request.state.cookie.email;
+                   
                     const me= await db.query(`SELECT * FROM usr WHERE email=$1`,[myEmail]);
 
                     const myID= me.rows[0].id;
@@ -144,9 +145,9 @@ module.exports = {
                 //     scope: ['user', 'admin']
                 // },
                 validate: {
-                    params: Joi.object({
-                        chatSerial: Joi.string().alphanum().min(6).max(6)
-                    }),
+                //     params: Joi.object({
+                //         chatSerial: Joi.string()
+                //     }),
                     payload: Joi.object({
                        message:Joi.string().required()
                     }),
@@ -155,21 +156,25 @@ module.exports = {
                 tags: ['api', 'chatroom']
             },
             handler: async function (request, h) {
-                console.log(`coucou`)
-               const chatSerial= request.params.chatSerial;
+                //  const chatSerial= request.params.chatSerial;
+                const chatSerial='edbff1'
                const message= request.payload.message;
-            //    const email= request.state.cookie.email;
-               const email= 'awawexd@hotmail.fr';
+            //  const email= request.state.cookie.email;
+                const email= 'awawexd@hotmail.fr';
                 const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`,[chatSerial]);
+
                 if(!chatExists.rows[0]){
-                    return h.code(404)
+                    const error= `Can not find chatroom`
+                    return h.response(error).code(404)
                 }
                 chatID= chatExists.rows[0].id;
+             
                const me= await db.query(`SELECT * FROM usr WHERE email=$1`,[email]);
                 const myID= me.rows[0].id;
-                 const newMessage=await db.query(`INSERT INTO usr_message_chat (script, usr_id, chat_id, "date") 
-                                                 VALUES($1,$2,$3,NOW()) RETURNING *`[message, myID, chatID]);
-                return h.response(newMessage.rows).code(200);
+                console.log(message, myID,chatID)
+                await db.query(`INSERT INTO usr_message_chat(script,usr_id,chat_id) VALUES($1,$2,$3);`[message,myID,chatID]);
+                                                 console.log(`insert ok`)
+                return h.response().code(200);
             }
         
         });
@@ -195,10 +200,12 @@ module.exports = {
                 tags: ['api', 'chatroom','update']
             },
             handler: async function (request, h) {
-               const chatSerial= request.params.chatSerial;
+            //    const chatSerial= request.params.chatSerial;
+            const chatSerial= 'edbff1'
                const newChatter= request.payload.newChatter;
                console.log(chatSerial, newChatter)
             //    const email= request.state.cookie.email;
+
                const email= 'awawexd@hotmail.fr';
                console.log(chatSerial)
                 const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`,[chatSerial]);
@@ -212,13 +219,14 @@ module.exports = {
                                             WHERE email=$1`,[email]);
                 const myID= me.rows[0].id;
                 const usrInChat= await db.query(`SELECT * FROM all_my_message_in_chat
-                                                 WHERE usr_id=$1`,[me.rows[0].id]);
+                                                 WHERE usr_id=$1;`,[me.rows[0].id]);
                     if(!usrInChat.rows[0]){
                         error.push("Vous n'êtes pas invité sur cette chatroom!")
                         return h.response(error).code(403);
 
                     }
-                const newInvited= await db.query(`SELECT * FROM usr WHERE pseudo=$1`,[newChatter])
+
+                const newInvited= await db.query(`SELECT * FROM usr WHERE pseudo=$1;`,[newChatter]);
                 if(!newInvited.rows[0]){
                     error.push(`Cannot find user ${newChatter}`)
                     return h.response(error).code(404);
@@ -226,12 +234,12 @@ module.exports = {
                 else{
 
                 const newChatterID= newInvited.rows[0].id;
-                await db.query(`INSERT INTO usr_message_chat ( usr_id, chat_id, "date") 
-                                                VALUES($1,$2, NOW())`[newChatterID, chatID]);
-                
+                await db.query(`INSERT INTO usr_message_chat ( "date", usr_id, chat_id) 
+                                                VALUES(NOW(),$1,$2)`[newChatterID, chatID]);
+                console.log('insert ok')
                 const messages= await db.query(`SELECT * FROM all_my_message_in_chat
                                                 WHERE chat_id=$1`,[chatID])
-                 return h.response(messages.rows).code(200);
+                return h.response(messages.rows).code(200);
             }
         }
         
