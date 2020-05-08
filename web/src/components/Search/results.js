@@ -1,6 +1,7 @@
 // == Import npm
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { Columns, Pagination } from 'react-bulma-components';
 
@@ -26,10 +27,11 @@ const Results = () => {
     return state.usersData.maxPage;
   });
 
+  const history = useHistory()
   const dispatch = useDispatch();
 
   const handleChange = (page) => {
-    setActivePage(page)
+    setActivePage(page);
   };
 
   const getUsersData = () => {
@@ -44,6 +46,7 @@ const Results = () => {
         usersData.maxPage = data.maxPage;
         usersData.maxUsers = data.maxUser;
         usersData.users = data.users;
+        history.push(`/search?page_nb=${activePage}&user_nb=12`);
         dispatch(getUsersList(usersData));
       })
       .catch((err) => {

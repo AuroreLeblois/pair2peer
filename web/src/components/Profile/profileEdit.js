@@ -103,10 +103,10 @@ const ProfileEdit = () => {
             <Form.Field>
               <Form.Label>Comment souhaitez-vous travailler ?</Form.Label>
               <Form.Control>
-                <Form.Radio onChange={handleChange} checked={userInfos.remote === 'true'} value="true" name="remote">
+                <Form.Radio onChange={handleChange} checked={userInfos.remote === true} value="true" name="remote">
                   Remote
                 </Form.Radio>
-                <Form.Radio onChange={handleChange} checked={userInfos.remote === 'false'} value="false" name="remote">
+                <Form.Radio onChange={handleChange} checked={userInfos.remote === false} value="false" name="remote">
                   Rencontre
                 </Form.Radio>
               </Form.Control>

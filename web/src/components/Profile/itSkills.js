@@ -1,9 +1,14 @@
 // == Import npm
-import React from 'react';
-import { Input, Dropdown, Form, Header } from 'semantic-ui-react';
+import React, { Fragment } from 'react';
+import { useSelector } from 'react-redux';
+import { Form, Heading, Progress, Columns, Container, Content, Tag } from 'react-bulma-components';
+import { firstLetterToUppercase } from 'src/store/utils';
 
 // == Composant
-const ITSkills = ({ it_language }) => {
+const ITSkills = () => {
+  let key = 1;
+  const user = useSelector((state) => state.user);
+
   const lvlOptions = [
     { key: '1', text: '1', value: '1' },
     { key: '2', text: '2', value: '2' },
@@ -17,28 +22,53 @@ const ITSkills = ({ it_language }) => {
     { key: '10', text: '10', value: '10' },
   ];
 
-  const ITButton = () => {
-    return it_language.map((techno) => {
-      return (
-        <Form.Field>
-          <Input
-            disabled
-            label={<Dropdown defaultValue={techno.level.toString()} options={lvlOptions} />}
-            labelPosition="right"
-            value={techno.name}
-          />
-        </Form.Field>
-      )
-    });
-  };
+  const ITButton = () => (
+    <>
+      <Container>
+        {user.it_language.map((techno) => (
+          <Columns>
+            <Columns.Column size={2}>
+              <Form.Control>
+                <Form.Label>{firstLetterToUppercase(techno.name)}</Form.Label>
+              </Form.Control>
+            </Columns.Column>
+            <Columns.Column>
+              <Progress color="danger" value={techno.level} max={10} />
+            </Columns.Column>
+          </Columns>
+        ))}
+      </Container>
+    </>
+  );
+
+  const Languages = () => (
+    <Container>
+      {user.language.map((language) => (
+        <Columns>
+          <Columns.Column size={2}>
+            <Form.Control>
+              <Tag size="large">{firstLetterToUppercase(language)}</Tag>
+            </Form.Control>
+          </Columns.Column>
+        </Columns>
+      ))}
+    </Container>
+  );
 
   return (
-    <>
-      <Header as="h6" inverted>Technologies</Header>
-      <Form.Group widths="4">
+    <Columns.Column>
+      <Container>
+        <Content style={{ textAlign: 'center' }}>
+          <Heading renderAs="p" size={5}>Compétences</Heading>
+        </Content>
         <ITButton />
-      </Form.Group>
-    </>
+        <Columns.Column />
+        <Content style={{ textAlign: 'center' }}>
+          <Heading renderAs="p" size={5}>Langues</Heading>
+        </Content>
+        <Languages />
+      </Container>
+    </Columns.Column>
   );
 };
 
