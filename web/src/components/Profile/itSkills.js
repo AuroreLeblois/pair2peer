@@ -79,7 +79,7 @@ const ITSkills = () => {
   };
 
   const ItLanguages = () => {
-    if (user.it_language) {
+    if (user.it_language[0].name !== null) {
       return (
         <>
           <Container>
@@ -94,7 +94,7 @@ const ITSkills = () => {
                 </Columns.Column>
                 <Columns.Column size={2}>
                   <Form.Control>
-                    <Form.Label>{firstLetterToUppercase(techno.name)}</Form.Label>
+                    <Form.Label>{techno.name}</Form.Label>
                   </Form.Control>
                 </Columns.Column>
                 <Columns.Column>
@@ -110,7 +110,7 @@ const ITSkills = () => {
   };
 
   const Languages = () => {
-    if (user.language) {
+    if (user.language[0] !== null) {
       return (
         <Container>
           <Columns>
@@ -118,7 +118,7 @@ const ITSkills = () => {
               <Columns.Column key={key++} size={2}>
                 <Form.Control>
                   <Tag.Group gapless>
-                    <Tag size="medium">{firstLetterToUppercase(language)}</Tag>
+                    <Tag size="medium">{language}</Tag>
                     <Tag size="medium" color="danger" remove renderAs="a" />
                   </Tag.Group>
                 </Form.Control>

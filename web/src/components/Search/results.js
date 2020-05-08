@@ -43,6 +43,7 @@ const Results = () => {
       .then((res) => {
         const data = res.data
         const usersData = {};
+        console.log(data)
         usersData.maxPage = data.maxPage;
         usersData.maxUsers = data.maxUser;
         usersData.users = data.users;
