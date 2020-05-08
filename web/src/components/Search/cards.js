@@ -6,20 +6,23 @@ const Cards = ({ users }) => {
   let key = 1;
 
   const ItLabels = ({ user }) => {
-    return user.it_language.map((label) => (
-      <Fragment key={key++}>
-        <Form.Control>
-          <Tag color="dark">{firstLetterToUppercase(label.name)}</Tag>
-        </Form.Control>
-        <Progress color="danger" size="small" value={label.level} max={10} />
-      </Fragment>
-    ));
+    if (user.it_language[0].name !== null) {
+      return user.it_language.map((label) => (
+        <Fragment key={key++}>
+          <Form.Control>
+            <Tag color="dark">{label.name}</Tag>
+          </Form.Control>
+          <Progress color="danger" size="small" value={label.level} max={10} />
+        </Fragment>
+      ));
+    }
+    return null;
   };
 
-  const LanguagesLabels = ({ user }) => {
-    if (user.language) {
+  const LanguagesLabels = ({ user }) => {""
+    if (user.language[0] !== null) {
       return user.language.map((language) => (
-        <Tag key={key++}>{firstLetterToUppercase(language)}</Tag>
+        <Tag key={key++}>{language}</Tag>
       ));
     }
     return null;
