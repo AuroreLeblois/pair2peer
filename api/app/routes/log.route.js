@@ -12,7 +12,7 @@ module.exports = {
                 description: 'Log form',
                 tags: ['api', 'login']
             },
-            handler: function (request, h) {
+            handler: (request, h) => {
 
                 return 'à définir';
             }

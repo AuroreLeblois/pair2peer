@@ -3,7 +3,7 @@ const Joi = require('@hapi/joi');
 const User = require('../models/User.model');
 
 module.exports = {
-    name: 'get profile pages',
+    name: 'get and delete profile pages',
     register: async (server) => {
 
         server.route({
@@ -70,7 +70,7 @@ module.exports = {
 
                 const { pseudo } = request.params;
                 // use User model to see other user profile
-                const profile = await User.oprofile(pseudo);
+                const profile = await User.findOne(pseudo);
                 
                 if (profile.statusCode) {
                     // if error, send error messages

@@ -11,7 +11,6 @@ CREATE VIEW usr_profile AS
 		usr_detail.picture,
 		usr_detail.country,
 		usr_detail.city,
-        jsonb_build_array(latitude, longitude) localisation,
 		usr_detail.remote,
 		usr_detail.description,
         usr_detail.facebook_link,
@@ -34,10 +33,17 @@ CREATE VIEW usr_profile AS
 		usr.id, usr_detail.country,
 		usr_detail.city, usr_detail.remote,
 		usr_detail.description, usr_detail.picture,
-        usr_detail.latitude, usr_detail.longitude,
         usr_detail.disponibility, usr_detail.facebook_link,
         usr_detail.github_link, usr_detail.linkedin_link;
 
+CREATE VIEW usr_map AS
+	SELECT 
+		usr.pseudo,
+		city,
+		jsonb_build_array(latitude, longitude) localisation,
+		"remote"
+	FROM usr_detail
+	JOIN usr ON usr_detail.usr_id = usr.id;
 
 CREATE VIEW all_it_language AS (
 	SELECT jsonb_agg(DISTINCT "name") AS "name"

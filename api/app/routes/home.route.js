@@ -1,4 +1,3 @@
-const react= require('react');
 const db = require('../models/db');
 
 module.exports = {
@@ -30,22 +29,5 @@ module.exports = {
             }
         });
 
-        server.route({
-            method: 'GET',
-            path: '/concept',
-            options: {
-                auth: {
-                    strategy: 'base',
-                    mode: 'required',
-                   scope: ['user', 'admin']
-                },
-                description: 'Example : restricted page for users authentified',
-                tags: ['api', 'concept']
-            },
-            handler: (request, h) => {
-                return `tout ceci est fort conceptuel`
-               // return h.view('concept');
-            }
-        });
     }
 }

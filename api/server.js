@@ -51,15 +51,13 @@ const db = require('./app/models/db');
                 }
             }
         }, {
-            plugin: require('./app/routes/_homePage')
+            plugin: require('./app/routes/home.route')
         }, {
-            plugin: require('./app/routes/_loginPage')
-        },
-         {
-            plugin: require('./app/routes/_profilePage')
-        },
-         {
-            plugin: require('./app/routes/_filtredPage')
+            plugin: require('./app/routes/log.route')
+        }, {
+            plugin: require('./app/routes/profile.route')
+        }, {
+            plugin: require('./app/routes/search.route')
         }, {
             plugin: require('./app/routes/_updateProfile')
          }, {
@@ -69,7 +67,9 @@ const db = require('./app/models/db');
          }, {
             plugin: require('./app/routes/_chatRoom')
          }, {
-            plugin: require('./app/routes/_adminPage')
+            plugin: require('./app/routes/admin.route')
+         }, {
+             plugin: require('./app/routes/mapping.route')
          }
     ]);
 

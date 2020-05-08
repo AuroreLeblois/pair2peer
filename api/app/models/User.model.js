@@ -119,10 +119,10 @@ module.exports = class User {
         await db.query('DELETE FROM usr WHERE email = $1', [email]);
     };
 
-    // ####    Other      ####
-    // ##      profile      ##
-    // ####    method     ####
-    static async oprofile(pseudo) {
+    // ####               ####
+    // ##   FindOne method  ##
+    // ####               ####
+    static async findOne(pseudo) {
 
         const user = await db.query(`SELECT * FROM usr_profile WHERE pseudo = $1`, [pseudo]);
 
