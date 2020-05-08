@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { getFiltersList } from 'src/store/actions';
 import { API_URI } from 'src/store/utils';
+import { Container, Hero, Progress } from 'react-bulma-components';
 import axios from 'axios';
 
 
@@ -14,6 +15,7 @@ import Signup from 'src/components/Signup';
 import Header from 'src/components/Header';
 import Footer from 'src/components/Footer';
 import Search from 'src/components/Search';
+import Home from 'src/components/Home';
 import './styles.css';
 
 // Ajout d'une route /signup
@@ -37,14 +39,12 @@ const App = () => {
     )
       .then((res) => {
         const data = res.data;
-        console.log(data)
         const filtersList = {};
         const usersData = {};
         filtersList.it_language = data.it_language;
         filtersList.language = data.language;
         filtersList.localisation = data.localisation;
         usersData.maxUser = data.maxUser;
-        console.log(usersData)
         dispatch(getFiltersList(filtersList, usersData));
       })
       .catch((err) => {
@@ -57,16 +57,27 @@ const App = () => {
 
   return (
     <div className="app">
-      <Header />
-      <div className="container">
-        <Switch>
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/signup" component={Signup} />
-          <Route exact path="/profile" render={() => loginCheck('/login', <Profile />)} />
-          <Route exact path="/search" render={() => loginCheck('/login', <Search />)} />
-        </Switch>
-      </div>
-      <Footer />
+      <Hero color="light" size="fullheight">
+        <Hero.Head>
+          <Header />
+        </Hero.Head>
+
+        <Hero.Body color="primary">
+          <Container>
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/signup" component={Signup} />
+              <Route exact path="/profile" render={() => loginCheck('/login', <Profile />)} />
+              <Route exact path="/search" render={() => loginCheck('/login', <Search />)} />
+            </Switch>
+          </Container>
+        </Hero.Body>
+
+        <Hero.Footer>
+          <Footer />
+        </Hero.Footer>
+      </Hero>
     </div>
   );
 };

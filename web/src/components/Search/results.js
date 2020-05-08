@@ -1,8 +1,9 @@
 // == Import npm
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { Grid, Card, Pagination, Message } from 'semantic-ui-react';
+import { Columns, Pagination } from 'react-bulma-components';
 
 // == import utils/actions
 import { API_URI } from 'src/store/utils';
@@ -26,10 +27,11 @@ const Results = () => {
     return state.usersData.maxPage;
   });
 
+  const history = useHistory()
   const dispatch = useDispatch();
 
-  const onChange = (evt, pageInfo) => {
-    setActivePage(pageInfo.activePage);
+  const handleChange = (page) => {
+    setActivePage(page);
   };
 
   const getUsersData = () => {
@@ -44,6 +46,7 @@ const Results = () => {
         usersData.maxPage = data.maxPage;
         usersData.maxUsers = data.maxUser;
         usersData.users = data.users;
+        history.push(`/search?page_nb=${activePage}&user_nb=12`);
         dispatch(getUsersList(usersData));
       })
       .catch((err) => {
@@ -53,35 +56,32 @@ const Results = () => {
 
   useEffect(getUsersData, [activePage, search]);
 
-  const PaginationComponent = () => (
-    <Pagination
-      activePage={activePage}
-      onPageChange={onChange}
-      boundaryRange={0}
-      ellipsisItem={null}
-      firstItem={null}
-      lastItem={null}
-      siblingRange={1}
-      totalPages={maxPage}
-    />
-  );
-
   return (
-    <Grid stretched>
-      <Grid.Row centered>
-        <Message attached color="black">{usersData.maxUsers} développeurs disponibles</Message>
-      </Grid.Row>
-      <Grid.Row stretched>
-        <Card.Group stackable itemsPerRow={4}>
-          <Cards users={usersData.users} />
-        </Card.Group>
-      </Grid.Row>
-      <Grid.Row textAlign="right">
-        <Grid.Column>
-          <PaginationComponent />
-        </Grid.Column>
-      </Grid.Row>
-    </Grid>
+    // <Grid stretched>
+    //   <Grid.Row centered>
+    //     <Message attached color="black">{usersData.maxUsers} développeurs disponibles</Message>
+    //   </Grid.Row>
+    //   <Grid.Row stretched>
+    //     <Card.Group stackable itemsPerRow={4}>
+    //       <Cards users={usersData.users} />
+    //     </Card.Group>
+    //   </Grid.Row>
+    //   <Grid.Row textAlign="right">
+    //     <Grid.Column>
+    //       <PaginationComponent />
+    //     </Grid.Column>
+    //   </Grid.Row>
+    // </Grid>
+    <>
+      <Columns>
+        <Cards users={usersData.users} />
+      </Columns>
+      <Columns>
+        <Columns.Column>
+          <Pagination current={activePage} total={maxPage} onChange={handleChange} delta={maxPage} />
+        </Columns.Column>
+      </Columns>
+    </>
   );
 };
 

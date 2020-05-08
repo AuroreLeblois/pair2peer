@@ -1,37 +1,62 @@
-import React from 'react';
-import { Card, Icon, Image, Label } from 'semantic-ui-react';
+import React, { Fragment } from 'react';
 import { firstLetterToUppercase } from 'src/store/utils';
+import { Card, Media, Content, Heading, Form, Tag, Image, Columns, Hero, Container, Progress } from 'react-bulma-components';
 
 const Cards = ({ users }) => {
+  let key = 1;
+
   if (!users) {
     return null;
   }
 
   return users.map((user) => (
-    <Card color="yellow" key={user.id}>
-      <Image src={user.picture} wrapped />
-      <Card.Content>
-        <Card.Header>{firstLetterToUppercase(user.pseudo)}</Card.Header>
-        <Card.Meta>
-          <span className="date"><Icon name="map marker" />{firstLetterToUppercase(user.city)}, {firstLetterToUppercase(user.country)}</span>
-        </Card.Meta>
-        <Card.Description>{user.description}</Card.Description>
-      </Card.Content>
-      <Card.Content extra>
-        <Label.Group size="mini">
-          {user.it_language.map((label) => (
-            <Label key={label.name} size="mini">{label.name}</Label>
-          ))}
-        </Label.Group>
-      </Card.Content>
-      <Card.Content extra>
-        <Label.Group size="mini">
-          {user.language.map((language) => (
-            <Label key={language} size="mini">{language}</Label>
-          ))}
-        </Label.Group>
-      </Card.Content>
-    </Card>
+    <Columns.Column key={key++} size={4}>
+      <Card>
+        <Card.Content>
+          <Media>
+            <Media.Item renderAs="figure" position="left">
+              <Image size={128} src={user.picture} />
+            </Media.Item>
+            <Media.Content>
+              <Hero>
+                <Hero.Body>
+                  <Container>
+                    <Heading renderAs="p" size={4}>{user.pseudo}</Heading>
+                    <Heading renderAs="p" subtitle size={6}>{user.city}, {user.country}</Heading>
+                  </Container>
+                </Hero.Body>
+              </Hero>
+            </Media.Content>
+          </Media>
+          <Media>
+            <Media.Item>
+              <Tag.Group>
+                {user.language.map((language) => (
+                  <Tag key={key++}>{firstLetterToUppercase(language)}</Tag>
+                ))}
+              </Tag.Group>
+            </Media.Item>
+          </Media>
+          <Content>
+            {user.description}
+          </Content>
+          <Media>
+            <Media.Item>
+              <Form.Field multiline kind="group">
+                {user.it_language.map((label) => (
+                  <Fragment key={key++}>
+                    <Form.Control>
+                      <Tag color="dark">{firstLetterToUppercase(label.name)}</Tag>
+                    </Form.Control>
+                    <Progress color="danger" size="small" value={label.level} max={10} />
+                  </Fragment>
+                ))}
+              </Form.Field>
+            </Media.Item>
+          </Media>
+        </Card.Content>
+      </Card>
+    </Columns.Column>
   ));
 };
 

@@ -1,23 +1,26 @@
 // == Import npm
-import React, { useEffect, useState } from 'react';
-// import { Formik, Form, useField } from 'formik';
-import * as Yup from 'yup';
-import axios from 'axios';
-import { Radio, Form, Button, Input, Header, Grid } from 'semantic-ui-react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, Link } from 'react-router-dom';
+import { submitSignup } from 'src/store/actions';
+import { Columns, Form, Button, Box, Container, Content, Heading } from 'react-bulma-components';
 
 const Signup = () => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const { usersData } = useSelector((state) => state)
 
   // Les hooks
-  const [pseudo, setPseudo] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [passwordConfirm, setPasswordConfirm] = React.useState("");
-  const [country, setCountry] = React.useState("");
-  const [city, setCity] = React.useState("");
-  const [radioValue, setRadioValue] = useState();
+  const [pseudo, setPseudo] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [passwordConfirm, setPasswordConfirm] = React.useState('');
+  const [country, setCountry] = React.useState('');
+  const [city, setCity] = React.useState('');
+  const [remote, setRemote] = useState('');
 
-  const handleSubmit = () => {
-    event.preventDefault ();
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
     const newUser = {
       pseudo,
       email,
@@ -25,180 +28,106 @@ const Signup = () => {
       passwordConfirm,
       country,
       city,
-      remote: radioValue,
+      remote,
     };
-    console.log(newUser)
-    axios.post(
-      'http://localhost:3000/signup',
-      newUser,
-      { withCredentials: true },
-    )
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-        console.log(err.response);
-      });
+    dispatch(submitSignup(history, newUser));
   };
 
-  const handleRadioChange = (evt, result) => {
-    setRadioValue(result.value);
+  const handleRadioChange = (evt) => {
+    const target = evt.target
+    setRemote(target.value);
   };
-  
 
   return (
-      // <Formik
-      //   initialValues={
-      //   {
-      //     pseudo:'',
-      //     email: '',
-      //     password:'',
-      //     passwordConfirm:'',
-      //     country:'',
-      //     city:'',
-      //     remote:'',
-      //     // role:'',
-      //     // acceptedTerms: false, // Pour la checkbox
-      //   }
-      // }
+    <Columns>
+      <Columns.Column />
+      <Columns.Column>
+        <Columns>
+          <Container>
+            <Content style={{ textAlign: "center" }}>
+              <Heading size={3}>Inscription</Heading>
+              <Heading subtitle size={6}>Rejoignez les {usersData.maxUser} développeurs enregistrés !</Heading>
+            </Content>
+          </Container>
+        </Columns>
+        <Columns.Column />
+        <Box>
+          <form onSubmit={handleSubmit}>
+            <Form.Field>
+              <Form.Field>
+                <Form.Control>
+                  <Form.Label>Pseudo</Form.Label>
+                  <Form.Input name="name" type="text" value={pseudo} onChange={(e) => setPseudo(e.target.value)} />
+                </Form.Control>
+              </Form.Field>
 
-      // // Gerer coté back mais possibilité de rajout en front ??
-      // validationSchema = {
-      //   Yup.object (
-      //     {
-      //       pseudo: Yup.string()
-      //       .max(15)
-      //       .required('Obligatoire'),
-      //       country: Yup.string()
-      //       .max(15)
-      //       .required('Obligatoire'),
-      //       city: Yup.string()
-      //       .max(15)
-      //       .required('Obligatoire'),
-      //       email: Yup.string()
-      //       .email('Invalid email address')
-      //       .required('Obligatoire'),
-      //       remote: Yup.boolean(),
-      //       //acceptedTerms: Yup.boolean()
-      //       //.required('Required')
-      //       //.oneOf([true], 'You must accept the terms and conditions.'), // Pour une future Charte de bonne conduite par exemple
-      //     }
-      //   ).shape({
-      //     password: Yup.string().required("Obligatoire"),
-      //     passwordConfirm: Yup.string().when("password", {
-      //       is: val => (val && val.length > 0 ? true : false),
-      //       then: Yup.string().oneOf(
-      //         [Yup.ref("password")],
-      //         "Both password need to be the same"
-      //       )
-      //     })
-      //   })
-      // }
+              <Form.Field>
+                <Form.Control>
+                  <Form.Label>Email</Form.Label>
+                  <Form.Input name="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                </Form.Control>
+              </Form.Field>
+            </Form.Field>
 
-      // onSubmit = {
-      //   (values, { setSubmitting } ) => {
-      //     setTimeout(() => {
-      //       alert(JSON.stringify(values, null, 2));
-      //       setSubmitting(false);
-      //     }, 400
-      //     );
-      //   }}
-      // >
-      
-    <Grid centered>
-      <Grid.Column width={8}>
-        <Form
-          inverted
-          className="ui form"
-          onSubmit={handleSubmit}
-          size="tiny"
-        >
-          <Form.Group widths="equal">
-            <Form.Field
-              control={Input}
-              label="Pseudo"
-              name="pseudo"
-              placeholder="Jane57"
-              onChange={e => setPseudo(e.target.value)}
-            />
-            <Form.Field
-              control={Input}
-              label="Mail"
-              name="email"
-              type="email"
-              placeholder="Email"
-              onChange={e => setEmail(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group widths="equal">
-            <Form.Field
-              control={Input}
-              label="Mot de passe"
-              name="password"
-              type="password"
-              placeholder=""
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-            />
-            <Form.Field
-              control={Input}
-              label="Confirmation de mot de passe"
-              name="passwordConfirm"
-              type="password"
-              placeholder=""
-              value={passwordConfirm}
-              onChange={e => setPasswordConfirm(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group widths="equal">
-            <Form.Field
-              control={Input}
-              label="Pays"
-              name="country"
-              type="text"
-              placeholder="France"
-              value={country}
-              onChange={e => setCountry(e.target.value)}
-            />
-            <Form.Field
-              control={Input}
-              label="Ville"
-              name="city"
-              type="text"
-              placeholder="Strasbourg"
-              value={city}
-              onChange={e => setCity(e.target.value)}
-            />
-          </Form.Group>
+            <Form.Field>
+              <Form.Field>
+                <Form.Control>
+                  <Form.Label>Mot de passe</Form.Label>
+                  <Form.Input name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                </Form.Control>
+              </Form.Field>
 
-          <Header as="h6" inverted> Je veux travailler en remote </Header>
-          <Form.Field>
-            <Radio
-              label="Oui"
-              name="remote"
-              value="true"
-              checked={radioValue === 'true'}
-              onChange={handleRadioChange}
-            />
-          </Form.Field>
-          <Form.Field>
-            <Radio
-              label="Non"
-              name="remote"
-              value="false"
-              checked={radioValue === 'false'}
-              onChange={handleRadioChange}
-            />
-          </Form.Field>
-          <Button
-            type="submit"
-          >
-            S'inscrire
-          </Button>
-        </Form>
-      </Grid.Column>
-    </Grid>
+              <Form.Field>
+                <Form.Control>
+                  <Form.Label>Confirmer le mot de passe</Form.Label>
+                  <Form.Input name="passwordConfirm" type="password" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
+                </Form.Control>
+              </Form.Field>
+            </Form.Field>
+
+            <Form.Field>
+              <Form.Field>
+                <Form.Control>
+                  <Form.Label>Ville</Form.Label>
+                  <Form.Input name="city" type="text" value={city} onChange={(e) => setCity(e.target.value)} />
+                </Form.Control>
+              </Form.Field>
+              <Form.Field>
+                <Form.Control>
+                  <Form.Label>Pays</Form.Label>
+                  <Form.Input name="country" type="text" value={country} onChange={(e) => setCountry(e.target.value)} />
+                </Form.Control>
+              </Form.Field>
+            </Form.Field>
+
+            <Form.Field>
+              <Form.Label>Comment souhaitez-vous travailler ?</Form.Label>
+              <Form.Control>
+                <Form.Radio value="true" name="remote" checked={remote === 'true'} onChange={handleRadioChange}>
+                  Remote
+                </Form.Radio>
+                <Form.Radio value="false" name="remote" checked={remote === 'false'} onChange={handleRadioChange}>
+                  Rencontre
+                </Form.Radio>
+              </Form.Control>
+            </Form.Field>
+            <Button.Group position="right">
+              <Button type="submit" color="success">Valider</Button>
+            </Button.Group>
+          </form>
+          <Columns.Column />
+          <Columns.Column />
+          <Columns>
+            <Container>
+              <Content style={{ textAlign: 'center' }}>
+                <Heading subtitle size={6}><Link to="/login">Déjà inscrit ?</Link></Heading>
+              </Content>
+            </Container>
+          </Columns>
+        </Box>
+      </Columns.Column>
+      <Columns.Column />
+    </Columns>
   );
 };
 
