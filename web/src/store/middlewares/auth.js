@@ -11,7 +11,8 @@ export default (store) => (next) => (action) => {
       const { data } = action;
       axios.post(
         `${API_URI}/login`,
-        data,
+        { email: 'tony9@gmail.com',
+          password: 'azertyui'},
         { withCredentials: true },
       )
         .then((res) => {
