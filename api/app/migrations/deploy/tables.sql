@@ -76,4 +76,5 @@ CREATE TABLE usr_message_chat (
     chat_id INT NOT NULL REFERENCES chat(id) ON DELETE CASCADE
 );
 
+
 COMMIT;

@@ -24,7 +24,9 @@ module.exports = {
                 const email = request.state.cookie.email;
                 const user = await db.query(`SELECT * FROM usr_profile WHERE email = $1`, [email]);
                 // no need to check if the user exist, because if the user want to access this path, he have to be logged
-                return user.rows[0];
+                //delete old chat room
+                const userChatRoom= await db.query(`SELECT DISTINCT chat_serial, chat_id FROM all_my_message_in_chat WHERE usr_id=$1`,[user.rows[0].id])
+                return [user.rows[0],userChatRoom.rows];
             }
         });
 
