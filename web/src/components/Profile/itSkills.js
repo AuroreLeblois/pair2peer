@@ -28,8 +28,6 @@ const ITSkills = () => {
     [evt.currentTarget.name]: evt.currentTarget.value,
   });
 
-  console.log(input)
-
   const LangOptions = () => {
     if (filters.language) {
       return filters.language.map((language) => (
