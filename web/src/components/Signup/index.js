@@ -111,9 +111,8 @@ const Signup = () => {
                 </Form.Radio>
               </Form.Control>
             </Form.Field>
-            <Button.Group position="right">
-              <Button type="submit" color="success">Valider</Button>
-            </Button.Group>
+            <Columns.Column />
+            <Button fullwidth type="submit" color="success">Valider</Button>
           </form>
           <Columns.Column />
           <Columns.Column />

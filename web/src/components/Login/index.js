@@ -54,9 +54,8 @@ const Login = () => {
                   {(errors && errors.errorPassword) ? <ErrorMessage message={errors.errorPassword} /> : null}
                 </Form.Control>
               </Form.Field>
-              <Button.Group position="right">
-                <Button color="success">Connexion</Button>
-              </Button.Group>
+              <Columns.Column />
+              <Button fullwidth color="success">Connexion</Button>
             </form>
             <Columns.Column />
             <Columns.Column />
