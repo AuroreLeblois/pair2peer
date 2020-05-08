@@ -29,12 +29,12 @@ const Header = () => {
     <>
       <Navbar.Item renderAs="div">
         <Link to="/signup">
-          <Button color="info" onClick={() => setActiveNavbar(!activeNavbar)}>Inscription</Button>
+          <Button color="danger" onClick={() => setActiveNavbar(!activeNavbar)}>Inscription</Button>
         </Link>
       </Navbar.Item>
       <Navbar.Item renderAs="div">
         <Link to="/login">
-          <Button color="info" outlined onClick={() => setActiveNavbar(!activeNavbar)}>Connexion</Button>
+          <Button outlined onClick={() => setActiveNavbar(!activeNavbar)}>Connexion</Button>
         </Link>
       </Navbar.Item>
     </>
@@ -65,7 +65,7 @@ const Header = () => {
   return (
     <Navbar active={activeNavbar}>
       <Container>
-        <Navbar.Brand>
+        <Navbar.Brand className="logo">
           <Navbar.Item renderAs="div">
             <Link to="/">
               <Heading subtitle size={6}>

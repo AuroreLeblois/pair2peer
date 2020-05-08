@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { firstLetterToUppercase } from 'src/store/utils';
-import { Columns, Image, Media, Container, Heading, Hero, Form, Button, Modal, Section } from 'react-bulma-components';
+import { Columns, Container, Heading, Form, Button, Modal, Section } from 'react-bulma-components';
 import useInputChange from 'src/store/hooks/useInputChange';
 
 
@@ -103,16 +103,16 @@ const ProfileEdit = () => {
             <Form.Field>
               <Form.Label>Comment souhaitez-vous travailler ?</Form.Label>
               <Form.Control>
-                <Form.Radio onChange={handleChange} checked={userInfos.remote === 'true'} value="false" name="remote">
+                <Form.Radio onChange={handleChange} checked={userInfos.remote === true} value="true" name="remote">
                   Remote
                 </Form.Radio>
-                <Form.Radio onChange={handleChange} checked={userInfos.remote === 'false'} value="true" name="remote">
+                <Form.Radio onChange={handleChange} checked={userInfos.remote === false} value="false" name="remote">
                   Rencontre
                 </Form.Radio>
               </Form.Control>
             </Form.Field>
             <Button.Group position="right">
-              <Button renderAs="a" onClick={() => setOpenModal(true)} color="info">Sauvegarder</Button>
+              <Button renderAs="a" onClick={() => setOpenModal(true)} color="success">Sauvegarder</Button>
             </Button.Group>
             <Modal closeOnBlur show={openModal} onClose={() => setOpenModal(false)}>
               <Modal.Content>
