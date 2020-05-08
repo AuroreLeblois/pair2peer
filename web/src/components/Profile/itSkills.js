@@ -8,6 +8,8 @@ import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
 
 // == Composant
 const ITSkills = () => {
+  let key = 1;
+  const { user, filters } = useSelector((state) => state);
 
   // States required for modal info
   const [modalIt, setModalIt] = useState(false);
@@ -16,21 +18,34 @@ const ITSkills = () => {
   const [itClicked, setItClicked] = useState();
 
   // States for update request Languages & IT Languages
-  const [updateLang, setUpdateLang] = useState();
+  const [input, setInput] = useState({
+    language: user.language,
+    it_language: user.it_language,
+  });
 
-  let key = 1;
-  const { user, filters } = useSelector((state) => state);
+  const handleInputChange = (evt) => setInput({
+    ...evt.currentTarget.name,
+    [evt.currentTarget.name]: evt.currentTarget.value,
+  });
+
+  console.log(input)
 
   const LangOptions = () => {
-    return filters.language.map((language) => (
-      <option key={language} value={language}>{firstLetterToUppercase(language)}</option>
-    ));
+    if (filters.language) {
+      return filters.language.map((language) => (
+        <option key={language} value={language}>{firstLetterToUppercase(language)}</option>
+      ));
+    }
+    return null;
   };
 
   const ItOptions = () => {
-    return filters.it_language.map((language) => (
-      <option key={language} value={language}>{firstLetterToUppercase(language)}</option>
-    ));
+    if (filters.it_language) {
+      return filters.it_language.map((language) => (
+        <option key={language} value={language}>{firstLetterToUppercase(language)}</option>
+      ));
+    }
+    return null;
   };
 
   const LvlOptions = () => {
@@ -65,48 +80,58 @@ const ITSkills = () => {
     setItClicked(evt.currentTarget.value);
   };
 
-  const ItLanguages = () => (
-    <>
-      <Container>
-        {user.it_language.map((techno) => (
-          <Columns key={key++}>
-            <Columns.Column size={1}>
-              <Button size="small" color="danger" onClick={handleEditClick} value={techno.name}>
-                <Icon renderAs="div">
-                  <FontAwesomeIcon size="lg" icon={faPenSquare} />
-                </Icon>
-              </Button>
-            </Columns.Column>
-            <Columns.Column size={2}>
-              <Form.Control>
-                <Form.Label>{firstLetterToUppercase(techno.name)}</Form.Label>
-              </Form.Control>
-            </Columns.Column>
-            <Columns.Column>
-              <Progress color="danger" value={techno.level} max={10} />
-            </Columns.Column>
-          </Columns>
-        ))}
-      </Container>
-    </>
-  );
+  const ItLanguages = () => {
+    if (user.it_language) {
+      return (
+        <>
+          <Container>
+            {user.it_language.map((techno) => (
+              <Columns key={key++}>
+                <Columns.Column size={1}>
+                  <Button size="small" color="danger" onClick={handleEditClick} value={techno.name}>
+                    <Icon renderAs="div">
+                      <FontAwesomeIcon size="lg" icon={faPenSquare} />
+                    </Icon>
+                  </Button>
+                </Columns.Column>
+                <Columns.Column size={2}>
+                  <Form.Control>
+                    <Form.Label>{firstLetterToUppercase(techno.name)}</Form.Label>
+                  </Form.Control>
+                </Columns.Column>
+                <Columns.Column>
+                  <Progress color="danger" value={techno.level} max={10} />
+                </Columns.Column>
+              </Columns>
+            ))}
+          </Container>
+        </>
+      );
+    }
+    return null;
+  };
 
-  const Languages = () => (
-    <Container>
-      <Columns>
-        {user.language.map((language) => (
-          <Columns.Column key={key++} size={2}>
-            <Form.Control>
-              <Tag.Group gapless>
-                <Tag size="medium">{firstLetterToUppercase(language)}</Tag>
-                <Tag size="medium" color="danger" remove renderAs="a" />
-              </Tag.Group>
-            </Form.Control>
-          </Columns.Column>
-        ))}
-      </Columns>
-    </Container>
-  );
+  const Languages = () => {
+    if (user.language) {
+      return (
+        <Container>
+          <Columns>
+            {user.language.map((language) => (
+              <Columns.Column key={key++} size={2}>
+                <Form.Control>
+                  <Tag.Group gapless>
+                    <Tag size="medium">{firstLetterToUppercase(language)}</Tag>
+                    <Tag size="medium" color="danger" remove renderAs="a" />
+                  </Tag.Group>
+                </Form.Control>
+              </Columns.Column>
+            ))}
+          </Columns>
+        </Container>
+      );
+    }
+    return null;
+  };
 
   const ModalAddIT = () => (
     <Modal closeOnBlur show={modalIt} onClose={() => setModalIt(false)}>
@@ -175,7 +200,7 @@ const ITSkills = () => {
           <Form.Field>
             <Form.Control>
               <Form.Label>Langue</Form.Label>
-              <Form.Select name="language">
+              <Form.Select onChange={handleInputChange} value={input.language} name="language">
                 <option value="">{null}</option>
                 <LangOptions />
               </Form.Select>
@@ -202,12 +227,12 @@ const ITSkills = () => {
           <Content style={{ textAlign: 'center' }}>
             <Heading renderAs="p" size={5}>Compétences</Heading>
           </Content>
-          {(user.it_language) ? <ItLanguages /> : null }
+          <ItLanguages />
           <Columns.Column />
           <Content style={{ textAlign: 'center' }}>
             <Heading renderAs="p" size={5}>Langues</Heading>
           </Content>
-          {(user.language) ? <Languages /> : null }
+          <Languages />
         </Container>
       </Columns.Column>
       <ModalAddIT />

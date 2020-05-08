@@ -57,21 +57,6 @@ const Results = () => {
   useEffect(getUsersData, [activePage, search]);
 
   return (
-    // <Grid stretched>
-    //   <Grid.Row centered>
-    //     <Message attached color="black">{usersData.maxUsers} développeurs disponibles</Message>
-    //   </Grid.Row>
-    //   <Grid.Row stretched>
-    //     <Card.Group stackable itemsPerRow={4}>
-    //       <Cards users={usersData.users} />
-    //     </Card.Group>
-    //   </Grid.Row>
-    //   <Grid.Row textAlign="right">
-    //     <Grid.Column>
-    //       <PaginationComponent />
-    //     </Grid.Column>
-    //   </Grid.Row>
-    // </Grid>
     <>
       <Columns>
         <Cards users={usersData.users} />
