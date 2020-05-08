@@ -72,11 +72,11 @@ module.exports = {
             method: 'POST',
             path: '/chatroom',
             options: {
-                // auth: {
-                //     strategy: 'base',
-                //     mode: 'required',
-                //     scope: ['user', 'admin']
-                // },
+                auth: {
+                    strategy: 'base',
+                    mode: 'required',
+                    scope: ['user', 'admin']
+                },
                 validate: {
                     payload: Joi.object({
                        nameForChatRoom: Joi.string().required(),
@@ -141,18 +141,17 @@ module.exports = {
             method: 'POST',
             path: '/chatroom/{chatName}',
             options: {
-                auth: {
-                    strategy: 'base',
-                    mode: 'required',
-                    scope: ['user', 'admin']
-                },
+                // auth: {
+                //     strategy: 'base',
+                //     mode: 'required',
+                //     scope: ['user', 'admin']
+                // },
                 validate: {
                     params: Joi.object({
-                        chatSerial: Joi.string().required()
+                        chatSerial: Joi.string().alphanum().min(6).max(6).required()
                     }),
                     payload: Joi.object({
                        message:Joi.string().required()
-                    //    email: Joi.string().email().required()
                     }),
                 },
                 description: 'handle post message on chat room',
@@ -161,8 +160,8 @@ module.exports = {
             handler: async function (request, h) {
                const chatSerial= request.params.chatSerial;
                const message= request.payload.message;
-               const email= request.state.cookie.email;
-               //const email= request.payload.email;
+            //    const email= request.state.cookie.email;
+               const email= 'awawexd@hotmail.fr';
                 const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`,[chatSerial]);
                 if(!chatExists.rows[0]){
                     return h.code(404)
@@ -192,7 +191,6 @@ module.exports = {
                     }),
                     payload: Joi.object({
                        newChatter: Joi.string()
-                    //    email: Joi.string().email().required()
                     }),
                 },
                 description: 'add new chatter to chat room',
