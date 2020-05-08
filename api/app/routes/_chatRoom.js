@@ -158,8 +158,8 @@ module.exports = {
             handler: async function (request, h) {
                 const chatSerial= request.params.chatSerial;
                const message= request.payload.message;
-            //  const email= request.state.cookie.email;
-                const email= 'awawexd@hotmail.fr';
+                const email= request.state.cookie.email;
+
                 const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`,[chatSerial]);
 
                 if(!chatExists.rows[0]){
@@ -170,9 +170,7 @@ module.exports = {
              
                const me= await db.query(`SELECT * FROM usr WHERE email=$1`,[email]);
                 const myID= me.rows[0].id;
-                console.log(myID);
                 const newMessage=await db.query(`INSERT INTO usr_message_chat("date",script,usr_id,chat_id) VALUES(NOW(),$1,$2,$3)RETURNING *;`,[message,myID,chatID]);
-                                                 console.log(`insert ok`)
                 return h.response(newMessage.rows).code(200);
             }
         
@@ -201,14 +199,12 @@ module.exports = {
             handler: async function (request, h) {
                const chatSerial= request.params.chatSerial;
                const newChatter= request.payload.newChatter;
-               console.log(chatSerial, newChatter)
                const email= request.state.cookie.email;
                 const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`,[chatSerial]);
                 if(!chatExists.rows[0]){
                     const error=`chat not found `
                     return h.response(error).code(404);
                 }
-                console.log(`j'ai trouvé la chatid`)
                 chatID= chatExists.rows[0].id;
                 const me= await db.query(`SELECT * FROM usr 
                                             WHERE email=$1`,[email]);
@@ -231,7 +227,6 @@ module.exports = {
                 const newChatterID= newInvited.rows[0].id;
                 await db.query(`INSERT INTO usr_message_chat ( "date", usr_id, chat_id) 
                                                 VALUES(NOW(),$1,$2)`[newChatterID, chatID]);
-                console.log('insert ok')
                 const messages= await db.query(`SELECT * FROM all_my_message_in_chat
                                                 WHERE chat_id=$1`,[chatID])
                 return h.response(messages.rows).code(200);
