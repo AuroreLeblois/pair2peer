@@ -56,9 +56,7 @@ module.exports = {
                         remote: Joi.boolean().required(),
                         city: Joi.string().required(),
                         country: Joi.string().required(),
-                        birthyear: Joi.number().allow(''),
                         description: Joi.string().allow(''),
-                        experience: Joi.number().allow(''),
                         disponibility: Joi.number(),
                         linkedinLink: Joi.string().allow(''),
                         facebook_link: Joi.string().allow(''),
@@ -86,12 +84,10 @@ module.exports = {
                 //les données du formulaire:
                 //les données utilisateur brutes
                 const password= request.payload.password;
-                let birthyear= request.payload.birthyear;
                 const picture= request.payload.picture;
                 const country= request.payload.country;
                 const city= request.payload.city;
                 const remote= request.payload.remote;
-                const experience= request.payload.experience;
                 const description= request.payload.description;
                 const validatePassword= request.payload.validatePassword;
                 const changeMyEmail= request.payload.email;
@@ -187,15 +183,14 @@ module.exports = {
                         console.log(latitude);
                         const longitude= api.payload.items[0].position.lng;
                         console.log(longitude);
-                        birthyear='01-01-'+birthyear;
                         console.log(birthyear);
                         const detailExist= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
                         //il n'existe pas=> on insert
                          if(!detailExist.rows[0]){
                              console.log(`je n'ai pas trouvé de correspondance=>j'insère`)
-                             await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id, "birthyear", picture, description, experience, latitude, longitude, disponibility, linkedin_link, facebook_link, github_link)
-                                            VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7, $8, $9, $10, $11,$12,$13, $14);`
-                                            ,[city, country, remote, userID, birthyear, picture, description,experience, latitude, longitude, disponibility, linkedinLink, facebook_link,github_link]);
+                             await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id, picture, description,  latitude, longitude, disponibility, linkedin_link, facebook_link, github_link)
+                                            VALUES ($1 , $2 , $3 , $4 , $5 , $6, $7, $8, $9,$10,$11, $12);`
+                                            ,[city, country, remote, userID, picture, description, latitude, longitude, disponibility, linkedinLink, facebook_link,github_link]);
                     }//sinon on update
                          else{
                              console.log(`j'ai trouvé une correspondance=>j'update`)
@@ -203,19 +198,17 @@ module.exports = {
                                             SET "city"=$1, 
                                             "country"=$2,
                                             "remote"=$3,
-                                            "birthyear"=$4,
-                                            picture=$5,
-                                            description=$6 ,
-                                            experience=$7,
-                                            latitude=$8,
-                                            longitude=$9,
-                                            disponibility=$10,
-                                            linkedin_link=$11,
-                                            facebook_link=$12,
-                                            github_link=$13
-                                            WHERE usr_id=$14`,
-                                            [city, country, remote,birthyear,
-                                            picture, description, experience, latitude, longitude,disponibility,linkedinLink, facebook_link,github_link,userID]);
+                                            picture=$4,
+                                            description=$5 ,
+                                            latitude=$6,
+                                            longitude=$7,
+                                            disponibility=$8,
+                                            linkedin_link=$9,
+                                            facebook_link=$10,
+                                            github_link=$11
+                                            WHERE usr_id=$12`,
+                                            [city, country, remote, picture, description, 
+                                             latitude, longitude,disponibility,linkedinLink, facebook_link,github_link,userID]);
                                         };
                     
                     }
