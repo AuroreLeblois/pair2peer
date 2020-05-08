@@ -6,7 +6,7 @@ module.exports = {
     register: async (server) => {
 
         server.route({
-            mothod: 'GET',
+            method: 'GET',
             path: '/map',
             config: {
                 description: 'Map representation',
