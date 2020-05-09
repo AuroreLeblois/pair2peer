@@ -1,21 +1,27 @@
 // == Import npm
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Form, Heading, Progress, Columns, Container, Content, Tag, Button, Icon } from 'react-bulma-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
-import Modals from './modals';
+
+// == Import components
+import ModalAddIt from './Modals/modalAddIt';
+import ModalAddLang from './Modals/modalAddLang';
+import ModalEditIT from './Modals/modalEditIt';
 
 // == Composant
-const Skills = () => {
+const SkillsEdit = () => {
   let key = 1;
-  const { user, filters } = useSelector((state) => state);
+  const { user } = useSelector((state) => state);
 
   // States required for modal info
   const [modalIt, setModalIt] = useState(false);
   const [modalLang, setModalLang] = useState(false);
   const [editIt, setEditIt] = useState(false);
   const [itClicked, setItClicked] = useState();
+
+  console.log(itClicked);
 
   const handleEditClick = (evt) => {
     setEditIt(true);
@@ -95,19 +101,12 @@ const Skills = () => {
           <Languages />
         </Container>
       </Columns.Column>
-      <Modals
-        modalIt={modalIt}
-        modalLang={modalLang}
-        editIt={editIt}
-        itClicked={itClicked}
-        setModalIt={setModalIt}
-        setModalLang={setModalLang}
-        setEditIt={setEditIt}
-        setItClicked={setItClicked}
-      />
+      <ModalAddIt modalIt={modalIt} itClicked={itClicked} setModalIt={setModalIt} />
+      <ModalEditIT itClicked={itClicked} editIt={editIt} setEditIt={setEditIt} setItClicked={setItClicked} />
+      <ModalAddLang modalLang={modalLang} setModalLang={setModalLang} />
     </>
   );
 };
 
 // == Export
-export default Skills;
+export default SkillsEdit;
