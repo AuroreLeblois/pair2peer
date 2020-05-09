@@ -84,7 +84,7 @@ const App = () => {
               <Route exact path="/signup" component={Signup} />
               <Route exact path="/profile" render={() => loginCheck('/login', <Profile />)} />
               <Route exact path="/search" render={() => loginCheck('/login', <Search />)} />
-              <Route component={NotFound}/>
+              <Route component={NotFound} />
             </Switch>
           </Container>
         </Hero.Body>
