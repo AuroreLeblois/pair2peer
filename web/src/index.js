@@ -6,6 +6,8 @@ import { render } from 'react-dom'; // couche 2
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, browserHistory } from 'react-router-dom';
 
+import 'leaflet/dist/leaflet.css';
+
 // == Import : local
 // Composants
 import App from 'src/components/App';

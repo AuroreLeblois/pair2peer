@@ -1,3 +1,4 @@
 node_modules
 web/node_modules
 .env
+PGCONNECT=postgresql://apotheosepp:psTeP8glzD8cuuiC8X4B@apotheosepp.cq2wawodtr6y.us-east-1.rds.amazonaws.com:5432/apop2p

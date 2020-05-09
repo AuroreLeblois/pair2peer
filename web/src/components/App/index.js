@@ -14,9 +14,9 @@ import Signup from 'src/components/Signup';
 import Header from 'src/components/Header';
 import Footer from 'src/components/Footer';
 import Search from 'src/components/Search';
+import UserMap from 'src/components/Map';
 import './styles.css';
 
-// Ajout d'une route /signup
 
 // == Composant
 const App = () => {
@@ -64,6 +64,7 @@ const App = () => {
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/profile" render={() => loginCheck('/login', <Profile />)} />
           <Route exact path="/search" render={() => loginCheck('/login', <Search />)} />
+          <Route exact path="/map" component={UserMap} />
         </Switch>
       </div>
       <Footer />
