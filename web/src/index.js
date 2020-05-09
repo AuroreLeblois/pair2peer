@@ -4,7 +4,8 @@
 import React from 'react'; // couche 1
 import { render } from 'react-dom'; // couche 2
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router, browserHistory } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { getAutoconnect } from 'src/store/actions';
 
 // == Import : local
 // Composants

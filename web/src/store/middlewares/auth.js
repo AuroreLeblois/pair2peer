@@ -18,6 +18,7 @@ export default (store) => (next) => (action) => {
           // Redirection to '/', object { user } from reponse to reducer state
           store.dispatch(getAuthentified(action.history, res.data));
           store.dispatch({ type: actions.CLEAR_ERRORS_MSG });
+          sessionStorage.user = JSON.stringify(res.data);
         })
         .catch((err) => {
           const { message } = err.response.data;
@@ -31,6 +32,7 @@ export default (store) => (next) => (action) => {
         { withCredentials: true },
       )
         .then((res) => {
+          window.sessionStorage.clear();
           store.dispatch(getLogout(action.history));
         })
         .catch((err) => {
