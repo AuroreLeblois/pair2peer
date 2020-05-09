@@ -314,7 +314,10 @@ module.exports = {
                                 //     search: Joi.boolean()
                                 //     }))
                             }),
-                        },
+                        },  
+                        description: 'handle update user profile lang',
+                        tags: ['api', 'profile', 'validation']
+                    },
                         handler: async (request, h) => {
                             const email= request.state.cookie.email;
                             const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
@@ -330,8 +333,9 @@ module.exports = {
                             const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
                 return newUser.rows;
                         }
-                    }
+                    
                 });
+
                 server.route({
                     method: 'PATCH',
                     path: '/profile/it_languages',
@@ -364,10 +368,9 @@ module.exports = {
         //les it        
                         const itLangExists = await db.query(`SELECT *
                                                         FROM it_lang
-                                                        WHERE "name" = $1`, [it_language.name]);
-                        const itLangID= itLangExists.rows[0].id;
+                                                        WHERE "name"=$1;`, [it_language[0].name]);
 
-    
+                        const itLangID= itLangExists.rows[0].id;
                         const userKnowsIt= await db.query(`SELECT usr_id, it_lang_id 
                                                            FROM usr_knows_it_lang
                                                            WHERE usr_id = $1 
@@ -377,7 +380,7 @@ module.exports = {
                         if(!userKnowsIt.rows[0]){
                             await db.query(`INSERT INTO usr_knows_it_lang (usr_id, it_lang_id, "level", search) 
                             VALUES ($1, $2, $3, $4)`,
-                            [userID, itLangID, it_language.level, it_language.search]);
+                            [userID, itLangID, it_language[0].level, it_language[0].search]);
                         }
                 //         //si résultat
                         else{
@@ -385,7 +388,7 @@ module.exports = {
                                             SET "level"= $1, search=$2
                                             WHERE usr_id=$3
                                             AND it_lang_id =$4`,
-                                            [it_language.level,it_language.search, userID,itLangID]);
+                                            [it_language[0].level,it_language[0].search, userID,itLangID]);
                         }
                     
                 
@@ -418,15 +421,20 @@ module.exports = {
 
                         handler: async (request, h) => {
                             const email= request.state.cookie.email;
+                            const it_language= request.params.it_language;
                             const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
                             const userID= result.rows[0].id;
+                    
                             const itLangExists = await db.query(`SELECT *
                                                         FROM it_lang
-                                                        WHERE "name" = $1`, [it_language.name]);
+                                                        WHERE "name" = $1`, [it_language]);
+                                              
                         const itLangID= itLangExists.rows[0].id;
+              
                     await db.query(`DELETE FROM usr_knows_it_lang
                                     where usr_id=$1
-                                    AND it_lang=$2;`,[userID,itLangID]);
+                                    AND it_lang_id=$2;`,[userID,itLangID]);
+                                    console.log(`ok`)
                                     const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
                                     return newUser.rows;
                         }
