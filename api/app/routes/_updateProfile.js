@@ -306,13 +306,8 @@ module.exports = {
                         },
                         validate: {
                             params: Joi.object({
-                                // email:Joi.string().email(),
                                 language: Joi.string(),
-                                // it_language: Joi.array().items(Joi.object({
-                                //     name: Joi.string(),
-                                //     level: Joi.number().min(0).max(10),
-                                //     search: Joi.boolean()
-                                //     }))
+                              
                             }),
                         },  
                         description: 'handle update user profile lang',
@@ -434,7 +429,7 @@ module.exports = {
                     await db.query(`DELETE FROM usr_knows_it_lang
                                     where usr_id=$1
                                     AND it_lang_id=$2;`,[userID,itLangID]);
-                                    console.log(`ok`)
+                         
                                     const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
                                     return newUser.rows;
                         }
