@@ -1,10 +1,10 @@
 // == Import npm
 import React, { useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Route, Switch, Redirect } from 'react-router-dom';
-import { getFiltersList } from 'src/store/actions';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { getFiltersList, getAuthentified } from 'src/store/actions';
 import { API_URI } from 'src/store/utils';
-import { Container, Hero, Progress } from 'react-bulma-components';
+import { Container, Hero } from 'react-bulma-components';
 import axios from 'axios';
 
 
@@ -23,7 +23,16 @@ import './styles.css';
 // == Composant
 const App = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const user = useSelector((state) => state.user);
+
+  if (!user) {
+    const userInfo = JSON.parse(sessionStorage.getItem('user'));
+    if (userInfo) {
+      dispatch(getAuthentified(history, userInfo));
+    }
+  }
+
   const loginCheck = useCallback((path, component) => {
     if (!user) {
       return <Redirect to={path} />;

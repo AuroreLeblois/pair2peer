@@ -3,11 +3,6 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { firstLetterToUppercase } from 'src/store/utils';
 import { Columns, Container, Heading, Form, Button, Modal, Section } from 'react-bulma-components';
-import useInputChange from 'src/store/hooks/useInputChange';
-
-
-// == Import component
-import ITSkills from './itSkills';
 
 // == Composant
 const ProfileEdit = () => {
@@ -26,18 +21,6 @@ const ProfileEdit = () => {
   const handleChange = ({ target }) => {
     setUserInfos({ ...userInfos, [target.name]: target.value });
   };
-
-  // const onAddLanguage = (evt, { value }) => {
-  //   console.log(value);
-  // };
-
-  // const langOptions = () => (
-  //   filters.language.map((language) => ({
-  //     key: key++,
-  //     text: firstLetterToUppercase(language),
-  //     value: language,
-  //   }))
-  // );
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
