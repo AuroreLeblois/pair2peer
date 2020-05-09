@@ -19,6 +19,7 @@ export const actions = {
   UPDATE_USER: 'actions/UPDATE_USER',
   SET_LOADER: 'actions/SET_LOADER',
   DELETE_LANG: 'actions/DELETE_LANG',
+  UPDATE_IT_LANG: 'actions/UPDATE_IT_LANG'
 };
 
 // == Actions creator
@@ -76,4 +77,8 @@ export const updateUser = (data) => (
 
 export const deleteLang = (language) => (
   { type: actions.DELETE_LANG, language }
+);
+
+export const submitUpdateIt = (data) => (
+  { type: actions.UPDATE_IT_LANG, data }
 );

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Form, Heading, Progress, Columns, Container, Content, Tag, Button, Icon } from 'react-bulma-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { actions, deleteLang } from 'src/store/actions';
 
 // == Import components
@@ -24,12 +24,19 @@ const SkillsEdit = () => {
   const [editIt, setEditIt] = useState(false);
   const [itClicked, setItClicked] = useState();
 
-  const handleEditClick = (evt) => {
+  const handleEditClick = (evt, value) => {
     setEditIt(true);
-    setItClicked(evt.currentTarget.value);
+    setItClicked(value);
   };
 
   const handleClickDeleteLang = (evt, value) => {
+    console.log(evt);
+    console.log(value);
+    dispatch(deleteLang(value));
+    dispatch({ type: actions.SET_LOADER });
+  };
+
+  const handleClickDeleteIt = (evt, value) => {
     console.log(evt);
     console.log(value);
     dispatch(deleteLang(value));
@@ -43,12 +50,13 @@ const SkillsEdit = () => {
           <Container>
             {user.it_language.map((techno) => (
               <Columns key={key++}>
-                <Columns.Column size={1}>
-                  <Button size="small" color="danger" onClick={handleEditClick} value={techno.name}>
-                    <Icon renderAs="div">
-                      <FontAwesomeIcon size="lg" icon={faPenSquare} />
-                    </Icon>
-                  </Button>
+                <Columns.Column size={2}>
+                  <Icon color="danger" renderAs="div">
+                    <FontAwesomeIcon renderAs="a" size="lg" icon={faTrash} pull="left" />
+                  </Icon>
+                  <Icon color="dark" renderAs="a" onClick={(evt) => handleEditClick(evt, techno.name)}>
+                    <FontAwesomeIcon size="lg" icon={faEdit} pull="right" />
+                  </Icon>
                 </Columns.Column>
                 <Columns.Column size={2}>
                   <Form.Control>

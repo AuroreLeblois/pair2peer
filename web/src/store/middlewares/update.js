@@ -39,6 +39,25 @@ export default (store) => (next) => (action) => {
           console.log(err);
         });
     }
+    case actions.UPDATE_IT_LANG: {
+      const { data } = action;
+      console.log(data);
+      axios.patch(
+        `${API_URI}/profile/it_languages`,
+        data,
+        { withCredentials: true },
+      )
+        .then((res) => {
+          console.log(res.data);
+          const data = res.data[0];
+          store.dispatch(updateUser(data));
+          sessionStorage.user = JSON.stringify(data);
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+      return;
+    }
     default: {
       next(action);
     }
