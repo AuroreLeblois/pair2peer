@@ -26,12 +26,14 @@ const App = () => {
   const history = useHistory();
   const user = useSelector((state) => state.user);
 
-  if (!user) {
-    const userInfo = JSON.parse(sessionStorage.getItem('user'));
-    if (userInfo) {
-      dispatch(getAuthentified(history, userInfo));
+  const sessionUser = () => {
+    if (!user) {
+      const userInfo = JSON.parse(sessionStorage.getItem('user'));
+      if (userInfo) {
+        dispatch(getAuthentified(history, userInfo));
+      }
     }
-  }
+  };
 
   const loginCheck = useCallback((path, component) => {
     if (!user) {
@@ -39,6 +41,8 @@ const App = () => {
     }
     return component;
   }, [user]);
+
+  useEffect(sessionUser, [user]);
 
   // Req to get filters list
   const getFilters = () => {
