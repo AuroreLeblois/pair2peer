@@ -6,7 +6,7 @@ import { Columns, Image, Media, Container, Heading, Hero, Form, Button, Box } fr
 
 // == Import
 import ProfileEdit from './profileEdit';
-import Skills from './Skills';
+import SkillsEdit from './skillsEdit';
 
 // == Composant
 const Profile = () => {
@@ -74,7 +74,7 @@ const Profile = () => {
             </Container>
           </Columns.Column>
           <Columns.Column />
-          {(activeTab) ? <Skills /> : <ProfileEdit /> }
+          {(activeTab) ? <SkillsEdit /> : <ProfileEdit /> }
         </Box>
       </Columns.Column>
 
