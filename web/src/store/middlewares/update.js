@@ -23,6 +23,22 @@ export default (store) => (next) => (action) => {
         });
       return;
     }
+    case actions.DELETE_LANG: {
+      const { language } = action;
+      axios.delete(
+        `${API_URI}/profile/languages/${language}`,
+        { withCredentials: true },
+      )
+        .then((res) => {
+          console.log(res.data);
+          const data = res.data[0];
+          store.dispatch(updateUser(data));
+          sessionStorage.user = JSON.stringify(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
     default: {
       next(action);
     }

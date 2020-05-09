@@ -1,9 +1,10 @@
 // == Import npm
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Form, Heading, Progress, Columns, Container, Content, Tag, Button, Icon } from 'react-bulma-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
+import { actions, deleteLang } from 'src/store/actions';
 
 // == Import components
 import Loading from 'src/components/Loading';
@@ -13,6 +14,7 @@ import ModalEditIT from './Modals/modalEditIt';
 
 // == Composant
 const SkillsEdit = () => {
+  const dispatch = useDispatch();
   let key = 1;
   const { user, loading } = useSelector((state) => state);
 
@@ -22,11 +24,16 @@ const SkillsEdit = () => {
   const [editIt, setEditIt] = useState(false);
   const [itClicked, setItClicked] = useState();
 
-  console.log(itClicked);
-
   const handleEditClick = (evt) => {
     setEditIt(true);
     setItClicked(evt.currentTarget.value);
+  };
+
+  const handleClickDeleteLang = (evt, value) => {
+    console.log(evt);
+    console.log(value);
+    dispatch(deleteLang(value));
+    dispatch({ type: actions.SET_LOADER });
   };
 
   const ItLanguages = () => {
@@ -70,7 +77,7 @@ const SkillsEdit = () => {
                 <Form.Control>
                   <Tag.Group gapless>
                     <Tag size="medium">{language}</Tag>
-                    <Tag size="medium" color="danger" remove renderAs="a" />
+                    <Tag size="medium" onClick={(evt) => handleClickDeleteLang(evt, language)} color="danger" remove renderAs="a" />
                   </Tag.Group>
                 </Form.Control>
               </Columns.Column>
