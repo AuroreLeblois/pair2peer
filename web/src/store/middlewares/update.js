@@ -1,22 +1,25 @@
 /* eslint-disable no-fallthrough */
 import axios from 'axios';
-import { actions } from 'src/store/actions';
+import { actions, updateUser } from 'src/store/actions';
 import { API_URI } from 'src/store/utils';
 
 export default (store) => (next) => (action) => {
   switch (action.type) {
-    case actions.UPDATE_PROFILE: {
-      // const { data } = action;
+    case actions.SUBMIT_UPDATE_LANG: {
+      const { data } = action;
       axios.patch(
-        `${API_URI}/update/profile`,
-        // data,
+        `${API_URI}/profile/languages`,
+        data,
         { withCredentials: true },
       )
         .then((res) => {
-          console.log(res);
+          console.log(res.data);
+          const data = res.data[0];
+          store.dispatch(updateUser(data));
+          sessionStorage.user = JSON.stringify(data);
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err.response);
         });
       return;
     }

@@ -66,7 +66,7 @@ const App = () => {
       });
   };
 
-  useEffect(getFilters, []);
+  useEffect(getFilters);
 
 
   return (
