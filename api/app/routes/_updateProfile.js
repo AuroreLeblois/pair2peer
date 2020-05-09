@@ -258,13 +258,9 @@ module.exports = {
                         },
                         validate: {
                             payload: Joi.object({
-                                // email:Joi.string().email(),
-                                language: Joi.array().items(Joi.string()),
-                                it_language: Joi.array().items(Joi.object({
-                                    name: Joi.string(),
-                                    level: Joi.number().min(0).max(10),
-                                    search: Joi.boolean()
-                                    }))
+                               
+                                language: Joi.string(),
+                              
                             }),
                         },
 
@@ -274,19 +270,15 @@ module.exports = {
             handler: async (request, h) => {
                 //les langues
                 const email= request.state.cookie.email;
-                // const email= request.payload.email;
                 const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
                 const userID= result.rows[0].id;
-                const key= Object.keys(request.payload);
-                const value= Object.values(request.payload);
                 const language=request.payload.language;
-                const it_language= request.payload.it_language;
-        //          //si l'utilisateur rentre une langue
-                 if(key[0]&&key[0].length>0){
-                 for(let i=0;i<language.length;i++){
-                        const langExists= await db.query(`SELECT id 
+
+        
+                
+                        const langExists= await db.query(`SELECT * 
                                                       FROM lang
-                                                      WHERE "name" =$1`, [language[i]]);
+                                                      WHERE "name" =$1`, [language]);
                         const langID= langExists.rows[0].id;
                         const userKnowsLang= await db.query(`SELECT usr_id, lang_id 
                                                             FROM usr_speaks_lang
@@ -294,27 +286,85 @@ module.exports = {
                                                            
                         if(!userKnowsLang.rows[0]){
                         await db.query(`INSERT INTO usr_speaks_lang (usr_id, lang_id) 
-                                        VALUES ($1, $2)`,[userID,langID]);
-                        console.log('insert ok');
+                                        VALUES ($1, $2);`,[userID,langID]);
+                        }
+                        const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
+                         return newUser.rows;
+                    }
+                });
+                    
+                
+
+                 server.route({
+                    method: 'DELETE',
+                    path: '/profile/languages/{language}',
+                    options: {
+                        auth: {
+                            strategy: 'base',
+                            mode: 'required',
+                            scope: ['user', 'admin']
+                        },
+                        validate: {
+                            params: Joi.object({
+                                // email:Joi.string().email(),
+                                language: Joi.string(),
+                                // it_language: Joi.array().items(Joi.object({
+                                //     name: Joi.string(),
+                                //     level: Joi.number().min(0).max(10),
+                                //     search: Joi.boolean()
+                                //     }))
+                            }),
+                        },
+                        handler: async (request, h) => {
+                            const email= request.state.cookie.email;
+                            const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
+                            const userID= result.rows[0].id;
+                            const language=request.params.language;
+                            const langExists= await db.query(`SELECT * 
+                                                      FROM lang
+                                                      WHERE "name" =$1`, [language]);
+                             const langID= langExists.rows[0].id;
+                            await db.query(`DELETE FROM usr_speaks_lang
+                            where usr_id=$1
+                            AND lang_id=$2`,[userID,langID]);
+                            const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
+                return newUser.rows;
                         }
                     }
-                 }
-                 else if(key[0].length=0){
-                     await db.query(`DELETE FROM usr_speaks_lang
-                                    where usr_id=$1`,[userID])
-                 }
-                
-            
-                    
-    //pour le test email=>key[2]
-        //les it
-        if(key[1]&&key[1].length>0){
-                // //si l'utilisateur entre un it langage => insert//update user knows it lang
-                for(let i=0;i<it_language.length;i++){
-                    
-                        const itLangExists = await db.query(`SELECT id 
+                });
+                server.route({
+                    method: 'PATCH',
+                    path: '/profile/it_languages',
+                    options: {
+                        auth: {
+                            strategy: 'base',
+                            mode: 'required',
+                            scope: ['user', 'admin']
+                        },
+                        validate: {
+                            payload: Joi.object({
+                               
+                                // language: Joi.string(),
+                                it_language: Joi.array().items(Joi.object({
+                                    name: Joi.string(),
+                                    level: Joi.number().min(0).max(10),
+                                    search: Joi.boolean()
+                                    }))
+                            }),
+                        },
+
+                        description: 'handle update user profile it-lang',
+                tags: ['api', 'profile', 'validation']
+            },
+            handler: async (request, h) => {
+                const email= request.state.cookie.email;
+                            const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
+                            const userID= result.rows[0].id;
+                  const it_language= request.payload.it_language;
+        //les it        
+                        const itLangExists = await db.query(`SELECT *
                                                         FROM it_lang
-                                                        WHERE "name" = $1`, [it_language[i].name]);
+                                                        WHERE "name" = $1`, [it_language.name]);
                         const itLangID= itLangExists.rows[0].id;
 
     
@@ -327,7 +377,7 @@ module.exports = {
                         if(!userKnowsIt.rows[0]){
                             await db.query(`INSERT INTO usr_knows_it_lang (usr_id, it_lang_id, "level", search) 
                             VALUES ($1, $2, $3, $4)`,
-                            [userID, itLangID, it_language[i].level, it_language[i].search]);
+                            [userID, itLangID, it_language.level, it_language.search]);
                         }
                 //         //si résultat
                         else{
@@ -335,17 +385,53 @@ module.exports = {
                                             SET "level"= $1, search=$2
                                             WHERE usr_id=$3
                                             AND it_lang_id =$4`,
-                                            [it_language[i].level,it_language[i].search, userID,itLangID]);
-                        }}
-                 }
-                 else if(key[1].length=0){
-                    await db.query(`DELETE FROM usr_knows_it_lang
-                                   where usr_id=$1`,[userID])
-                }
+                                            [it_language.level,it_language.search, userID,itLangID]);
+                        }
+                    
+                
+                  
+                
                 const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
-                return newUser;
+                return newUser.rows;
             }
            
                 });
+                server.route({
+                    method: 'DELETE',
+                    path: '/profile/it_languages/{it_language}',
+                    options: {
+                        auth: {
+                            strategy: 'base',
+                            mode: 'required',
+                            scope: ['user', 'admin']
+                        },
+                        validate: {
+                            params: Joi.object({
+                                // email:Joi.string().email(),
+                                // language: Joi.string(),
+                                it_language: Joi.string(),
+                            }),
+                        },
+                        description: 'handle delete user profile it-lang',
+                        tags: ['api', 'profile', 'deletion']
+                    },
+
+                        handler: async (request, h) => {
+                            const email= request.state.cookie.email;
+                            const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
+                            const userID= result.rows[0].id;
+                            const itLangExists = await db.query(`SELECT *
+                                                        FROM it_lang
+                                                        WHERE "name" = $1`, [it_language.name]);
+                        const itLangID= itLangExists.rows[0].id;
+                    await db.query(`DELETE FROM usr_knows_it_lang
+                                    where usr_id=$1
+                                    AND it_lang=$2;`,[userID,itLangID]);
+                                    const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
+                                    return newUser.rows;
+                        }
+                    });
+                
                 }
-        }
+            }
+        
