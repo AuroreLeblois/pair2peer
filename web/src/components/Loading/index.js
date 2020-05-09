@@ -1,14 +1,16 @@
 import React from 'react';
-import { Segment, Dimmer, Loader, Image } from 'semantic-ui-react';
+import { Modal, Section, Heading } from 'react-bulma-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const Loading = () => (
-  <Segment>
-    <Dimmer active inverted>
-      <Loader inverted content="Patientez" />
-    </Dimmer>
-
-    <Image src="https://react.semantic-ui.com/images/wireframe/short-paragraph.png" />
-  </Segment>
+  <Modal closeOnBlur={false} closeOnEsc={false} showClose={false} show>
+    <Modal.Content>
+      <Section style={{ backgroundColor: 'white' }}>
+        <FontAwesomeIcon size="xs" icon={faSpinner} />
+      </Section>
+    </Modal.Content>
+  </Modal>
 );
 
 export default Loading;

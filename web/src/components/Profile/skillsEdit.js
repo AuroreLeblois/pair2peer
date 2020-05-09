@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
 
 // == Import components
+import Loading from 'src/components/Loading';
 import ModalAddIt from './Modals/modalAddIt';
 import ModalAddLang from './Modals/modalAddLang';
 import ModalEditIT from './Modals/modalEditIt';
@@ -13,7 +14,7 @@ import ModalEditIT from './Modals/modalEditIt';
 // == Composant
 const SkillsEdit = () => {
   let key = 1;
-  const { user } = useSelector((state) => state);
+  const { user, loading } = useSelector((state) => state);
 
   // States required for modal info
   const [modalIt, setModalIt] = useState(false);
@@ -81,31 +82,34 @@ const SkillsEdit = () => {
     return null;
   };
 
-  return (
-    <>
-      <Columns.Column>
-        <Button.Group position="centered">
-          <Button renderAs="a" onClick={() => setModalIt(true)} color="danger">Ajouter une compétence</Button>
-          <Button renderAs="a" onClick={() => setModalLang(true)} color="danger">Ajouter une langue</Button>
-        </Button.Group>
-        <Columns.Column />
-        <Container>
-          <Content style={{ textAlign: 'center' }}>
-            <Heading renderAs="p" size={5}>Compétences</Heading>
-          </Content>
-          <ItLanguages />
+  if (!loading) {
+    return (
+      <>
+        <Columns.Column>
+          <Button.Group position="centered">
+            <Button renderAs="a" onClick={() => setModalIt(true)} color="danger">Ajouter une compétence</Button>
+            <Button renderAs="a" onClick={() => setModalLang(true)} color="danger">Ajouter une langue</Button>
+          </Button.Group>
           <Columns.Column />
-          <Content style={{ textAlign: 'center' }}>
-            <Heading renderAs="p" size={5}>Langues</Heading>
-          </Content>
-          <Languages />
-        </Container>
-      </Columns.Column>
-      <ModalAddIt modalIt={modalIt} itClicked={itClicked} setModalIt={setModalIt} />
-      <ModalEditIT itClicked={itClicked} editIt={editIt} setEditIt={setEditIt} setItClicked={setItClicked} />
-      <ModalAddLang modalLang={modalLang} setModalLang={setModalLang} />
-    </>
-  );
+          <Container>
+            <Content style={{ textAlign: 'center' }}>
+              <Heading renderAs="p" size={5}>Compétences</Heading>
+            </Content>
+            <ItLanguages />
+            <Columns.Column />
+            <Content style={{ textAlign: 'center' }}>
+              <Heading renderAs="p" size={5}>Langues</Heading>
+            </Content>
+            <Languages />
+          </Container>
+        </Columns.Column>
+        <ModalAddIt modalIt={modalIt} itClicked={itClicked} setModalIt={setModalIt} />
+        <ModalEditIT itClicked={itClicked} editIt={editIt} setEditIt={setEditIt} setItClicked={setItClicked} />
+        <ModalAddLang modalLang={modalLang} setModalLang={setModalLang} />
+      </>
+    );
+  }
+  return <Loading />;
 };
 
 // == Export
