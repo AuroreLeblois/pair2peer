@@ -164,21 +164,20 @@ module.exports = {
                 //avant on vérifie que les input "required" sont conformes
                 if(city!==null&& country!==null && remote!==null
                     ||city!== undefined&& country!== undefined&& remote!== undefined){
-                        console.log(`attention je rentre dans la vérification de la ville et du pays`)
+ 
                     //ensuite on vérifie si ce qui a été saisie diffère des données existantes
                     if(city!==userCity &&country!==userCountry
                         ||country==userCountry&& city!==userCity
                         ||city==userCity&&country!==userCountry){
-                            console.log(`je lance la requete vers l'api`)
+
                         const api= await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}&apiKey=${APIKEY}`,{
                             json:true
                         });
-                        console.log(`j'ai vérifié la requête à l'api`)
+
                         const latitude= api.payload.items[0].position.lat;
                         console.log(latitude);
                         const longitude= api.payload.items[0].position.lng;
-                        console.log(longitude);
-                        console.log(birthyear);
+
                         const detailExist= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
                         //il n'existe pas=> on insert
                          if(!detailExist.rows[0]){
