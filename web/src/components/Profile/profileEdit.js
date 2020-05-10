@@ -108,7 +108,7 @@ const ProfileEdit = () => {
                   <Form.Radio onChange={handleChange} checked={userInfos.disponibility === 5 || userInfos.disponibility === '5' } value="5" name="disponibility">
                     5h
                   </Form.Radio>
-                  <Form.Radio onChange={handleChange} checked={userInfos.disponibility === 10  || userInfos.disponibility === '10' } value="10" name="disponibility">
+                  <Form.Radio onChange={handleChange} checked={userInfos.disponibility === 10 || userInfos.disponibility === '10' } value="10" name="disponibility">
                     10h
                   </Form.Radio>
                   <Form.Radio onChange={handleChange} checked={userInfos.disponibility === 20 || userInfos.disponibility === '20' } value="20" name="disponibility">
