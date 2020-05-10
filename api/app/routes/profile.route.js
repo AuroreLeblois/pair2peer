@@ -24,7 +24,21 @@ module.exports = {
                 const email = request.state.cookie.email;
                 const user = await db.query(`SELECT * FROM usr_profile WHERE email = $1`, [email]);
                 // no need to check if the user exist, because if the user want to access this path, he have to be logged
+                const userID= user.rows[0].id;
                 //delete old chat room
+                const oldChat= await db.query(`SELECT * FROM all_my_message_in_chat 
+                                                WHERE usr_id=$1
+                                                ORDER BY date DESC;`,[userID]);
+                const chatToDelete= oldChat.rows[0].date;
+                const newChat= await db.query(`SELECT * FROM all_my_message_in_chat 
+                                                WHERE chat_id=$1
+                                                ORDER BY date ASC;`,[oldChat.rows[0].chat_id]);
+                const mostRecentMes= newChat.rows[0].date;
+                const interval=((chatToDelete-mostRecentMes)/1000)/60;
+                const limit= 43800;
+                if(interval>limit){
+                    await db.query(`DELETE FROM chat WHERE id=$1;`,[oldChat.rows[0].chat_id]);
+                }
                 const userChatRoom= await db.query(`SELECT DISTINCT chat_serial, chat_id FROM all_my_message_in_chat WHERE usr_id=$1`,[user.rows[0].id])
                 return [user.rows[0],userChatRoom.rows];
             }
