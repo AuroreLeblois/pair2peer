@@ -4,6 +4,8 @@
     "checkbox": "^0.0.1",
     "leaflet-markercluster": "^0.2.2",
     "leaflet.markercluster": "^1.4.1",
-    "omit": "^1.0.1"
+    "omit": "^1.0.1",
+    "react-dom": "^16.13.1",
+    "react-leaflet": "^2.7.0"
   }
 }
