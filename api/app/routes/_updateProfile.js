@@ -234,9 +234,9 @@ module.exports = {
                             const newResult = await db.query(`SELECT * FROM usr WHERE "id" = $1` ,[userID]);
                             const newProfile= await db.query(`SELECT * FROM usr_profile WHERE pseudo=$1 `,[newResult.rows[0].pseudo]);
                             const newPlace= await db.query(`SELECT * FROM usr_map WHERE pseudo=$1`, [newResult.rows[0].pseudo]);
-                            const newPl= newPlace.rows[0];
+                            // const newPl= newPlace.rows[0];
                             const newPro= newProfile.rows[0];
-                            return  {newPl, newPro};
+                            return  {newPro};
                         }
                         //si le champs est vide=> ne rien faire
                     }
