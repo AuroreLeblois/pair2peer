@@ -41,7 +41,10 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         filters: action.filters,
-        usersData: action.maxUser,
+        usersData: {
+          ...state.usersData,
+          maxUser: action.maxUser,
+        },
       };
     }
     case actions.SUBMIT_FILTERS_SEARCH: {
