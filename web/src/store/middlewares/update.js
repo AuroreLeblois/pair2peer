@@ -67,9 +67,8 @@ export default (store) => (next) => (action) => {
       )
         .then((res) => {
           console.log(res.data);
-          // const data = res.data[0];
-          // store.dispatch(updateUser(data));
-          // sessionStorage.user = JSON.stringify(data);
+          store.dispatch(updateUser(data));
+          sessionStorage.user = JSON.stringify(data);
         })
         .catch((err) => {
           console.log(err);
@@ -85,8 +84,8 @@ export default (store) => (next) => (action) => {
         { withCredentials: true },
       )
         .then((res) => {
-          console.log(res.data);
-          const data = res.data[0];
+          console.log(res.data.newPro);
+          const data = res.data.newPro;
           store.dispatch(updateUser(data));
           sessionStorage.user = JSON.stringify(data);
         })
