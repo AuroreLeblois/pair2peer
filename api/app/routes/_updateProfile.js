@@ -310,8 +310,8 @@ module.exports = {
                               
                             }),
                         },  
-                        description: 'handle update user profile lang',
-                        tags: ['api', 'profile', 'validation']
+                        description: 'handle delete user profile lang',
+                        tags: ['api', 'profile', 'delete']
                     },
                         handler: async (request, h) => {
                             const email= request.state.cookie.email;
@@ -320,13 +320,14 @@ module.exports = {
                             const language=request.params.language;
                             const langExists= await db.query(`SELECT * 
                                                       FROM lang
-                                                      WHERE "name" =$1`, [language]);
+                                                      WHERE "name" =$1;`, [language]);
                              const langID= langExists.rows[0].id;
                             await db.query(`DELETE FROM usr_speaks_lang
-                            where usr_id=$1
-                            AND lang_id=$2`,[userID,langID]);
-                            const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
-                return newUser.rows;
+                                            where usr_id=$1
+                                            AND lang_id=$2;`,[userID,langID]);
+                            const newUser=await db.query(`SELECT * FROM usr_profile 
+                                                            WHERE id=$1;`,[userID]);
+                                return newUser.rows;
                         }
                     
                 });
@@ -391,9 +392,11 @@ module.exports = {
                 
                 const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
                 return newUser.rows;
-            }
+                 }
            
                 });
+
+
                 server.route({
                     method: 'DELETE',
                     path: '/profile/it_languages/{it_language}',
@@ -405,8 +408,6 @@ module.exports = {
                         },
                         validate: {
                             params: Joi.object({
-                                // email:Joi.string().email(),
-                                // language: Joi.string(),
                                 it_language: Joi.string(),
                             }),
                         },
