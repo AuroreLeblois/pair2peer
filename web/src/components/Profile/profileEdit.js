@@ -105,13 +105,13 @@ const ProfileEdit = () => {
               <Form.Field>
                 <Form.Label>Combien de temps êtes-vous disponible pour travailler ? (par semaine)</Form.Label>
                 <Form.Control>
-                  <Form.Radio onChange={handleChange} checked={userInfos.disponibility === 5} value="5" name="disponibility">
+                  <Form.Radio onChange={handleChange} checked={userInfos.disponibility === 5 || userInfos.disponibility === '5' } value="5" name="disponibility">
                     5h
                   </Form.Radio>
-                  <Form.Radio onChange={handleChange} checked={userInfos.disponibility === 10} value="10" name="disponibility">
+                  <Form.Radio onChange={handleChange} checked={userInfos.disponibility === 10  || userInfos.disponibility === '10' } value="10" name="disponibility">
                     10h
                   </Form.Radio>
-                  <Form.Radio onChange={handleChange} checked={userInfos.disponibility === 20} value="20" name="disponibility">
+                  <Form.Radio onChange={handleChange} checked={userInfos.disponibility === 20 || userInfos.disponibility === '20' } value="20" name="disponibility">
                     Plus de 20h
                   </Form.Radio>
                 </Form.Control>
