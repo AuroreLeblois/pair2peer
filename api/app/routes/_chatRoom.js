@@ -58,7 +58,7 @@ module.exports = {
                          const messages= await db.query(`SELECT * FROM all_my_message_in_chat
                                                          WHERE chat_id=$1
                                                          ORDER BY "date" ASC;`,[chatExists.rows[0].id]);
-                        return h.response(messages.rows[0]).code(200);
+                        return h.response(messages.rows).code(200);
                      }
                
             }
