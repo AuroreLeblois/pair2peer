@@ -21,7 +21,6 @@ export default (store) => (next) => (action) => {
         .catch((err) => {
           console.log(err.response);
         });
-      return;
     }
     case actions.DELETE_LANG: {
       const { language } = action;
@@ -57,6 +56,40 @@ export default (store) => (next) => (action) => {
           console.log(err.response);
         });
       return;
+    }
+    case actions.DELETE_IT_LANG: {
+      const { itLanguage } = action;
+      axios.delete(
+        `${API_URI}/profile/it_languages/${itLanguage}`,
+        { withCredentials: true },
+      )
+        .then((res) => {
+          console.log(res.data);
+          const data = res.data[0];
+          store.dispatch(updateUser(data));
+          sessionStorage.user = JSON.stringify(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    case actions.UPDATE_USER: {
+      const { data } = action;
+      console.log(data);
+      axios.patch(
+        `${API_URI}/update/profile`,
+        data,
+        { withCredentials: true },
+      )
+        .then((res) => {
+          console.log(res.data);
+          const data = res.data[0];
+          store.dispatch(updateUser(data));
+          sessionStorage.user = JSON.stringify(data);
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
     }
     default: {
       next(action);

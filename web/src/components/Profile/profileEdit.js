@@ -1,21 +1,30 @@
 // == Import npm
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { firstLetterToUppercase } from 'src/store/utils';
-import { Columns, Container, Heading, Form, Button, Modal, Section } from 'react-bulma-components';
+import { Columns, Container, Heading, Form, Button, Modal, Section, Icon } from 'react-bulma-components';
+import { actions, updateUser } from 'src/store/actions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithub, faFacebook, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 // == Composant
 const ProfileEdit = () => {
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state);
   const [openModal, setOpenModal] = useState(false);
   const [userInfos, setUserInfos] = useState({
     pseudo: user.pseudo,
     email: user.email,
     password: '',
-    passwordConfirm: '',
+    validatePassword: '',
     city: firstLetterToUppercase(user.city),
     country: firstLetterToUppercase(user.country),
     remote: user.remote,
+    description: user.description,
+    disponibility: user.disponibility,
+    linkedinLink: user.linkedinLink,
+    facebook_link: user.facebook_link,
+    github_link: user.github_link,
   });
 
   const handleChange = ({ target }) => {
@@ -24,7 +33,9 @@ const ProfileEdit = () => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    console.log(userInfos);
+    userInfos.remote = userInfos.remote === 'true' ? true : false;
+    dispatch(updateUser(userInfos));
+    dispatch({ type: actions.SET_LOADER });
     setOpenModal(false);
   };
 
@@ -36,14 +47,14 @@ const ProfileEdit = () => {
             <Form.Field>
               <Form.Field.Body>
                 <Form.Field>
+                  <Form.Label>Pseudo</Form.Label>
                   <Form.Control>
-                    <Form.Label>Pseudo</Form.Label>
-                    <Form.Input value={userInfos.pseudo} name="name" onChange={handleChange} />
+                    <Form.Input value={userInfos.pseudo} name="pseudo" onChange={handleChange} />
                   </Form.Control>
                 </Form.Field>
                 <Form.Field>
+                  <Form.Label>Email</Form.Label>
                   <Form.Control>
-                    <Form.Label>Email</Form.Label>
                     <Form.Input value={userInfos.email} name="email" type="email" onChange={handleChange} />
                   </Form.Control>
                 </Form.Field>
@@ -53,15 +64,15 @@ const ProfileEdit = () => {
             <Form.Field>
               <Form.Field.Body>
                 <Form.Field>
+                  <Form.Label>Mot de passe</Form.Label>
                   <Form.Control>
-                    <Form.Label>Mot de passe</Form.Label>
                     <Form.Input value={userInfos.password} name="password" type="password" onChange={handleChange} />
                   </Form.Control>
                 </Form.Field>
                 <Form.Field>
+                  <Form.Label>Confirmer le mot de passe</Form.Label>
                   <Form.Control>
-                    <Form.Label>Confirmer le mot de passe</Form.Label>
-                    <Form.Input value={userInfos.passwordConfirm} name="passwordConfirm" type="password" onChange={handleChange} />
+                    <Form.Input value={userInfos.passwordConfirm} name="validatePassword" type="password" onChange={handleChange} />
                   </Form.Control>
                 </Form.Field>
               </Form.Field.Body>
@@ -70,28 +81,75 @@ const ProfileEdit = () => {
             <Form.Field>
               <Form.Field.Body>
                 <Form.Field>
+                  <Form.Label>Ville</Form.Label>
                   <Form.Control>
-                    <Form.Label>Ville</Form.Label>
                     <Form.Input value={userInfos.city} name="city" type="text" onChange={handleChange} />
                   </Form.Control>
                 </Form.Field>
                 <Form.Field>
+                  <Form.Label>Pays</Form.Label>
                   <Form.Control>
-                    <Form.Label>Pays</Form.Label>
                     <Form.Input value={userInfos.country} name="country" type="text" onChange={handleChange} />
                   </Form.Control>
                 </Form.Field>
               </Form.Field.Body>
             </Form.Field>
             <Form.Field>
+              <Form.Label>Combien de temps êtes-vous disponible pour travailler ? (par semaine)</Form.Label>
+              <Form.Control>
+                <Form.Radio onChange={handleChange} checked={userInfos.disponibility === '5'} value="5" name="disponibility">
+                  5h
+                </Form.Radio>
+                <Form.Radio onChange={handleChange} checked={userInfos.disponibility === '10'} value="10" name="disponibility">
+                  10h
+                </Form.Radio>
+                <Form.Radio onChange={handleChange} checked={userInfos.disponibility === '20'} value="20" name="disponibility">
+                  Plus de 20h
+                </Form.Radio>
+              </Form.Control>
+            </Form.Field>
+            <Form.Field>
               <Form.Label>Comment souhaitez-vous travailler ?</Form.Label>
               <Form.Control>
-                <Form.Radio onChange={handleChange} checked={userInfos.remote === true} value="true" name="remote">
+                <Form.Radio onChange={handleChange} checked={userInfos.remote === true || userInfos.remote === 'true'} value="true" name="remote">
                   Remote
                 </Form.Radio>
-                <Form.Radio onChange={handleChange} checked={userInfos.remote === false} value="false" name="remote">
+                <Form.Radio onChange={handleChange} checked={userInfos.remote === false || userInfos.remote === 'false'} value="false" name="remote">
                   Rencontre
                 </Form.Radio>
+              </Form.Control>
+            </Form.Field>
+            <Form.Field>
+              <Form.Label>Description</Form.Label>
+              <Form.Control>
+                <Form.Textarea placeholder="Présentez-vous ..." value={userInfos.description} name="description" />
+              </Form.Control>
+            </Form.Field>
+            <Form.Field>
+              <Form.Label>Profil GitHub</Form.Label>
+              <Form.Control iconLeft>
+                <Form.Input value={userInfos.github_link} name="github_link" type="text" onChange={handleChange} />
+                <Icon align="left" color="dark">
+                  <FontAwesomeIcon size="lg" icon={faGithub} />
+                </Icon>
+              </Form.Control>
+            </Form.Field>
+            <Form.Field>
+              <Form.Label>Profil LinkedIn</Form.Label>
+              <Form.Control iconLeft>
+                <Form.Input value={userInfos.linkedinLink} name="linkedinLink" type="text" onChange={handleChange} />
+                <Icon align="left" color="dark">
+                  <FontAwesomeIcon size="lg" icon={faLinkedin} />
+                </Icon>
+              </Form.Control>
+            </Form.Field>
+            <Form.Field>
+              <Form.Label>Profil Facebook</Form.Label>
+              <Form.Control iconLeft>
+                <Form.Input value={userInfos.facebook_link} name="facebook_link" type="text" onChange={handleChange} />
+                <Icon align="left" color="dark">
+                  <FontAwesomeIcon size="lg" icon={faFacebook} />
+                </Icon>
               </Form.Control>
             </Form.Field>
             <Button.Group position="right">
