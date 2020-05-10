@@ -58,7 +58,7 @@ module.exports = {
                         country: Joi.string().required(),
                         description: Joi.string().allow(''),
                         disponibility: Joi.number(),
-                        linkedinLink: Joi.string().allow(''),
+                        linkedin_link: Joi.string().allow(''),
                         facebook_link: Joi.string().allow(''),
                         github_link: Joi.string().allow(''),
                         // languages: Joi.array().items(Joi.string()),
@@ -93,7 +93,7 @@ module.exports = {
                 // const changeMyEmail= request.payload.email;
                 // const validateEmail= request.payload.validateEmail;
                 const pseudo= request.payload.pseudo;
-                const linkedinLink=request.payload.linkedinLink;
+                const linkedin_link=request.payload.linkedin_link;
                 const facebook_link= request.payload.facebook_link;
                 const github_link= request.payload.github_link;
                 //les langues
@@ -184,7 +184,7 @@ module.exports = {
                              console.log(`je n'ai pas trouvé de correspondance=>j'insère`)
                              await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id, picture, description,  latitude, longitude, disponibility, linkedin_link, facebook_link, github_link)
                                             VALUES ($1 , $2 , $3 , $4 , $5 , $6, $7, $8, $9,$10,$11, $12);`
-                                            ,[city, country, remote, userID, picture, description, latitude, longitude, disponibility, linkedinLink, facebook_link,github_link]);
+                                            ,[city, country, remote, userID, picture, description, latitude, longitude, disponibility, linkedin_link, facebook_link,github_link]);
                     }//sinon on update
                          else{
                              console.log(`j'ai trouvé une correspondance=>j'update`)
@@ -202,7 +202,7 @@ module.exports = {
                                             github_link=$11
                                             WHERE usr_id=$12`,
                                             [city, country, remote, picture, description, 
-                                             latitude, longitude,disponibility,linkedinLink, facebook_link,github_link,userID]);
+                                             latitude, longitude,disponibility,linkedin_link, facebook_link,github_link,userID]);
                                         };
                     
                     }
