@@ -26,3 +26,7 @@ input[type=radio] {
 .navbar-link:not(.is-arrowless):after {
   border-color: #FF2B56;
 }
+
+.profile-iconic {
+  padding-right: 1rem;
+}

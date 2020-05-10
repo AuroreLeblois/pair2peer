@@ -1,11 +1,14 @@
 // == Import npm
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import useInputChange from 'src/store/hooks/useInputChange';
 import { Form, Heading, Button, Modal, Section, Columns } from 'react-bulma-components';
+import { submitUpdateIt, actions } from 'src/store/actions';
 
 
 const ModalAddIt = ({ modalIt, itClicked, setModalIt }) => {
+  const dispatch = useDispatch();
+
   const { user, filters } = useSelector((state) => state);
 
   const [input, handleInputChange] = useInputChange();
@@ -48,8 +51,12 @@ const ModalAddIt = ({ modalIt, itClicked, setModalIt }) => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
+    const data = {};
     input.search = true;
-    console.log(input);
+    data.it_language = [input];
+    dispatch(submitUpdateIt(data));
+    dispatch({ type: actions.SET_LOADER });
+    setModalIt(false);
   };
 
   return (
