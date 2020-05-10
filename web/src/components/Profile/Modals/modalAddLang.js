@@ -22,7 +22,7 @@ const ModalAddLang = ({ modalLang, setModalLang }) => {
     return null;
   };
 
-  const handleSubmit = (evt) => {
+  const handleSubmitAddLang = (evt) => {
     evt.preventDefault();
     dispatch(submitUpdateLang(input));
     dispatch({ type: actions.SET_LOADER });
@@ -34,7 +34,7 @@ const ModalAddLang = ({ modalLang, setModalLang }) => {
       <Modal.Content>
         <Section style={{ backgroundColor: 'white' }}>
           <Heading renderAs="p" size={5}>Ajouter une langue</Heading>
-          <form onSubmit={handleSubmit}>
+          <form>
             <Form.Field>
               <Form.Control>
                 <Form.Label>Langue</Form.Label>
@@ -46,7 +46,7 @@ const ModalAddLang = ({ modalLang, setModalLang }) => {
             </Form.Field>
             <Button.Group position="right">
               <Button type="button" onClick={() => setModalLang(false)} color="danger">Annuler</Button>
-              <Button type="submit" color="success">Valider</Button>
+              <Button onClick={handleSubmitAddLang} type="submit" color="success">Valider</Button>
             </Button.Group>
           </form>
         </Section>

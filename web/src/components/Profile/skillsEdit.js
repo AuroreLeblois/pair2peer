@@ -111,7 +111,7 @@ const SkillsEdit = () => {
           <Heading renderAs="p" size={5}>Êtes-vous sur ?</Heading>
           <Button.Group position="right">
             <Button onClick={() => setModalConfirm(false)} color="danger">Annuler</Button>
-            <Button onClick={(modalChoice === 'language') ? (evt) => handleClickDeleteLang(evt, modalSelectedValue) : (evt) => handleClickDeleteIt(evt, modalSelectedValue)} type="submit" color="success">Valider</Button>
+            <Button onClick={(modalChoice === 'language') ? (evt) => handleClickDeleteLang(evt, modalSelectedValue) : (evt) => handleClickDeleteIt(evt, modalSelectedValue)} color="success">Valider</Button>
           </Button.Group>
         </Section>
       </Modal.Content>

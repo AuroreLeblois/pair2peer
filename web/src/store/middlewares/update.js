@@ -21,6 +21,7 @@ export default (store) => (next) => (action) => {
         .catch((err) => {
           console.log(err.response);
         });
+      return;
     }
     case actions.DELETE_LANG: {
       const { language } = action;
@@ -37,6 +38,7 @@ export default (store) => (next) => (action) => {
         .catch((err) => {
           console.log(err);
         });
+      return;
     }
     case actions.UPDATE_IT_LANG: {
       const { data } = action;
@@ -72,6 +74,7 @@ export default (store) => (next) => (action) => {
         .catch((err) => {
           console.log(err);
         });
+      return;
     }
     case actions.UPDATE_PROFILE: {
       const { data } = action;
@@ -91,6 +94,7 @@ export default (store) => (next) => (action) => {
           console.log(err);
           console.log(err.response);
         });
+      return;
     }
     default: {
       next(action);

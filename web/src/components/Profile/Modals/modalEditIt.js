@@ -44,7 +44,7 @@ const ModalEditIT = ({ itClicked, setItClicked, editIt, setEditIt }) => {
     setItClicked();
   };
 
-  const handleSubmit = (evt) => {
+  const handleSubmitIt = (evt) => {
     evt.preventDefault();
     const data = {};
     input.name = itClicked;
@@ -60,7 +60,7 @@ const ModalEditIT = ({ itClicked, setItClicked, editIt, setEditIt }) => {
       <Modal.Content>
         <Section style={{ backgroundColor: 'white' }}>
           <Heading renderAs="p" size={5}>{(itClicked) ? `Editer ${itClicked}` : null }</Heading>
-          <form onSubmit={handleSubmit}>
+          <form>
             <Columns.Column>
               <Form.Field>
                 <Form.Field.Body>
@@ -83,7 +83,7 @@ const ModalEditIT = ({ itClicked, setItClicked, editIt, setEditIt }) => {
             </Columns.Column>
             <Button.Group position="right">
               <Button type="button" onClick={closeModal} color="danger">Annuler</Button>
-              <Button type="submit" color="success">Valider</Button>
+              <Button onClick={handleSubmitIt} color="success">Valider</Button>
             </Button.Group>
           </form>
         </Section>
