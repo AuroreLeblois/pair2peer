@@ -147,17 +147,12 @@ module.exports = {
                 //         error.push('invalid email')
                 //     }
                 // };
-                if(pseudo.length>0 && pseudo.toLowerCase()!==result.rows[0].pseudo){
+                if(pseudo.length>0 && pseudo!==result.rows[0].pseudo){
                        console
                     //oui mais le pseudo doit être unique
-                    console.log(`je rentre dans la vérification du pseudo`);
-                    console.log(pseudo.length);
-                    console.log(`le pseudo est: ${pseudo}`)
                     const pseudoExists= await db.query(`SELECT pseudo FROM usr WHERE pseudo= $1;` ,[pseudo]);
                     if(!pseudoExists.rows[0]){
-                        console.log(`aucun pseudo équivalent`);
                         await db.query(`UPDATE usr SET pseudo=$1 WHERE "id"=$2;`,[pseudo,userID]);
-                        console.log(`j'ai update le pseudo`);
                     }
                     //si le pseudo existe=> on le dit à l'utilisateur
                     else{
