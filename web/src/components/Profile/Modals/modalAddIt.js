@@ -49,7 +49,7 @@ const ModalAddIt = ({ modalIt, itClicked, setModalIt }) => {
     );
   };
 
-  const handleSubmit = (evt) => {
+  const handleSubmitAddIt = (evt) => {
     evt.preventDefault();
     const data = {};
     input.search = true;
@@ -64,7 +64,7 @@ const ModalAddIt = ({ modalIt, itClicked, setModalIt }) => {
       <Modal.Content>
         <Section style={{ backgroundColor: 'white' }}>
           <Heading renderAs="p" size={5}>Ajouter une compétence</Heading>
-          <form onSubmit={handleSubmit}>
+          <form>
             <Columns.Column>
               <Form.Field>
                 <Form.Field.Body>
@@ -90,7 +90,7 @@ const ModalAddIt = ({ modalIt, itClicked, setModalIt }) => {
             </Columns.Column>
             <Button.Group position="right">
               <Button type="button" onClick={() => setModalIt(false)} color="danger">Annuler</Button>
-              <Button type="submit" color="success">Valider</Button>
+              <Button onClick={handleSubmitAddIt} color="success">Valider</Button>
             </Button.Group>
           </form>
         </Section>

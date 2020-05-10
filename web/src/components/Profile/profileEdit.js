@@ -34,7 +34,7 @@ const ProfileEdit = () => {
     setUserInfos({ ...userInfos, [target.name]: target.value });
   };
 
-  const handleSubmit = (evt) => {
+  const handleSubmitEditProfile = (evt) => {
     evt.preventDefault();
     userInfos.remote = userInfos.remote === 'true' ? true : false;
     if (userInfos.disponibility) {
@@ -42,7 +42,6 @@ const ProfileEdit = () => {
     } else {
       userInfos.disponibility = 0;
     }
-    console.log(userInfos);
     dispatch(updateProfile(userInfos));
     dispatch({ type: actions.SET_LOADER });
     setOpenModal(false);
@@ -170,7 +169,7 @@ const ProfileEdit = () => {
                     <Heading renderAs="p" size={5}>Êtes-vous sur de vos informations ?</Heading>
                     <Button.Group position="right">
                       <Button onClick={() => setOpenModal(false)} color="danger">Annuler</Button>
-                      <Button onClick={handleSubmit} type="submit" color="success">Valider</Button>
+                      <Button onClick={handleSubmitEditProfile} color="success">Valider</Button>
                     </Button.Group>
                   </Section>
                 </Modal.Content>
