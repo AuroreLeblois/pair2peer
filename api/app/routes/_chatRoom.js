@@ -39,6 +39,7 @@ module.exports = {
                          return h.response(error).code(404);
                      }
                      else{
+                         const chatName= chatExists.rows[0].name;
                          //on verifie que le user soit dans la chatroom pour éviter les indésirables
                          const usrInChat= await db.query(`SELECT * FROM all_my_message_in_chat
                                                             WHERE usr_id=$1`,[me.rows[0].id]);
@@ -55,9 +56,12 @@ module.exports = {
                                             WHERE chat_id=$1
                                             AND (NOW()-"date")>'30 days`,[chatExists.rows[0].id]);
                         }
-                         const messages= await db.query(`SELECT * FROM all_my_message_in_chat
-                                                         WHERE chat_id=$1
-                                                         ORDER BY "date" ASC;`,[chatExists.rows[0].id]);
+                         const messages= await db.query(`SELECT date, usr_id, chat.chat_serial, name, message,pseudo, chat_id 
+                                                        FROM all_my_message_in_chat
+                                                        JOIN chat ON chat.chat_serial=all_my_message_in_chat.chat_serial
+                                                        WHERE chat_id=$1
+                                                        ORDER BY date ASC;`,[chatExists.rows[0].id]);
+        
                         return h.response(messages.rows).code(200);
                      }
                
