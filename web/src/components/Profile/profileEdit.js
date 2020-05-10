@@ -14,17 +14,19 @@ const ProfileEdit = () => {
   const [openModal, setOpenModal] = useState(false);
   const [userInfos, setUserInfos] = useState({
     pseudo: user.pseudo,
-    email: user.email,
+    email: '',
+    validateEmail: '',
     password: '',
     validatePassword: '',
-    city: firstLetterToUppercase(user.city),
-    country: firstLetterToUppercase(user.country),
+    city: user.city,
+    country: user.country,
     remote: user.remote,
-    description: user.description,
-    disponibility: user.disponibility,
-    linkedinLink: user.linkedinLink,
-    facebook_link: user.facebook_link,
-    github_link: user.github_link,
+    description: (user.description) ? user.description : '',
+    disponibility: (user.disponibility) ? user.disponibility : '',
+    linkedinLink: (user.linkedinLink) ? user.linkedinLink : '',
+    facebook_link: (user.facebook_link) ? user.facebook_link : '',
+    github_link: (user.github_link) ? user.github_link : '',
+    searchable: true,
   });
 
   const handleChange = ({ target }) => {
@@ -34,6 +36,10 @@ const ProfileEdit = () => {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     userInfos.remote = userInfos.remote === 'true' ? true : false;
+    if (userInfos.disponibility) {
+      userInfos.disponibility = parseInt(userInfos.disponibility, 10);
+    }
+    console.log(userInfos);
     dispatch(updateUser(userInfos));
     dispatch({ type: actions.SET_LOADER });
     setOpenModal(false);
@@ -55,12 +61,11 @@ const ProfileEdit = () => {
                 <Form.Field>
                   <Form.Label>Email</Form.Label>
                   <Form.Control>
-                    <Form.Input value={userInfos.email} name="email" type="email" onChange={handleChange} />
+                    <Form.Input disabled value={user.email} name="email" type="email" />
                   </Form.Control>
                 </Form.Field>
               </Form.Field.Body>
             </Form.Field>
-
             <Form.Field>
               <Form.Field.Body>
                 <Form.Field>
@@ -83,13 +88,13 @@ const ProfileEdit = () => {
                 <Form.Field>
                   <Form.Label>Ville</Form.Label>
                   <Form.Control>
-                    <Form.Input value={userInfos.city} name="city" type="text" onChange={handleChange} />
+                    <Form.Input value={firstLetterToUppercase(userInfos.city)} name="city" type="text" onChange={handleChange} />
                   </Form.Control>
                 </Form.Field>
                 <Form.Field>
                   <Form.Label>Pays</Form.Label>
                   <Form.Control>
-                    <Form.Input value={userInfos.country} name="country" type="text" onChange={handleChange} />
+                    <Form.Input value={firstLetterToUppercase(userInfos.country)} name="country" type="text" onChange={handleChange} />
                   </Form.Control>
                 </Form.Field>
               </Form.Field.Body>

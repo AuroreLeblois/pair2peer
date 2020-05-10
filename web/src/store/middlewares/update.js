@@ -83,9 +83,9 @@ export default (store) => (next) => (action) => {
       )
         .then((res) => {
           console.log(res.data);
-          const data = res.data[0];
-          store.dispatch(updateUser(data));
-          sessionStorage.user = JSON.stringify(data);
+          // const data = res.data[0];
+          // store.dispatch(updateUser(data));
+          // sessionStorage.user = JSON.stringify(data);
         })
         .catch((err) => {
           console.log(err.response);
