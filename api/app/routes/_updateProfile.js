@@ -50,8 +50,8 @@ module.exports = {
                         validatePassword: Joi.ref('password'),
                         pseudo: Joi.string().allow(''),
                         // firstEmail: Joi.string().email().required(),
-                        email: Joi.string().email().allow(''),
-                        validateEmail: Joi.string().email().allow(''),
+                        // email: Joi.string().email().allow(''),
+                        // validateEmail: Joi.string().email().allow(''),
                         searchable: Joi.boolean().required(),
                         remote: Joi.boolean().required(),
                         city: Joi.string().required(),
@@ -90,8 +90,8 @@ module.exports = {
                 const remote= request.payload.remote;
                 const description= request.payload.description;
                 const validatePassword= request.payload.validatePassword;
-                const changeMyEmail= request.payload.email;
-                const validateEmail= request.payload.validateEmail;
+                // const changeMyEmail= request.payload.email;
+                // const validateEmail= request.payload.validateEmail;
                 const pseudo= request.payload.pseudo;
                 const linkedinLink=request.payload.linkedinLink;
                 const facebook_link= request.payload.facebook_link;
@@ -128,25 +128,25 @@ module.exports = {
                     }
                     else{error.push(' Votre mot de passe doit faire 8 caractères minimum!')};
                 };
-                //l'email
-                //est-ce que le champs email est rempli et différent du cookie?
-                if(changeMyEmail.length>0
-                    &&changeMyEmail!==email&& changeMyEmail===validateEmail
-                    ){
-                    console.log('un email a été saisie et est différent+validation ok')
-                    //ok mais c'est un email?
-                    if(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(changeMyEmail)===true){
-                    //dans ce cas on va update le profil
-                    console.log(`c'est bien un email`)
-                    await db.query(`UPDATE usr 
-                    SET "email"=$1 
-                    WHERE "id"=$2`, [changeMyEmail, userID]);
-                    }
-                    //sinon on prévient l'user
-                    else{
-                        error.push('invalid email')
-                    }
-                };
+                // //l'email
+                // //est-ce que le champs email est rempli et différent du cookie?
+                // if(changeMyEmail.length>0
+                //     &&changeMyEmail!==email&& changeMyEmail===validateEmail
+                //     ){
+                //     console.log('un email a été saisie et est différent+validation ok')
+                //     //ok mais c'est un email?
+                //     if(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(changeMyEmail)===true){
+                //     //dans ce cas on va update le profil
+                //     console.log(`c'est bien un email`)
+                //     await db.query(`UPDATE usr 
+                //     SET "email"=$1 
+                //     WHERE "id"=$2`, [changeMyEmail, userID]);
+                //     }
+                //     //sinon on prévient l'user
+                //     else{
+                //         error.push('invalid email')
+                //     }
+                // };
                 if(pseudo.length>0 && pseudo.toLowerCase()!==result.rows[0].pseudo){
                        console
                     //oui mais le pseudo doit être unique
