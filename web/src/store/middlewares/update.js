@@ -21,6 +21,7 @@ export default (store) => (next) => (action) => {
         .catch((err) => {
           console.log(err.response);
         });
+      return;
     }
     case actions.DELETE_LANG: {
       const { language } = action;
@@ -37,6 +38,7 @@ export default (store) => (next) => (action) => {
         .catch((err) => {
           console.log(err);
         });
+      return;
     }
     case actions.UPDATE_IT_LANG: {
       const { data } = action;
@@ -72,8 +74,9 @@ export default (store) => (next) => (action) => {
         .catch((err) => {
           console.log(err);
         });
+      return;
     }
-    case actions.UPDATE_USER: {
+    case actions.UPDATE_PROFILE: {
       const { data } = action;
       console.log(data);
       axios.patch(
@@ -82,14 +85,16 @@ export default (store) => (next) => (action) => {
         { withCredentials: true },
       )
         .then((res) => {
-          console.log(res.data);
-          // const data = res.data[0];
-          // store.dispatch(updateUser(data));
-          // sessionStorage.user = JSON.stringify(data);
+          console.log(res.data.newPro);
+          const data = res.data.newPro;
+          store.dispatch(updateUser(data));
+          sessionStorage.user = JSON.stringify(data);
         })
         .catch((err) => {
+          console.log(err);
           console.log(err.response);
         });
+      return;
     }
     default: {
       next(action);
