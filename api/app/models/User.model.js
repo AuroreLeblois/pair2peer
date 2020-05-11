@@ -45,13 +45,14 @@ module.exports = class User {
 
         // send all informations about the user logged for the front in react
         const userInfos = await db.query(`SELECT * FROM usr_profile WHERE email = $1`, [email]);
-        const info = userInfos.rows[0];
         // add chat message
-        const chatInfos = await db.query(`SELECT * FROM chat_message WHERE "pseudo" ? $1`, [info.pseudo]);
+        const chatInfos = await db.query(`SELECT * FROM chat_message WHERE "pseudo" ? $1`, [userInfos.rows[0].pseudo]);
         
         // create user object who will contain 2 objects (informations about the user and his messages)
-        const user = { info };
-        user.inbox = chatInfos.rows;
+        const user = {
+            info: userInfos.rows[0],
+            inbox: chatInfos.rows
+        };
         
         return user;
     };
