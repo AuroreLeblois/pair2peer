@@ -80,7 +80,7 @@ const ProfileEdit = () => {
                   <Form.Field>
                     <Form.Label>Confirmer le mot de passe</Form.Label>
                     <Form.Control>
-                      <Form.Input value={userInfos.passwordConfirm} name="validatePassword" type="password" onChange={handleChange} />
+                      <Form.Input value={userInfos.validatePassword} name="validatePassword" type="password" onChange={handleChange} />
                     </Form.Control>
                   </Form.Field>
                 </Form.Field.Body>
