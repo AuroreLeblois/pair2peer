@@ -5,7 +5,6 @@ import L from 'leaflet';
 import { render } from 'react-dom';
 import 'leaflet/dist/leaflet.css';
 import './map.css';
-import { firstLetterToUppercase } from 'src/store/utils';
 import axios from 'axios';
 import { API_URI } from 'src/store/utils';
 
@@ -22,7 +21,7 @@ const position = [48.84664340683584,2.3455810546875];
 
 
 const UserMap = (user) =>  {
-    const [userMarker] = useState({});
+    //const [userMarker] = useState([]);
 
     axios.get(
       `${API_URI}`,
@@ -53,7 +52,7 @@ const UserMap = (user) =>  {
 		  icon={myIcon}
 		  >
 
-      {userMarker}.map((localisation, pseudo, city, remote) => {
+      {/* {userMarker}.map((localisation, pseudo, city, remote) => {
         <Marker
           icon={myIcon}
           position={user.localisation}
@@ -61,14 +60,14 @@ const UserMap = (user) =>  {
 
         <Popup position = {user.localisation}>
           <div>
-            <h2>Pseudo :{firstLetterToUppercase(user.pseudo)}</h2>
-            <p>Ville : {firstLetterToUppercase(user.city)}</p>
+            <h2>Pseudo :{user.pseudo}</h2>
+            <p>Ville : {user.city}</p>
             <p>Remote : {user.remote}</p>
           </div>
         </Popup>
 
         </Marker>
-        })
+        }) */}
       
       </Marker>
       
