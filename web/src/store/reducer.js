@@ -84,6 +84,12 @@ export default (state = initialState, action = {}) => {
         loading: !state.loading,
       };
     }
+    case actions.GET_USER_INBOX: {
+      return {
+        ...state,
+        inbox: action.data,
+      };
+    }
     default: {
       return state;
     }
