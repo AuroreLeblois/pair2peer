@@ -26,14 +26,14 @@ const UserMap = (user) =>  {
     axios.get(
       `${API_URI}`,
     )
-    .then(res => {
+    .then((res) => {
       console.log(data);
       console.log(user.localisation);
       console.log(user.pseudo);
       console.log(user.city);
       console.log(user.remote);
     }) 
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
     
