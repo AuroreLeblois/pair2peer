@@ -1,0 +1,24 @@
+.chatlist {
+
+  &-content {
+  
+    &-msg {
+      font-size: .8rem
+    }
+
+    &-title {
+      margin-bottom: 0 !important;
+    }
+  }
+}
+.inbox {
+  &-messages {
+    &-content {
+      min-height: 25vh;
+    }
+
+    &-form {
+      
+    }
+  }
+}
