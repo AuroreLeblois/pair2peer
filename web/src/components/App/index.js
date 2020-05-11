@@ -17,7 +17,7 @@ import Footer from 'src/components/Footer';
 import Search from 'src/components/Search';
 import Home from 'src/components/Home';
 import NotFound from 'src/components/Page404';
-import Chat from 'src/components/Chat';
+// import Chat from 'src/components/Chat';
 import './styles.css';
 
 // Ajout d'une route /signup

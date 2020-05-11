@@ -9,6 +9,26 @@ module.exports = {
         await server.register([vision, inert]);
 
         server.route({
+            method: 'GET',
+            path: '/inbox',
+            options: {
+                auth: {
+                    strategy: 'base',
+                    mode: 'required',
+                    scope: ['user', 'admin']
+                },
+                description: 'my chat rooms',
+                tags: ['api', 'chatroom', 'everything']
+            },
+            handler: async function (request, h) {
+                const myEmail= request.state.cookie.email;
+                const me= await db.query(`SELECT * FROM usr WHERE email=$1`,[myEmail]);
+                const myChatRooms=await db.query(`SELECT * FROM chat_message  WHERE pseudo ? $1;`,[me.rows[0].pseudo]);
+                return myChatRooms.rows;
+            }
+        });
+
+        server.route({
             //get existing chat room
             method: 'GET',
             path: '/chatroom/{chatSerial}',
@@ -56,13 +76,11 @@ module.exports = {
                                             WHERE chat_id=$1
                                             AND (NOW()-"date")>'30 days`,[chatExists.rows[0].id]);
                         }
-                         const messages= await db.query(`SELECT date, usr_id, chat.chat_serial, name, message,pseudo, chat_id 
-                                                        FROM all_my_message_in_chat
-                                                        JOIN chat ON chat.chat_serial=all_my_message_in_chat.chat_serial
-                                                        WHERE chat_id=$1
-                                                        ORDER BY date ASC;`,[chatExists.rows[0].id]);
+                         const messages= await db.query(`SELECT * FROM
+                                                        chat_message 
+                                                        WHERE chat_serial=$1`,[chatCode]);
         
-                        return h.response(messages.rows).code(200);
+                        return h.response(messages.rows[0]).code(200);
                      }
                
             }
@@ -175,7 +193,7 @@ module.exports = {
                const me= await db.query(`SELECT * FROM usr WHERE email=$1`,[email]);
                 const myID= me.rows[0].id;
                 const newMessage=await db.query(`INSERT INTO usr_message_chat("date",script,usr_id,chat_id) VALUES(NOW(),$1,$2,$3)RETURNING *;`,[message,myID,chatID]);
-                return h.response(newMessage.rows).code(200);
+                return h.response(newMessage.rows[0]).code(200);
             }
         
         });
