@@ -1,11 +1,17 @@
 // == Import npm
 import React, { useState } from 'react';
-import { Columns, Media, Image, Container, Heading, Content, Form } from 'react-bulma-components';
+import { useSelector } from 'react-redux';
+import { Columns, Media, Image, Container, Button, Content, Form } from 'react-bulma-components';
+import useInputChange from 'src/store/hooks/useInputChange';
 
 // == Import css
 import './style.scss';
 
 const Messages = () => {
+  const [input, handleInputChange] = useInputChange();
+
+  const { inbox } = useSelector((state) => state);
+  console.log(inbox);
 
   const MessageOne = () => {
     return (
@@ -61,12 +67,15 @@ const Messages = () => {
   return (
     <>
       <MessageOne />
-      <Form.Field>
-        <Form.Label>Message</Form.Label>
-        <Form.Control className="inbox-messages-form">
-          <Form.Textarea placeholder="Textarea" />
-        </Form.Control>
-      </Form.Field>
+      <form>
+        <Form.Field>
+          <Form.Label>Message</Form.Label>
+          <Form.Control className="inbox-messages-form">
+            <Form.Textarea rows="3" placeholder="Tapez votre message ..." name="message" onChange={handleInputChange} value={input.message} />
+          </Form.Control>
+        </Form.Field>
+        <Button fullwidth color="success" type="submit">Envoyer</Button>
+      </form>
     </>
   );
 };

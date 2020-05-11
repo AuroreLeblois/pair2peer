@@ -1,11 +1,13 @@
 // == Import npm
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Columns, Media, Image, Container, Heading, Content } from 'react-bulma-components';
 
 // == Import css
 import './style.scss';
 
 const ChatsList = () => {
+  const { inbox } = useSelector((state) => state);
 
   const OneChat = () => {
     return (
