@@ -16,6 +16,7 @@ const initialState = {
     localisation: [],
   },
   usersData: {},
+  loading: false,
 };
 
 
@@ -66,6 +67,19 @@ export default (state = initialState, action = {}) => {
     }
     case actions.CLEAR_ERRORS_MSG: {
       return omit({ ...state }, 'errors');
+    }
+    case actions.UPDATE_USER: {
+      return {
+        ...state,
+        user: action.data,
+        loading: false,
+      };
+    }
+    case actions.SET_LOADER: {
+      return {
+        ...state,
+        loading: !state.loading,
+      };
     }
     default: {
       return state;

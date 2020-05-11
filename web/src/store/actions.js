@@ -15,10 +15,15 @@ export const actions = {
   CLEAR_ERRORS_MSG: 'actions/CLEAR_ERRORS_MSG',
   UPDATE_PROFILE: 'actions/UPDATE_PROFILE',
   SUBMIT_SIGNUP: 'actions/SUBMIT_SIGNUP',
+  SUBMIT_UPDATE_LANG: 'actions/SUBMIT_UPDATE_LANG',
+  UPDATE_USER: 'actions/UPDATE_USER',
+  SET_LOADER: 'actions/SET_LOADER',
+  DELETE_LANG: 'actions/DELETE_LANG',
+  DELETE_IT_LANG: 'actions/DELETE_IT_LANG',
+  UPDATE_IT_LANG: 'actions/UPDATE_IT_LANG',
 };
 
 // == Actions creator
-
 export const submitLogin = (history, data) => (
   { type: actions.SUBMIT_LOGIN, history, data }
 );
@@ -61,4 +66,24 @@ export const updateProfile = (data) => (
 
 export const submitSignup = (history, data) => (
   { type: actions.SUBMIT_SIGNUP, history, data }
+);
+
+export const submitUpdateLang = (data) => (
+  { type: actions.SUBMIT_UPDATE_LANG, data }
+);
+
+export const updateUser = (data) => (
+  { type: actions.UPDATE_USER, data }
+);
+
+export const deleteLang = (language) => (
+  { type: actions.DELETE_LANG, language }
+);
+
+export const submitUpdateIt = (data) => (
+  { type: actions.UPDATE_IT_LANG, data }
+);
+
+export const deleteIt = (itLanguage) => (
+  { type: actions.DELETE_IT_LANG, itLanguage }
 );

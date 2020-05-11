@@ -1,11 +1,13 @@
 // == Import npm
-import React from 'react';
+import React, { useState } from 'react';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import { render } from 'react-dom';
 import 'leaflet/dist/leaflet.css';
 import './map.css';
 import { firstLetterToUppercase } from 'src/store/utils';
+import axios from 'axios';
+import { API_URI } from 'src/store/utils';
 
 
 const myIcon = L.icon({
@@ -15,61 +17,65 @@ const myIcon = L.icon({
 		popupAnchor:[0,-43] // Pour mettre le popup juste au dessus du marqueur 
 });
 
-const position = [48.84664340683584,2.3455810546875]
-// var markersClusterCustom = new L.MarkerClusterGroup({
-//   iconCreateFunction: function(cluster) {
-//     var digits = (cluster.getChildCount()+'').length;
-//     return L.divIcon({ 
-//         html: cluster.getChildCount(), 
-//         className: 'cluster digits-'+digits,
-//         iconSize: null 
-//     });
-// }
-// });
+const position = [48.84664340683584,2.3455810546875];
 
-const UserMap = () =>  {
+
+
+const UserMap = (user) =>  {
+    const [userMarker] = useState({});
+
+    axios.get(
+      `${API_URI}`,
+    )
+    .then(res => {
+      console.log(data);
+      console.log(user.localisation);
+      console.log(user.pseudo);
+      console.log(user.city);
+      console.log(user.remote);
+    }) 
+    .catch(err => {
+      console.log(err);
+    });
+    
   
     return (
    
-
       <Map className="map"  center={position} zoom={7}>
 
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-        
       />
 
       <Marker 
       position={position}
 		  icon={myIcon}
 		  >
-      {/* {users.map(user => (
-        
+
+      {userMarker}.map((localisation, pseudo, city, remote) => {
         <Marker
           icon={myIcon}
           position={user.localisation}
-        />
-      ))}
-
-      
-      {userMarker && (
-        <Popup
-          position={user.localisation}
         >
+
+        <Popup position = {user.localisation}>
           <div>
             <h2>Pseudo :{firstLetterToUppercase(user.pseudo)}</h2>
             <p>Ville : {firstLetterToUppercase(user.city)}</p>
             <p>Remote : {user.remote}</p>
           </div>
         </Popup>
-      )}
-       */}
-      </Marker>
-    </Map>
-    );
 
-  }
+        </Marker>
+        })
+      
+      </Marker>
+      
+    </Map>
+  );
+
+}
 
 export default UserMap;
 

@@ -50,15 +50,15 @@ module.exports = {
                         validatePassword: Joi.ref('password'),
                         pseudo: Joi.string().allow(''),
                         // firstEmail: Joi.string().email().required(),
-                        email: Joi.string().email().allow(''),
-                        validateEmail: Joi.string().email().allow(''),
+                        // email: Joi.string().email().allow(''),
+                        // validateEmail: Joi.string().email().allow(''),
                         searchable: Joi.boolean().required(),
                         remote: Joi.boolean().required(),
                         city: Joi.string().required(),
                         country: Joi.string().required(),
                         description: Joi.string().allow(''),
                         disponibility: Joi.number(),
-                        linkedinLink: Joi.string().allow(''),
+                        linkedin_link: Joi.string().allow(''),
                         facebook_link: Joi.string().allow(''),
                         github_link: Joi.string().allow(''),
                         // languages: Joi.array().items(Joi.string()),
@@ -90,10 +90,10 @@ module.exports = {
                 const remote= request.payload.remote;
                 const description= request.payload.description;
                 const validatePassword= request.payload.validatePassword;
-                const changeMyEmail= request.payload.email;
-                const validateEmail= request.payload.validateEmail;
+                // const changeMyEmail= request.payload.email;
+                // const validateEmail= request.payload.validateEmail;
                 const pseudo= request.payload.pseudo;
-                const linkedinLink=request.payload.linkedinLink;
+                const linkedin_link=request.payload.linkedin_link;
                 const facebook_link= request.payload.facebook_link;
                 const github_link= request.payload.github_link;
                 //les langues
@@ -128,36 +128,31 @@ module.exports = {
                     }
                     else{error.push(' Votre mot de passe doit faire 8 caractères minimum!')};
                 };
-                //l'email
-                //est-ce que le champs email est rempli et différent du cookie?
-                if(changeMyEmail.length>0
-                    &&changeMyEmail!==email&& changeMyEmail===validateEmail
-                    ){
-                    console.log('un email a été saisie et est différent+validation ok')
-                    //ok mais c'est un email?
-                    if(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(changeMyEmail)===true){
-                    //dans ce cas on va update le profil
-                    console.log(`c'est bien un email`)
-                    await db.query(`UPDATE usr 
-                    SET "email"=$1 
-                    WHERE "id"=$2`, [changeMyEmail, userID]);
-                    }
-                    //sinon on prévient l'user
-                    else{
-                        error.push('invalid email')
-                    }
-                };
-                if(pseudo.length>0 && pseudo.toLowerCase()!==result.rows[0].pseudo){
+                // //l'email
+                // //est-ce que le champs email est rempli et différent du cookie?
+                // if(changeMyEmail.length>0
+                //     &&changeMyEmail!==email&& changeMyEmail===validateEmail
+                //     ){
+                //     console.log('un email a été saisie et est différent+validation ok')
+                //     //ok mais c'est un email?
+                //     if(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(changeMyEmail)===true){
+                //     //dans ce cas on va update le profil
+                //     console.log(`c'est bien un email`)
+                //     await db.query(`UPDATE usr 
+                //     SET "email"=$1 
+                //     WHERE "id"=$2`, [changeMyEmail, userID]);
+                //     }
+                //     //sinon on prévient l'user
+                //     else{
+                //         error.push('invalid email')
+                //     }
+                // };
+                if(pseudo.length>0 && pseudo!==result.rows[0].pseudo){
                        console
                     //oui mais le pseudo doit être unique
-                    console.log(`je rentre dans la vérification du pseudo`);
-                    console.log(pseudo.length);
-                    console.log(`le pseudo est: ${pseudo}`)
                     const pseudoExists= await db.query(`SELECT pseudo FROM usr WHERE pseudo= $1;` ,[pseudo]);
                     if(!pseudoExists.rows[0]){
-                        console.log(`aucun pseudo équivalent`);
                         await db.query(`UPDATE usr SET pseudo=$1 WHERE "id"=$2;`,[pseudo,userID]);
-                        console.log(`j'ai update le pseudo`);
                     }
                     //si le pseudo existe=> on le dit à l'utilisateur
                     else{
@@ -169,28 +164,27 @@ module.exports = {
                 //avant on vérifie que les input "required" sont conformes
                 if(city!==null&& country!==null && remote!==null
                     ||city!== undefined&& country!== undefined&& remote!== undefined){
-                        console.log(`attention je rentre dans la vérification de la ville et du pays`)
+ 
                     //ensuite on vérifie si ce qui a été saisie diffère des données existantes
                     if(city!==userCity &&country!==userCountry
                         ||country==userCountry&& city!==userCity
                         ||city==userCity&&country!==userCountry){
-                            console.log(`je lance la requete vers l'api`)
+
                         const api= await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}&apiKey=${APIKEY}`,{
                             json:true
                         });
-                        console.log(`j'ai vérifié la requête à l'api`)
+
                         const latitude= api.payload.items[0].position.lat;
                         console.log(latitude);
                         const longitude= api.payload.items[0].position.lng;
-                        console.log(longitude);
-                        console.log(birthyear);
+
                         const detailExist= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
                         //il n'existe pas=> on insert
                          if(!detailExist.rows[0]){
                              console.log(`je n'ai pas trouvé de correspondance=>j'insère`)
                              await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id, picture, description,  latitude, longitude, disponibility, linkedin_link, facebook_link, github_link)
                                             VALUES ($1 , $2 , $3 , $4 , $5 , $6, $7, $8, $9,$10,$11, $12);`
-                                            ,[city, country, remote, userID, picture, description, latitude, longitude, disponibility, linkedinLink, facebook_link,github_link]);
+                                            ,[city, country, remote, userID, picture, description, latitude, longitude, disponibility, linkedin_link, facebook_link,github_link]);
                     }//sinon on update
                          else{
                              console.log(`j'ai trouvé une correspondance=>j'update`)
@@ -208,7 +202,7 @@ module.exports = {
                                             github_link=$11
                                             WHERE usr_id=$12`,
                                             [city, country, remote, picture, description, 
-                                             latitude, longitude,disponibility,linkedinLink, facebook_link,github_link,userID]);
+                                             latitude, longitude,disponibility,linkedin_link, facebook_link,github_link,userID]);
                                         };
                     
                     }
@@ -239,9 +233,9 @@ module.exports = {
                             const newResult = await db.query(`SELECT * FROM usr WHERE "id" = $1` ,[userID]);
                             const newProfile= await db.query(`SELECT * FROM usr_profile WHERE pseudo=$1 `,[newResult.rows[0].pseudo]);
                             const newPlace= await db.query(`SELECT * FROM usr_map WHERE pseudo=$1`, [newResult.rows[0].pseudo]);
-                            const newPl= newPlace.rows[0];
+                            // const newPl= newPlace.rows[0];
                             const newPro= newProfile.rows[0];
-                            return  {newPl, newPro};
+                            return  {newPro};
                         }
                         //si le champs est vide=> ne rien faire
                     }
@@ -306,17 +300,12 @@ module.exports = {
                         },
                         validate: {
                             params: Joi.object({
-                                // email:Joi.string().email(),
                                 language: Joi.string(),
-                                // it_language: Joi.array().items(Joi.object({
-                                //     name: Joi.string(),
-                                //     level: Joi.number().min(0).max(10),
-                                //     search: Joi.boolean()
-                                //     }))
+                              
                             }),
                         },  
-                        description: 'handle update user profile lang',
-                        tags: ['api', 'profile', 'validation']
+                        description: 'handle delete user profile lang',
+                        tags: ['api', 'profile', 'delete']
                     },
                         handler: async (request, h) => {
                             const email= request.state.cookie.email;
@@ -325,13 +314,14 @@ module.exports = {
                             const language=request.params.language;
                             const langExists= await db.query(`SELECT * 
                                                       FROM lang
-                                                      WHERE "name" =$1`, [language]);
+                                                      WHERE "name" =$1;`, [language]);
                              const langID= langExists.rows[0].id;
                             await db.query(`DELETE FROM usr_speaks_lang
-                            where usr_id=$1
-                            AND lang_id=$2`,[userID,langID]);
-                            const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
-                return newUser.rows;
+                                            where usr_id=$1
+                                            AND lang_id=$2;`,[userID,langID]);
+                            const newUser=await db.query(`SELECT * FROM usr_profile 
+                                                            WHERE id=$1;`,[userID]);
+                                return newUser.rows;
                         }
                     
                 });
@@ -396,9 +386,11 @@ module.exports = {
                 
                 const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
                 return newUser.rows;
-            }
+                 }
            
                 });
+
+
                 server.route({
                     method: 'DELETE',
                     path: '/profile/it_languages/{it_language}',
@@ -410,8 +402,6 @@ module.exports = {
                         },
                         validate: {
                             params: Joi.object({
-                                // email:Joi.string().email(),
-                                // language: Joi.string(),
                                 it_language: Joi.string(),
                             }),
                         },
@@ -434,7 +424,7 @@ module.exports = {
                     await db.query(`DELETE FROM usr_knows_it_lang
                                     where usr_id=$1
                                     AND it_lang_id=$2;`,[userID,itLangID]);
-                                    console.log(`ok`)
+                         
                                     const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
                                     return newUser.rows;
                         }
