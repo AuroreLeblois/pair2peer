@@ -52,6 +52,11 @@ const Header = () => {
               Profile
             </Navbar.Item>
           </Link>
+          <Link to="/inbox">
+            <Navbar.Item renderAs="div">
+              Messagerie
+            </Navbar.Item>
+          </Link>
           <Link to="/logout">
             <Navbar.Item renderAs="div" onClick={handleLogout}>
               Déconnexion
@@ -119,3 +124,5 @@ const Header = () => {
 
 // == Export
 export default Header;
+
+

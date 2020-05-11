@@ -3,29 +3,29 @@
   display: flex;
   flex-direction: column;
   background-color: #363738;
-}
+};
 
 .profile-container {
   background-color: #fff;
   height: 100%;
-}
+};
 
 .is-4 {
   display: inline-flex;
-}
+};
 
 .picture-profile {
   display: flex;
   justify-content: center;
-}
+};
 
 input[type=radio] {
   margin: 0 1rem !important;
-}
+};
 
 .navbar-link:not(.is-arrowless):after {
   border-color: #FF2B56;
-}
+};
 
 
 .profile-iconic {

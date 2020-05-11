@@ -17,6 +17,7 @@ import Footer from 'src/components/Footer';
 import Search from 'src/components/Search';
 import Home from 'src/components/Home';
 import NotFound from 'src/components/Page404';
+import Messaging from 'src/components/Messaging';
 import UserMap from 'src/components/Map';
 
 import './styles.css';
@@ -38,9 +39,9 @@ const App = () => {
     }
   };
 
-  const loginCheck = useCallback((path, component) => {
+  const loginCheck = useCallback((component) => {
     if (!user) {
-      return <Redirect to={path} />;
+      return <Redirect to="/login" />;
     }
     return component;
   }, [user]);
@@ -84,9 +85,12 @@ const App = () => {
               <Route exact path="/" component={Home} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/signup" component={Signup} />
-              <Route exact path="/map" component={UserMap} />
-              <Route exact path="/profile" render={() => loginCheck('/login', <Profile />)} />
-              <Route exact path="/search" render={() => loginCheck('/login', <Search />)} />
+              <Route exact path="/profile" render={() => loginCheck(<Profile />)} />
+              <Route exact path="/search" render={() => loginCheck(<Search />)} />
+              <Route exact path="/inbox" render={() => loginCheck(<Messaging />)} />   
+              <Route exact path="/map" component={UserMap} />                                                    
+                                                                
+
               <Route component={NotFound} />
             </Switch>
           </Container>
