@@ -1,82 +1,72 @@
+/* eslint-disable max-len */
 // == Import npm
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
-import { render } from 'react-dom';
-import 'leaflet/dist/leaflet.css';
-import './map.css';
 import axios from 'axios';
 import { API_URI } from 'src/store/utils';
 
+// == Import css
+import './style.css';
 
-const myIcon = L.icon({
-		iconUrl:'https://unpkg.com/leaflet@1.6.0/dist/images/marker-icon.png',
-		iconSize:[25,41], // Taille de l'icon 
-		iconAnchor:[12.5,50], // Pour que le marqueur reste en place 
-		popupAnchor:[0,-43] // Pour mettre le popup juste au dessus du marqueur 
-});
+// Composant React, toutes les définitions de variables et de fonctions doivent se trouver dedans
+// On laisse à l'extérieur uniquement les imports/exports
+const UserMap = () => {
 
-const position = [48.84664340683584,2.3455810546875];
+  // J'initie le state pour stocker les users en réponse de la requête axios
+  // La première variables stocke les données, la deuxième sert à définir les données qui seront stockées dans la première
+  const [users, setUsers] = useState();
 
+  console.log(users);
 
+  // Je définis une fonction pour faire la requête de mes users
+  const getUsersData = () => {
+    axios.get(`${API_URI}/map`)
+      .then((res) => {
+        // J'utilise mon state définit plus haut pour stocker les users que je reçois en réponse de la requête
+        setUsers(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        // Au cas où erreur avec le serveur, renvoie un console.log
+        console.log(err);
+      });
+  };
 
-const UserMap = (user) =>  {
-    //const [userMarker] = useState([]);
+  // Hooks React qui permet de faire la requête pour les users à l'arrivée sur la page /map
+  // Sert à plein d'autres choses aussi https://fr.reactjs.org/docs/hooks-effect.html
+  useEffect(getUsersData, [setUsers]);
 
-    axios.get(
-      `${API_URI}`,
-    )
-    .then((res) => {
-      console.log(data);
-      console.log(user.localisation);
-      console.log(user.pseudo);
-      console.log(user.city);
-      console.log(user.remote);
-    }) 
-    .catch((err) => {
-      console.log(err);
-    });
-    
-  
-    return (
-   
-      <Map className="map"  center={position} zoom={7}>
+  // Rendu du composant, c'est ici que tout se passe
 
+  // Le temps de la requêtes, users n'est pas défini
+  // Pour éviter une erreur de rendu on fait un "conditionnal rendering"
+  // Si users est vide
+  if (!users) {
+    return null;
+  }
+
+  return (
+    <Map className="map" center={[48.84664340683584, 2.3455810546875]} zoom={7}>
       <TileLayer
+        attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
       />
-
-      <Marker 
-      position={position}
-		  icon={myIcon}
-		  >
-
-      {/* {userMarker}.map((localisation, pseudo, city, remote) => {
+      {users.map((user) => (
         <Marker
-          icon={myIcon}
           position={user.localisation}
         >
-
-        <Popup position = {user.localisation}>
-          <div>
-            <h2>Pseudo :{user.pseudo}</h2>
-            <p>Ville : {user.city}</p>
-            <p>Remote : {user.remote}</p>
-          </div>
-        </Popup>
-
+          <Popup>
+            <div>
+              <h2>Pseudo :{user.pseudo}</h2>
+              <p>Ville : {user.city}</p>
+              <p>Remote : {user.remote}</p>
+            </div>
+          </Popup>
         </Marker>
-        }) */}
-      
-      </Marker>
-      
+      ))}
     </Map>
   );
+};
 
-}
-
+// On exporte pour le récupérer dans App/index.js
 export default UserMap;
-
-
-
