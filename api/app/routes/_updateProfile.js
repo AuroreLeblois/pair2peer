@@ -208,7 +208,7 @@ module.exports = {
                                             github_link=$11
                                             WHERE usr_id=$12`,
                                             [city, country, remote, picture, description, 
-                                             latitude, longitude,disponibility,linkedinLink, facebook_link,github_link,userID]);
+                                             latitude, longitude,disponibility,linkedin_link, facebook_link,github_link,userID]);
                                         };
                     
                     }
