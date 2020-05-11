@@ -18,6 +18,8 @@ import Search from 'src/components/Search';
 import Home from 'src/components/Home';
 import NotFound from 'src/components/Page404';
 import Messaging from 'src/components/Messaging';
+import UserMap from 'src/components/Map';
+
 import './styles.css';
 
 // Ajout d'une route /signup
@@ -85,7 +87,10 @@ const App = () => {
               <Route exact path="/signup" component={Signup} />
               <Route exact path="/profile" render={() => loginCheck(<Profile />)} />
               <Route exact path="/search" render={() => loginCheck(<Search />)} />
-              <Route exact path="/inbox" render={() => loginCheck(<Messaging />)} />
+              <Route exact path="/inbox" render={() => loginCheck(<Messaging />)} />   
+              <Route exact path="/map" component={UserMap} />                                                    
+                                                                
+
               <Route component={NotFound} />
             </Switch>
           </Container>

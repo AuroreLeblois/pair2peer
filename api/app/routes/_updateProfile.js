@@ -165,49 +165,67 @@ module.exports = {
                 if(city!==null&& country!==null && remote!==null
                     ||city!== undefined&& country!== undefined&& remote!== undefined){
  
-                    //ensuite on vérifie si ce qui a été saisie diffère des données existantes
-                    if(city!==userCity &&country!==userCountry
+
+
+                        const detailExist= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
+                        //il n'existe pas=> on insert
+                         if(!detailExist.rows[0]){
+                              //ensuite on vérifie si ce qui a été saisie diffère des données existantes
+                        if(city!==userCity &&country!==userCountry
                         ||country==userCountry&& city!==userCity
                         ||city==userCity&&country!==userCountry){
 
                         const api= await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}&apiKey=${APIKEY}`,{
                             json:true
                         });
-
+                    
                         const latitude= api.payload.items[0].position.lat;
-                        console.log(latitude);
                         const longitude= api.payload.items[0].position.lng;
 
-                        const detailExist= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
-                        //il n'existe pas=> on insert
-                         if(!detailExist.rows[0]){
-                             console.log(`je n'ai pas trouvé de correspondance=>j'insère`)
-                             await db.query(`INSERT INTO usr_detail ("city", "country", "remote", usr_id, picture, description,  latitude, longitude, disponibility, linkedin_link, facebook_link, github_link)
-                                            VALUES ($1 , $2 , $3 , $4 , $5 , $6, $7, $8, $9,$10,$11, $12);`
-                                            ,[city, country, remote, userID, picture, description, latitude, longitude, disponibility, linkedin_link, facebook_link,github_link]);
+                        await db.query(`INSERT INTO usr_detail ("city", "country", "remote", latitude, longitude, usr_id,description,disponibility,linkedin_link,facebook_link, github_link )
+                        VALUES ($1 , $2 , $3 , $4 , $5,$6,$7,$8,$9,$10,$11);`
+                        ,[city, country, remote,latitude, longitude, disponibility, userID,description, disponibility, linkedin_link, facebook_link,github_link]);
+
+                        }
+
+                            
                     }//sinon on update
                          else{
-                             console.log(`j'ai trouvé une correspondance=>j'update`)
+                            if(city!==userCity &&country!==userCountry
+                                ||country==userCountry&& city!==userCity
+                                ||city==userCity&&country!==userCountry){
+        
+                                const api= await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}&apiKey=${APIKEY}`,{
+                                    json:true
+                                });
+                                const latitude= api.payload.items[0].position.lat;
+                                const longitude= api.payload.items[0].position.lng;
+
+                                await db.query(`UPDATE usr_detail
+                                                SET "city"=$1, 
+                                                "country"=$2,
+                                                latitude=$3,
+                                                longitude=$4
+                                                WHERE usr_id=$5`,
+                                                [city, country,latitude,longitude,userID]);
+
+                            }
+                              
                              await db.query(`UPDATE usr_detail
-                                            SET "city"=$1, 
-                                            "country"=$2,
-                                            "remote"=$3,
-                                            picture=$4,
-                                            description=$5 ,
-                                            latitude=$6,
-                                            longitude=$7,
-                                            disponibility=$8,
-                                            linkedin_link=$9,
-                                            facebook_link=$10,
-                                            github_link=$11
-                                            WHERE usr_id=$12`,
-                                            [city, country, remote, picture, description, 
-                                             latitude, longitude,disponibility,linkedin_link, facebook_link,github_link,userID]);
+                                            SET "remote"=$1,
+                                            description=$2,
+                                            disponibility=$3,
+                                            linkedin_link=$4,
+                                            facebook_link=$5,
+                                            github_link=$6
+                                            WHERE usr_id=$7`,
+                                            [remote, description, 
+                                            disponibility,linkedin_link, facebook_link,github_link,userID]);
                                         };
                     
                     }
                      
-                }
+                
             // sinon on dit ce qu'il manque à l'utilisateur
                 else{
                     if(city===null||city===undefined){
