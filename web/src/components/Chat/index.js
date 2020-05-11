@@ -1,19 +1,37 @@
 // == Import npm
-import React from 'react';
-import { Widget } from 'react-chat-widget';
+import React, { useState } from 'react';
+import { Launcher } from 'react-chat-window';
 
 // == Import css
-import 'react-chat-widget/lib/styles.css';
 
 const Chat = () => {
-  const handleNewUserMessage = (newMessage) => {
-    console.log(`New message incoming! ${newMessage}`);
-    // Now send the message throught the backend API
+  const [messageList, setMessageList] = useState([]);
+
+  const onMessageWasSent = (message) => {
+    setMessageList([...messageList, message]);
+  };
+
+  const sendMessage = (text) => {
+    if (text.length > 0) {
+      setMessageList([...messageList, {
+        author: 'them',
+        type: 'text',
+        data: { text },
+      }]);
+    }
   };
 
   return (
     <>
-      <Widget handleNewUserMessage={handleNewUserMessage} />
+      <Launcher
+        agentProfile={{
+          teamName: 'react-chat-window',
+          imageUrl: 'https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png'
+        }}
+        onMessageWasSent={onMessageWasSent}
+        messageList={messageList}
+        showEmoji
+      />
     </>
   );
 };
