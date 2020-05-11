@@ -17,8 +17,9 @@ module.exports = class User {
     static async login(email, password) {
                 
         // test if the email exist
+        // I have to pass through usr instead of usr_profile to compare the password
         const visitor = await db.query(`SELECT * FROM usr WHERE email = $1`, [email]);
-        const user = visitor.rows[0];
+        const theUser = visitor.rows[0];
 
         // build a formated object error message like native Hapi
         const errorList = {
@@ -28,11 +29,11 @@ module.exports = class User {
         };
 
         // create specific error message depend on the data
-        if (!user) {
+        if (!theUser) {
             errorList.message.errorEmail = 'Cet email n\'existe pas';
             errorList.message.errorPassword = 'Mauvais mot de passe';
         };
-        if (user && !await bcrypt.compare(password, user.password)) {
+        if (theUser && !await bcrypt.compare(password, theUser.password)) {
             errorList.message.errorPassword = 'Mauvais mot de passe';
         };
         
@@ -43,8 +44,16 @@ module.exports = class User {
         }
 
         // send all informations about the user logged for the front in react
-        const userInfos = await db.query(`SELECT * FROM usr_profile WHERE email = $1`, [email]) 
-        return userInfos.rows[0];
+        const userInfos = await db.query(`SELECT * FROM usr_profile WHERE email = $1`, [email]);
+        const info = userInfos.rows[0];
+        // add chat message
+        const chatInfos = await db.query(`SELECT * FROM chat_message WHERE "pseudo" ? $1`, [info.pseudo]);
+        
+        // create user object who will contain 2 objects (informations about the user and his messages)
+        const user = { info };
+        user.inbox = chatInfos.rows;
+        
+        return user;
     };
 
     // ####               ####
