@@ -7,13 +7,22 @@ import useInputChange from 'src/store/hooks/useInputChange';
 // == Import css
 import './style.scss';
 
-const Messages = () => {
+const Messages = ({ selectedChat }) => {
   const [input, handleInputChange] = useInputChange();
 
-  const { inbox } = useSelector((state) => state);
-  console.log(inbox);
+  const { inbox, user } = useSelector((state) => state);
 
-  const MessageOne = () => {
+  const goodChat = inbox.filter((chatroom) => chatroom.chat_serial === selectedChat)[0];
+
+  const goodChatMessages = () => {
+    if (goodChat) {
+      return goodChat.messages.filter((message) => message.content !== null);
+    }
+  };
+
+  console.log(goodChatMessages());
+
+  const Message = () => {
     return (
       <>
         <Columns>
@@ -25,8 +34,7 @@ const Messages = () => {
                 </Media.Item>
                 <Media.Item>
                   <Media.Content>
-                    <h6 className="chatlist-content-title">xOOma</h6>
-                    <p className="chatlist-content-msg">Vendôme, France</p>
+                    <h6 className="chatlist-content-title">{goodChat.pseudo.filter((nickname) => nickname !== user.pseudo)}</h6>
                   </Media.Content>
                 </Media.Item>
               </Media>
@@ -35,47 +43,45 @@ const Messages = () => {
         </Columns>
         <Columns.Column className="inbox-messages-content">
           <Content>
-            Pouet
+            {goodChatMessages().map((message) => (
+              <Media>
+                <Media.Item renderAs="figure" position="left">
+                  <Image size={32} alt="xooma-picture" src="https://i.imgur.com/GJ4Ittp.png" />
+                </Media.Item>
+                <Media.Item>
+                  <Media.Content>
+                    <h6 className="chatlist-content-title">
+                      {message.pseudo}
+                    </h6>
+                    <p className="chatlist-content-msg">{message.date}</p>
+                    <p className="chatlist-content-msg">{message.content}</p>
+                  </Media.Content>
+                </Media.Item>
+              </Media>
+            ))}
           </Content>
         </Columns.Column>
+        <form>
+          <Form.Field>
+            <Form.Label>Message</Form.Label>
+            <Form.Control className="inbox-messages-form">
+              <Form.Textarea rows="3" placeholder="Tapez votre message ..." name="message" onChange={handleInputChange} value={input.message} />
+            </Form.Control>
+          </Form.Field>
+          <Button fullwidth color="success" type="submit">Envoyer</Button>
+        </form>
       </>
     );
   };
 
-  const Message2 = () => {
-    return (
-      <Columns className="chatlist">
-        <Columns.Column className="chatlist-content">
-          <Container>
-            <Media>
-              <Media.Item renderAs="figure" position="left">
-                <Image size={32} alt="xooma-picture" src="https://i.imgur.com/GJ4Ittp.png" />
-              </Media.Item>
-              <Media.Item>
-                <Media.Content>
-                  <h6 className="chatlist-content-title">xOOma</h6>
-                  <p className="chatlist-content-msg">Hello ça te dis de coder un p...</p>
-                </Media.Content>
-              </Media.Item>
-            </Media>
-          </Container>
-        </Columns.Column>
-      </Columns>
-    );
-  };
+  const NoChat = () => (
+    <h1>Bienvenue</h1>
+  );
+
 
   return (
     <>
-      <MessageOne />
-      <form>
-        <Form.Field>
-          <Form.Label>Message</Form.Label>
-          <Form.Control className="inbox-messages-form">
-            <Form.Textarea rows="3" placeholder="Tapez votre message ..." name="message" onChange={handleInputChange} value={input.message} />
-          </Form.Control>
-        </Form.Field>
-        <Button fullwidth color="success" type="submit">Envoyer</Button>
-      </form>
+      {(selectedChat) ? <Message /> : <NoChat />}
     </>
   );
 };
