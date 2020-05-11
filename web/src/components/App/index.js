@@ -87,7 +87,6 @@ const App = () => {
               <Route exact path="/search" render={() => loginCheck('/login', <Search />)} />
               <Route component={NotFound} />
             </Switch>
-            {(user) ? <Chat /> : null}
           </Container>
         </Hero.Body>
 
