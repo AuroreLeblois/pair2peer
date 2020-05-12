@@ -1,12 +1,13 @@
 // == Import npm
 import React from 'react';
 import { Container, Heading } from 'react-bulma-components';
-
+// == Import css
+import './style.css';
 
 // == Composant
 const Home = () => {
   return (
-    <Container>
+    <Container class="Container">
       <Heading>
         Peer2Pair
       </Heading>
@@ -24,9 +25,9 @@ const Home = () => {
        <Heading subtitle size={4}>
         <em>Comment faire?</em> 
      </Heading>
-     <p>Très simple, il vous suffit de créer un compte et de vous connecter</p>
+     <p>Très simple, il vous suffit de créer un compte et de vous connecter.</p>
       <p> Rentrez votre niveau, dites-nous si vous souhaitez coder en remote ou en personne.
-       Et c'est parti!</p> 
+      Et c'est parti pour la recherche de pairs!</p> 
        
      
     </Container>
