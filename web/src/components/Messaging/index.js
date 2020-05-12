@@ -8,6 +8,14 @@ import Messages from './messages';
 import './style.scss';
 
 const Messaging = () => {
+
+  const [selectedChat, setSelectedChat] = useState('');
+
+  const handleSelectChat = (evt, chatSerial) => {
+    console.log(chatSerial);
+    setSelectedChat(chatSerial);
+  };
+
   return (
     <>
       <Content style={{ textAlign: 'center' }}>
@@ -16,11 +24,11 @@ const Messaging = () => {
       </Content>
       <Box className="inbox">
         <Columns>
-          <Columns.Column size={3} className="inbox-chatlist">
-            <ChatsList />
+          <Columns.Column size={2} className="inbox-chatlist">
+            <ChatsList handleSelectChat={handleSelectChat} />
           </Columns.Column>
           <Columns.Column className="inbox-messages">
-            <Messages />
+            <Messages selectedChat={selectedChat} />
           </Columns.Column>
         </Columns>
       </Box>

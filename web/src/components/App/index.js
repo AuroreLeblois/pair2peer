@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
-import { getFiltersList, getAuthentified } from 'src/store/actions';
+import { getFiltersList, getAuthentified, getUserInbox } from 'src/store/actions';
 import { API_URI } from 'src/store/utils';
 import { Container, Hero } from 'react-bulma-components';
 import axios from 'axios';
@@ -33,8 +33,10 @@ const App = () => {
   const sessionUser = () => {
     if (!user) {
       const userInfo = JSON.parse(sessionStorage.getItem('user'));
+      const inbuxUserInfo = JSON.parse(sessionStorage.getItem('inbox'));
       if (userInfo) {
         dispatch(getAuthentified(history, userInfo));
+        dispatch(getUserInbox(inbuxUserInfo));
       }
     }
   };
@@ -85,12 +87,10 @@ const App = () => {
               <Route exact path="/" component={Home} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/signup" component={Signup} />
+              <Route exact path="/map" component={UserMap} />
               <Route exact path="/profile" render={() => loginCheck(<Profile />)} />
               <Route exact path="/search" render={() => loginCheck(<Search />)} />
-              <Route exact path="/inbox" render={() => loginCheck(<Messaging />)} />   
-              <Route exact path="/map" component={UserMap} />                                                    
-                                                                
-
+              <Route exact path="/inbox" render={() => loginCheck(<Messaging />)} />
               <Route component={NotFound} />
             </Switch>
           </Container>

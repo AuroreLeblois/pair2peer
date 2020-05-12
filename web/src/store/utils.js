@@ -6,3 +6,9 @@ export const API_URI = 'http://localhost:3000';
 export const firstLetterToUppercase = (string) => (
   string.charAt(0).toUpperCase() + string.slice(1)
 );
+
+export const cutStringToNCharacter = (string, length) => {
+  if (string) {
+    return string.substring(0, length);
+  }
+};

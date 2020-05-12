@@ -32,6 +32,7 @@
     "eslint-plugin-react-hooks": "^4.0.0",
     "file-loader": "*",
     "html-webpack-plugin": "*",
+    "json-loader": "^0.5.7",
     "mini-css-extract-plugin": "*",
     "optimize-css-assets-webpack-plugin": "*",
     "postcss-loader": "*",

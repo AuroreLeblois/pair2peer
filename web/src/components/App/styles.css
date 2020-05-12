@@ -31,3 +31,9 @@ input[type=radio] {
 .profile-iconic {
   padding-right: 1rem;
 }
+
+textarea,
+.textarea {
+  min-height: inherit;
+  height: auto;
+}
