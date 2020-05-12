@@ -8,6 +8,7 @@ import './style.css';
 const About = () => {
   return (
     <Container class="Container">
+      <div>
       <Heading>
         Peer2Pair Késsékéssé?
       </Heading>
@@ -20,6 +21,8 @@ const About = () => {
      </Heading>
      <p>C'est assez simple mais pour ça, vous devez être connecté/e. Les personnes non connectées n'ont que accès à la map ici et à cette très belle page d'exposition...</p>
      <p>Un fois connecté/e, vous aurez accès aux fonctionnalités du site: la recherche et le contacte via la messagerie</p>
+     </div>
+     <div>
      <Heading subtitle size={3}>
        J'ai trouvé un développeur!
       </Heading>
@@ -41,6 +44,7 @@ const About = () => {
       "cc sa te dirai de coD un truc ensemble"... Tu préfères quoi?
       On ne demande pas des pros de l'orthographe, juste une petite surveillance de ce que tu écris avant de l'envoyer</li>
     </ol>
+    </div>
     </Container>
   );
 };
