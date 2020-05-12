@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCodeBranch } from '@fortawesome/free-solid-svg-icons';
 
 // == Import
-import { submitLogout } from 'src/store/actions';
+import { submitLogout, actions } from 'src/store/actions';
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import './styles.css';
 
@@ -21,6 +21,7 @@ const Header = () => {
   const handleLogout = () => {
     dispatch(submitLogout(history));
     setActiveNavbar(!activeNavbar);
+    dispatch({ type: actions.SET_LOADER });
   };
 
   const { user } = useSelector((state) => state);
