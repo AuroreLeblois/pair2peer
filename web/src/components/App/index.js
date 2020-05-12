@@ -59,11 +59,12 @@ const App = () => {
       .then((res) => {
         const data = res.data;
         const filtersList = {};
-        const usersData = {};
+        let usersData = {};
+        console.log(res.data);
         filtersList.it_language = data.it_language;
         filtersList.language = data.language;
         filtersList.localisation = data.localisation;
-        usersData.maxUser = data.maxUser;
+        usersData = data.maxUser;
         dispatch(getFiltersList(filtersList, usersData));
       })
       .catch((err) => {
@@ -71,8 +72,7 @@ const App = () => {
       });
   };
 
-  useEffect(getFilters);
-
+  useEffect(getFilters, [user]);
 
   return (
     <div className="app">
