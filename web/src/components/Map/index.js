@@ -34,7 +34,7 @@ const UserMap = () => {
 
   // Hooks React qui permet de faire la requête pour les users à l'arrivée sur la page /map
   // Sert à plein d'autres choses aussi https://fr.reactjs.org/docs/hooks-effect.html
-  useEffect(getUsersData, [setUsers]);
+  useEffect(getUsersData, []);
 
   // Rendu du composant, c'est ici que tout se passe
 
@@ -54,6 +54,7 @@ const UserMap = () => {
       {users.map((user) => (
         <Marker
           position={user.localisation}
+          key={user.pseudo}
         >
           <Popup>
             <div>

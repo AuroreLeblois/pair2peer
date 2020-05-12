@@ -12,7 +12,6 @@ const Cards = ({ users }) => {
           <Form.Control>
             <Tag color="dark">{label.name}</Tag>
           </Form.Control>
-          <Progress color="danger" size="small" value={label.level} max={10} />
         </Fragment>
       ));
     }

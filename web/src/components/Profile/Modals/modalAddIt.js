@@ -19,7 +19,7 @@ const ModalAddIt = ({ modalIt, itClicked, setModalIt }) => {
       goodLanguage = user.it_language.find((language) => language.name === itClicked);
       return goodLanguage.level;
     }
-    return null;
+    return '';
   };
 
   const ItOptions = () => {
@@ -28,13 +28,12 @@ const ModalAddIt = ({ modalIt, itClicked, setModalIt }) => {
         <option key={language} value={language}>{language}</option>
       ));
     }
-    return null;
+    return '';
   };
 
   const LvlOptions = () => {
     return (
       <>
-        <option key="1" value="">{null}</option>
         <option key="2" value="1">1</option>
         <option key="3" value="2">2</option>
         <option key="4" value="3">3</option>
@@ -70,9 +69,9 @@ const ModalAddIt = ({ modalIt, itClicked, setModalIt }) => {
                 <Form.Field.Body>
                   <Form.Field>
                     <Form.Control>
-                      <Form.Label>Langage</Form.Label>
-                      <Form.Select onChange={handleInputChange} value={input.name} name="name">
-                        <option value="">{null}</option>
+                      <Form.Label>Language</Form.Label>
+                      <Form.Select onChange={handleInputChange} value={(input.name) ? input.name : ''} name="name">
+                        <option value=""> -- Selectionner une option -- </option>
                         <ItOptions />
                       </Form.Select>
                     </Form.Control>
@@ -81,6 +80,7 @@ const ModalAddIt = ({ modalIt, itClicked, setModalIt }) => {
                     <Form.Control>
                       <Form.Label>Niveau</Form.Label>
                       <Form.Select onChange={handleInputChange} value={(input.level) ? input.level : goodLevelIt()} name="level">
+                        <option value=""> -- Selectionner une option -- </option>
                         <LvlOptions />
                       </Form.Select>
                     </Form.Control>
