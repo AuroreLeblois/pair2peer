@@ -99,7 +99,7 @@ module.exports = {
                
                 validate: {
                     payload: Joi.object({
-                       nameForChatRoom: Joi.string().required(),
+                    //    nameForChatRoom: Joi.string().required(),
                        invited:Joi.string().required(),
                     }),
                 },
@@ -108,30 +108,33 @@ module.exports = {
             },
             handler: async function (request, h) {
                 const invited= request.payload.invited;
-                const chatName= request.payload.nameForChatRoom;
+                // const chatName= request.payload.nameForChatRoom;
                 error=[];
-                if(chatName.toLowerCase().includes('truncate')
-                    ||chatName.toLowerCase().includes('drop table')
-                    ||chatName.toLowerCase().includes('database')
-                    ||chatName.toLowerCase().includes('delete from')
-                    ||chatName.toLowerCase().includes('*')){
-                   error.push(`invalid name for chat room`);
-                   return h.response(error).code(403);
-                }
-                else{
+                // if(chatName.toLowerCase().includes('truncate')
+                //     ||chatName.toLowerCase().includes('drop table')
+                //     ||chatName.toLowerCase().includes('database')
+                //     ||chatName.toLowerCase().includes('delete from')
+                //     ||chatName.toLowerCase().includes('*')){
+                //    error.push(`invalid name for chat room`);
+                //    return h.response(error).code(403);
+                // }
+                // else{
     
                     const invitedInfo= await db.query(`SELECT * FROM usr WHERE pseudo=$1`,[invited]);
-  
                     if(!invitedInfo.rows[0]){
                         error.push("invalid user name")
                         return h.response(error).code(404)
                     }
                     const invitedID= invitedInfo.rows[0].id;
-                 const myEmail= request.state.cookie.email;
+
+                    const invitedPseudo= invitedInfo.rows[0].pseudo;
+                    const myEmail= request.state.cookie.email;
                    
                     const me= await db.query(`SELECT * FROM usr WHERE email=$1`,[myEmail]);
 
                     const myID= me.rows[0].id;
+                    const myPseudo= me.rows[0].pseudo;
+                    const chatName= `${invitedPseudo} + ${myPseudo}`;
                     //maintenant que l'on trouve 2 utilisateurs
                     //on créer la chat room
                     const newChat= await db.query(`INSERT INTO chat ("name")VALUES ($1) RETURNING *`,[chatName]);
@@ -152,7 +155,7 @@ module.exports = {
                         
                         return h.response(messages.rows).code(200);
                 }
-            }
+            // }
         }
         
         });
@@ -219,24 +222,27 @@ module.exports = {
                 tags: ['api', 'chatroom','update']
             },
             handler: async function (request, h) {
+                const error=[];
                const chatSerial= request.params.chatSerial;
                const newChatter= request.payload.newChatter;
                const email= request.state.cookie.email;
+
                 const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`,[chatSerial]);
                 if(!chatExists.rows[0]){
                     const error=`chat not found `
                     return h.response(error).code(404);
                 }
-                chatID= chatExists.rows[0].id;
+
+                const chatID= chatExists.rows[0].id;
+                const chatName= chatExists.rows[0].name;
                 const me= await db.query(`SELECT * FROM usr 
                                             WHERE email=$1`,[email]);
-                const myID= me.rows[0].id;
                 const usrInChat= await db.query(`SELECT * FROM all_my_message_in_chat
                                                  WHERE usr_id=$1;`,[me.rows[0].id]);
+                    
                     if(!usrInChat.rows[0]){
                         error.push("Vous n'êtes pas invité sur cette chatroom!")
                         return h.response(error).code(403);
-
                     }
 
                 const newInvited= await db.query(`SELECT * FROM usr WHERE pseudo=$1;`,[newChatter]);
@@ -245,13 +251,27 @@ module.exports = {
                     return h.response(error).code(404);
                 }
                 else{
+                    //check if newchatter already in chat
 
                 const newChatterID= newInvited.rows[0].id;
-                await db.query(`INSERT INTO usr_message_chat ( "date", usr_id, chat_id) 
-                                                VALUES(NOW(),$1,$2)`[newChatterID, chatID]);
+                const isInChat=await db.query(`SELECT * FROM all_my_message_in_chat
+                                                WHERE usr_id=$1
+                                                AND chat_serial=$2;`,[newChatterID, chatSerial]);
+                if(isInChat.rows[0]){
+                    error.push(`user already invited`)
+                    return h.response(error).code(200);   
+                }
+                else{
+                await db.query(`UPDATE chat 
+                                SET name='${chatName} + ${newInvited.rows[0].pseudo}'
+                                WHERE id=$1`,[chatID]);
+                await db.query(`INSERT INTO usr_message_chat ("date", usr_id, chat_id) 
+                                VALUES(NOW(),$1,$2)`,[newChatterID, chatID]);
                 const messages= await db.query(`SELECT * FROM all_my_message_in_chat
-                                                WHERE chat_id=$1`,[chatID])
+                                                WHERE chat_id=$1`,[chatID]);
+
                 return h.response(messages.rows).code(200);
+                }
             }
         }
         
