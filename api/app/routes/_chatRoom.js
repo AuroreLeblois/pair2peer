@@ -79,7 +79,7 @@ module.exports = {
                          const messages= await db.query(`SELECT * FROM
                                                         chat_message 
                                                         WHERE chat_serial=$1`,[chatCode]);
-        
+                        console.log(messages.rows[0].messages)
                         return h.response(messages.rows[0]).code(200);
                      }
                
