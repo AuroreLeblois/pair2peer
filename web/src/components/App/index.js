@@ -19,6 +19,7 @@ import Home from 'src/components/Home';
 import NotFound from 'src/components/Page404';
 import Messaging from 'src/components/Messaging';
 import UserMap from 'src/components/Map';
+import About from 'src/components/About';
 
 import './styles.css';
 
@@ -91,6 +92,7 @@ const App = () => {
               <Route exact path="/profile" render={() => loginCheck(<Profile />)} />
               <Route exact path="/search" render={() => loginCheck(<Search />)} />
               <Route exact path="/inbox" render={() => loginCheck(<Messaging />)} />
+              <Route exact path="/about" render={About}/>
               <Route component={NotFound} />
             </Switch>
           </Container>

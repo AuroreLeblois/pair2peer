@@ -1,0 +1,8 @@
+#center{
+  text-align: center;
+}
+#connect{
+  display: flex;
+  margin: auto;
+justify-content: center;
+}
