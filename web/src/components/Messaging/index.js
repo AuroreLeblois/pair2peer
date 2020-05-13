@@ -1,10 +1,11 @@
 // == Import npm
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Columns, Box, Heading, Content, Button } from 'react-bulma-components';
 import axios from 'axios';
 import { API_URI } from 'src/store/utils';
 import { getUserInbox } from 'src/store/actions';
+import useInterval from '@use-it/interval';
 
 // == Import
 import ChatsList from './chatsList';
@@ -36,7 +37,7 @@ const Messaging = () => {
       });
   };
 
-  useCallback(refreshInbox, [inbox]);
+  useInterval(refreshInbox, 6000 * 10);
 
   return (
     <>

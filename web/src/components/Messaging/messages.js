@@ -1,5 +1,5 @@
 // == Import npm
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Columns, Media, Image, Container, Button, Content, Form } from 'react-bulma-components';
 import useInputChange from 'src/store/hooks/useInputChange';
@@ -32,9 +32,7 @@ const Messages = ({ selectedChat, refreshInbox }) => {
     refreshInbox();
   };
 
-  console.log(input);
-  console.log(selectedChat)
-  console.log(input[selectedChat]);
+  useCallback(refreshInbox, [inbox]);
 
   const Message = () => {
     return (
