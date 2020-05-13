@@ -17,7 +17,7 @@ const About = () => {
       <div class="card contouring">
         <div class="card-image">
           <figure class="image is-one-third">
-          <img src={Max} alt="Max, notre lead dev front"/>
+            <img src={Charles} alt="Charles, notre product owner"/>
           </figure>
         </div>
        <div class="card-content">
@@ -51,7 +51,7 @@ const About = () => {
 <div class="card contouring">
   <div class="card-image">
     <figure class="image is-one-third">
-    <img src={Charles} alt="Charles, notre product owner"/>
+      <img src={Max} alt="Max, notre lead dev front"/>
     </figure>
   </div>
  <div class="card-content">
