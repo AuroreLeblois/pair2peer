@@ -92,12 +92,8 @@ module.exports = {
                 const picture =request.payload.picture;
                 const disponibility= request.payload.disponibility;
                 
-                //si l'utisateur change des infos=> update user table
-                //le pseudo
-                
-                //le mot de passe
                 //on compare le mdp avec la validation si mdp changé
-                //déjà est ce que le user a rentré un mdp?
+                //déjà, est ce que le user a rentré un mdp?
                 if(password.length>0){
                     //est ce que le mdp fait bien 8 caractères au moins?
                     if(password.length>=8){
@@ -114,25 +110,7 @@ module.exports = {
                     }
                     else{error.push(' Votre mot de passe doit faire 8 caractères minimum!')};
                 };
-                // //l'email
-                // //est-ce que le champs email est rempli et différent du cookie?
-                // if(changeMyEmail.length>0
-                //     &&changeMyEmail!==email&& changeMyEmail===validateEmail
-                //     ){
-                //     console.log('un email a été saisie et est différent+validation ok')
-                //     //ok mais c'est un email?
-                //     if(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(changeMyEmail)===true){
-                //     //dans ce cas on va update le profil
-                //     console.log(`c'est bien un email`)
-                //     await db.query(`UPDATE usr 
-                //     SET "email"=$1 
-                //     WHERE "id"=$2`, [changeMyEmail, userID]);
-                //     }
-                //     //sinon on prévient l'user
-                //     else{
-                //         error.push('invalid email')
-                //     }
-                // };
+               //le pseudo si on désire le changer
                 if(pseudo.length>0 && pseudo!==result.rows[0].pseudo){
                     //oui mais le pseudo doit être unique
                     const pseudoExists= await db.query(`SELECT pseudo FROM usr WHERE pseudo= $1;` ,[pseudo]);
@@ -153,7 +131,7 @@ module.exports = {
                         const detailExist= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
                         //il n'existe pas=> on insert
                          if(!detailExist.rows[0]){
-                              //ensuite on vérifie si ce qui a été saisie diffère des données existantes
+                        //ensuite on vérifie si ce qui a été saisie diffère des données existantes
                         if(city!==userCity &&country!==userCountry
                         ||country==userCountry&& city!==userCity
                         ||city==userCity&&country!==userCountry){
@@ -190,7 +168,8 @@ module.exports = {
                                                 latitude=$3,
                                                 longitude=$4
                                                 WHERE usr_id=$5`,
-                                                [city, country,latitude,longitude,userID]);
+                                                [city, country,latitude,
+                                                longitude,userID]);
 
                             }
                               
@@ -204,7 +183,9 @@ module.exports = {
                                             picture=$7
                                             WHERE usr_id=$8`,
                                             [remote, description, 
-                                            disponibility,linkedin_link, facebook_link,github_link, picture,userID]);
+                                            disponibility,linkedin_link,
+                                            facebook_link,github_link, picture,
+                                            userID]);
                                         };
                     
                     }
@@ -224,22 +205,19 @@ module.exports = {
                         error.push(`Merci de nous dire si vous souhaitez travailler en remote`);
                     }
                 }
-                    
-                        // si il y a des erreurs
+    
                         if(error.length>0){
                             console.log(error)
                             return h.response(error).code(400);
                         }
-                        // sinon on renvoie les nouvelles infos
                         else{
                             const newResult = await db.query(`SELECT * FROM usr WHERE "id" = $1` ,[userID]);
                             const newProfile= await db.query(`SELECT * FROM usr_profile WHERE pseudo=$1 `,[newResult.rows[0].pseudo]);
-                            const newPlace= await db.query(`SELECT * FROM usr_map WHERE pseudo=$1`, [newResult.rows[0].pseudo]);
+                            // const newPlace= await db.query(`SELECT * FROM usr_map WHERE pseudo=$1`, [newResult.rows[0].pseudo]);
                             // const newPl= newPlace.rows[0];
                             const newPro= newProfile.rows[0];
                             return  {newPro};
                         }
-                        //si le champs est vide=> ne rien faire
                     }
                 });
 
@@ -261,20 +239,20 @@ module.exports = {
                         },
 
                         description: 'handle update user profile lang',
-                tags: ['api', 'profile', 'validation']
+                         tags: ['api', 'profile', 'validation']
             },
-            handler: async (request, h) => {
-                //les langues
-                const email= request.state.cookie.email;
-                const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
-                const userID= result.rows[0].id;
-                const language=request.payload.language;
+                    handler: async (request, h) => {
+                        //les langues
+                        const email= request.state.cookie.email;
+                        const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
+                        const userID= result.rows[0].id;
+                        const language=request.payload.language;
 
         
                 
                         const langExists= await db.query(`SELECT * 
-                                                      FROM lang
-                                                      WHERE "name" =$1`, [language]);
+                                                          FROM lang
+                                                          WHERE "name" =$1`, [language]);
                         const langID= langExists.rows[0].id;
                         const userKnowsLang= await db.query(`SELECT usr_id, lang_id 
                                                             FROM usr_speaks_lang
@@ -314,16 +292,16 @@ module.exports = {
                             const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
                             const userID= result.rows[0].id;
                             const language=request.params.language;
-                            const langExists= await db.query(`SELECT * 
-                                                      FROM lang
-                                                      WHERE "name" =$1;`, [language]);
-                             const langID= langExists.rows[0].id;
+                                const langExists= await db.query(`SELECT * 
+                                                        FROM lang
+                                                        WHERE "name" =$1;`, [language]);
+                            const langID= langExists.rows[0].id;
                             await db.query(`DELETE FROM usr_speaks_lang
                                             where usr_id=$1
                                             AND lang_id=$2;`,[userID,langID]);
                             const newUser=await db.query(`SELECT * FROM usr_profile 
                                                             WHERE id=$1;`,[userID]);
-                                return newUser.rows;
+                            return newUser.rows;
                         }
                     
                 });
@@ -340,7 +318,6 @@ module.exports = {
                         validate: {
                             payload: Joi.object({
                                
-                                // language: Joi.string(),
                                 it_language: Joi.array().items(Joi.object({
                                     name: Joi.string(),
                                     level: Joi.number().min(0).max(10),
@@ -354,41 +331,36 @@ module.exports = {
             },
             handler: async (request, h) => {
                 const email= request.state.cookie.email;
-                            const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
-                            const userID= result.rows[0].id;
-                  const it_language= request.payload.it_language;
-        //les it        
-                        const itLangExists = await db.query(`SELECT *
-                                                        FROM it_lang
-                                                        WHERE "name"=$1;`, [it_language[0].name]);
+                const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
+                const userID= result.rows[0].id;
+                const it_language= request.payload.it_language;      
+                const itLangExists = await db.query(`SELECT *
+                                                    FROM it_lang
+                                                    WHERE "name"=$1;`, [it_language[0].name]);
 
-                        const itLangID= itLangExists.rows[0].id;
-                        const userKnowsIt= await db.query(`SELECT usr_id, it_lang_id 
-                                                           FROM usr_knows_it_lang
-                                                           WHERE usr_id = $1 
-                                                           AND it_lang_id= $2`,
-                                                           [userID, itLangID]);
-                //         //si pas de résultat
-                        if(!userKnowsIt.rows[0]){
-                            await db.query(`INSERT INTO usr_knows_it_lang (usr_id, it_lang_id, "level", search) 
-                            VALUES ($1, $2, $3, $4)`,
-                            [userID, itLangID, it_language[0].level, it_language[0].search]);
+                const itLangID= itLangExists.rows[0].id;
+                const userKnowsIt= await db.query(`SELECT usr_id, it_lang_id 
+                                                    FROM usr_knows_it_lang
+                                                    WHERE usr_id = $1 
+                                                    AND it_lang_id= $2`,
+                                                    [userID, itLangID]);
+            
+                if(!userKnowsIt.rows[0]){
+                     await db.query(`INSERT INTO usr_knows_it_lang (usr_id, it_lang_id, "level", search) 
+                                    VALUES ($1, $2, $3, $4)`,
+                                    [userID, itLangID, it_language[0].level, it_language[0].search]);
                         }
-                //         //si résultat
-                        else{
-                            await db.query(`UPDATE usr_knows_it_lang 
-                                            SET "level"= $1, search=$2
-                                            WHERE usr_id=$3
-                                            AND it_lang_id =$4`,
-                                            [it_language[0].level,it_language[0].search, userID,itLangID]);
-                        }
+                else{
+                    await db.query(`UPDATE usr_knows_it_lang 
+                                    SET "level"= $1, search=$2
+                                    WHERE usr_id=$3
+                                    AND it_lang_id =$4`,
+                                    [it_language[0].level,it_language[0].search, userID,itLangID]);
+                }
                     
-                
-                  
-                
                 const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
                 return newUser.rows;
-                 }
+                }
            
                 });
 
@@ -414,21 +386,27 @@ module.exports = {
                         handler: async (request, h) => {
                             const email= request.state.cookie.email;
                             const it_language= request.params.it_language;
-                            const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
+                            const result = await db.query(`SELECT * FROM usr 
+                                                            WHERE email = $1`,
+                                                            [email] );
+
                             const userID= result.rows[0].id;
                     
                             const itLangExists = await db.query(`SELECT *
-                                                        FROM it_lang
-                                                        WHERE "name" = $1`, [it_language]);
+                                                                FROM it_lang
+                                                                WHERE "name" = $1`, 
+                                                                [it_language]);
                                               
-                        const itLangID= itLangExists.rows[0].id;
+                            const itLangID= itLangExists.rows[0].id;
               
-                    await db.query(`DELETE FROM usr_knows_it_lang
-                                    where usr_id=$1
-                                    AND it_lang_id=$2;`,[userID,itLangID]);
+                            await db.query(`DELETE FROM usr_knows_it_lang
+                                            WHERE usr_id=$1
+                                            AND it_lang_id=$2;`,
+                                            [userID,itLangID]);
                          
-                                    const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
-                                    return newUser.rows;
+                            const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,
+                                                        [userID]);
+                            return newUser.rows;
                         }
                     });
                 
