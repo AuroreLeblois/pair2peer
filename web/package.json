@@ -52,6 +52,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.13.0",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
+    "@use-it/interval": "^0.1.3",
     "axios": "^0.19.2",
     "bulma-react-components": "^1.0.2",
     "formik": "^2.1.4",
