@@ -3,6 +3,7 @@ import Max from './Max.png';
 import Victor from './Victor.png';
 import Aurore from './Aurore.png';
 // == Import css
+
 // == Composant
 const About = () => {
   return(
@@ -26,6 +27,10 @@ const About = () => {
           <p class="subtitle is-6">  Product Owner, Lead Dévoloppeur-Back</p>
         </div>
       </div>
+
+=======
+  
+
       <div class="content">
          Product Owner, Lead devolopper-back
          <br></br>
@@ -33,11 +38,13 @@ const About = () => {
         <br></br>
         <time datetime="2020">2020</time>
       </div>
+
     </div>
     </div>
     </div>
     </div>
     </article>
+
     <article class="card-of-team">
 <div class="columns is-mobile">
 <div class="column">
@@ -57,7 +64,8 @@ const About = () => {
   </div>
 </div>
 <div class="content">
-   Ah ben non tant que vous nous obligez pas à les manger! Non Provençal c'est mon nom.
+   Ah ben non tant que vous nous obligez pas à les manger! Non Provençal c’est mon nom.
+
    <br></br>
   <a href="#">#css</a> <a href="#">#responsive</a>
   <br></br>
@@ -87,7 +95,7 @@ const About = () => {
   </div>
 </div>
 <div class="content">
-   Ah ben non tant que vous nous obligez pas à les manger! Non Provençal c'est mon nom.
+   Ah ben non tant que vous nous obligez pas à les manger! Non Provençal c’est mon nom.
    <br></br>
   <a href="#">#css</a> <a href="#">#responsive</a>
   <br></br>
@@ -117,7 +125,7 @@ const About = () => {
   </div>
 </div>
 <div class="content">
-   Ah ben non tant que vous nous obligez pas à les manger! Non Provençal c'est mon nom.
+   Ah ben non tant que vous nous obligez pas à les manger! Non Provençal c’est mon nom.
    <br></br>
   <a href="#">#css</a> <a href="#">#responsive</a>
   <br></br>
