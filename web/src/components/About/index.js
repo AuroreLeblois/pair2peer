@@ -2,17 +2,19 @@ import React from 'react';
 import Max from './Max.png';
 import Victor from './Victor.png';
 import Aurore from './Aurore.png';
+import Charles from './Charles.png';
 // == Import css
+import './style.css';
 
 // == Composant
 const About = () => {
   return(
     <section id="presentation">
-       <div class="column is-three-quarters-mobile is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
+       <div class="take-all-space is-three-quarters-mobile is-two-thirds-tablet is-half-desktop  is-one-quarter-fullhd">
    <article class="card-of-team">
       <div class="columns is-mobile">
       <div class="column">
-      <div class="card">
+      <div class="card contouring">
         <div class="card-image">
           <figure class="image is-one-third">
           <img src={Max} alt="Max, notre lead dev front"/>
@@ -27,8 +29,6 @@ const About = () => {
           <p class="subtitle is-6">  Product Owner, Lead Dévoloppeur-Back</p>
         </div>
       </div>
-
-=======
   
 
       <div class="content">
@@ -48,10 +48,10 @@ const About = () => {
     <article class="card-of-team">
 <div class="columns is-mobile">
 <div class="column">
-<div class="card">
+<div class="card contouring">
   <div class="card-image">
     <figure class="image is-one-third">
-    <img src={Max} alt="Max, notre lead dev front"/>
+    <img src={Charles} alt="Charles, notre product owner"/>
     </figure>
   </div>
  <div class="card-content">
@@ -78,9 +78,9 @@ const About = () => {
 <article class="card-of-team">
 <div class="columns is-mobile">
 <div class="column">
-<div class="card">
+<div class="card contouring">
   <div class="card-image">
-    <figure class="image is-one-third">
+    <figure class="image is-one-third victor">
     <img src={Victor} alt="Victor, notre git master"/>
     </figure>
   </div>
@@ -108,7 +108,7 @@ const About = () => {
 <article class="card-of-team">
 <div class="columns is-mobile">
 <div class="column">
-<div class="card">
+<div class="card contouring">
   <div class="card-image">
     <figure class="image is-one-third">
     <img src={Aurore} alt="Aurore, scrum master"/>
