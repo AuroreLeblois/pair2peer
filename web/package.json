@@ -53,6 +53,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
     "axios": "^0.19.2",
+    "bulma-react-components": "^1.0.2",
     "formik": "^2.1.4",
     "leaflet": "^1.6.0",
     "object.omit": "^3.0.0",
