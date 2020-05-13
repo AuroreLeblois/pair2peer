@@ -31,7 +31,10 @@ const App = () => {
   const history = useHistory();
   const user = useSelector((state) => state.user);
 
+  console.log(document.cookie);
+
   const sessionUser = () => {
+    console.log('coucou')
     if (!user) {
       const userInfo = JSON.parse(sessionStorage.getItem('user'));
       const inbuxUserInfo = JSON.parse(sessionStorage.getItem('inbox'));
