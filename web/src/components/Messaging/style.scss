@@ -12,9 +12,13 @@
   }
 }
 .inbox {
+  min-height: 50vh;
+
   &-messages {
     &-content {
-      min-height: 25vh;
+      max-height: 5vw;
+      min-height: 50vh;
+      overflow-y: auto;
     }
 
     &-form {
