@@ -49,9 +49,6 @@ module.exports = {
                         password: Joi.string().allow(''),
                         validatePassword: Joi.ref('password'),
                         pseudo: Joi.string().allow(''),
-                        // firstEmail: Joi.string().email().required(),
-                        // email: Joi.string().email().allow(''),
-                        // validateEmail: Joi.string().email().allow(''),
                         searchable: Joi.boolean().required(),
                         remote: Joi.boolean().required(),
                         city: Joi.string().required(),
@@ -61,8 +58,7 @@ module.exports = {
                         linkedin_link: Joi.string().allow(''),
                         facebook_link: Joi.string().allow(''),
                         github_link: Joi.string().allow(''),
-                        // languages: Joi.array().items(Joi.string()),
-                        // itLang: Joi.string().items(Joi.string())
+                        picture:Joi.string()
                     })
                 },
                 description: 'handle update user profile',
@@ -74,7 +70,6 @@ module.exports = {
                 let error= [];
                 //le cookie email pour retrouver l'user
                 const email= request.state.cookie.email;
-                // const email= request.payload.firstEmail;
                 //on retrouve l'user de suite pour ne pas avoir à le refaire plus tard
                 const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
                 const userID= result.rows[0].id;
@@ -90,20 +85,11 @@ module.exports = {
                 const remote= request.payload.remote;
                 const description= request.payload.description;
                 const validatePassword= request.payload.validatePassword;
-                // const changeMyEmail= request.payload.email;
-                // const validateEmail= request.payload.validateEmail;
                 const pseudo= request.payload.pseudo;
                 const linkedin_link=request.payload.linkedin_link;
                 const facebook_link= request.payload.facebook_link;
                 const github_link= request.payload.github_link;
-                //les langues
-                const selectedLang= [request.payload.languages];
-                //les it
-                const itlangs = [request.payload.itLanguages];
-                const itLevel= [request.payload.itLevels];
-                //on peut me trouver via le filtre?
-                const searchMe= request.payload.searchable;
-                //les dispos
+                const picture =request.payload.picture;
                 const disponibility= request.payload.disponibility;
                 
                 //si l'utisateur change des infos=> update user table
@@ -148,7 +134,6 @@ module.exports = {
                 //     }
                 // };
                 if(pseudo.length>0 && pseudo!==result.rows[0].pseudo){
-                       console
                     //oui mais le pseudo doit être unique
                     const pseudoExists= await db.query(`SELECT pseudo FROM usr WHERE pseudo= $1;` ,[pseudo]);
                     if(!pseudoExists.rows[0]){
@@ -164,8 +149,6 @@ module.exports = {
                 //avant on vérifie que les input "required" sont conformes
                 if(city!==null&& country!==null && remote!==null
                     ||city!== undefined&& country!== undefined&& remote!== undefined){
- 
-
 
                         const detailExist= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
                         //il n'existe pas=> on insert
@@ -217,10 +200,11 @@ module.exports = {
                                             disponibility=$3,
                                             linkedin_link=$4,
                                             facebook_link=$5,
-                                            github_link=$6
-                                            WHERE usr_id=$7`,
+                                            github_link=$6,
+                                            picture=$7
+                                            WHERE usr_id=$8`,
                                             [remote, description, 
-                                            disponibility,linkedin_link, facebook_link,github_link,userID]);
+                                            disponibility,linkedin_link, facebook_link,github_link, picture,userID]);
                                         };
                     
                     }
