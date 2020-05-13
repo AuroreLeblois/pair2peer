@@ -89,7 +89,6 @@ module.exports = {
                 const linkedin_link=request.payload.linkedin_link;
                 const facebook_link= request.payload.facebook_link;
                 const github_link= request.payload.github_link;
-                const picture =request.payload.picture;
                 const disponibility= request.payload.disponibility;
                 
                 //on compare le mdp avec la validation si mdp changé
