@@ -22,7 +22,7 @@ const About = () => {
         </div>
        <div class="card-content">
       <div class="media">
-        <div class="media-left"> 
+        <div class="media"> 
         </div>
         <div class="media-content">
           <p class="title is-4">Charles Phonepraseuth</p>
@@ -32,9 +32,9 @@ const About = () => {
   
       <div class="content">
          Product Owner, Lead devolopper-back
-         <br></br>
+         <br/>
         <a href="#">linkedin</a> <a href="#">Autres projets</a>
-        <br></br>
+        <br/>
         <time datetime="2020">2020</time>
       </div>
     </div>
@@ -54,7 +54,7 @@ const About = () => {
   </div>
  <div class="card-content">
 <div class="media">
-  <div class="media-left"> 
+  <div class="media"> 
   </div>
   <div class="media-content">
     <p class="title is-4">Maximilien Bec</p>
@@ -64,9 +64,9 @@ const About = () => {
 
 <div class="content">
    Ah ben non tant que vous nous obligez pas à les manger! Non Provençal c’est mon nom.
-   <br></br>
+   <br/>
   <a href="#">#css</a> <a href="#">#responsive</a>
-  <br></br>
+  <br/>
   <time datetime="2020">2020</time>
 </div>
 </div>
@@ -86,7 +86,7 @@ const About = () => {
   </div>
  <div class="card-content">
 <div class="media">
-  <div class="media-left"> 
+  <div class="media"> 
   </div>
   <div class="media-content">
     <p class="title is-4">Victor Greiveldinger</p>
@@ -96,9 +96,9 @@ const About = () => {
 
 <div class="content">
    Ah ben non tant que vous nous obligez pas à les manger! Non Provençal c’est mon nom.
-   <br></br>
+   <br/>
   <a href="#">#css</a> <a href="#">#responsive</a>
-  <br></br>
+  <br/>
   <time datetime="2020">2020</time>
 </div>
 </div>
@@ -118,7 +118,7 @@ const About = () => {
   </div>
  <div class="card-content">
 <div class="media">
-  <div class="media-left"> 
+  <div class="media"> 
   </div>
   <div class="media-content">
     <p class="title is-4">Aurore Leblois</p>
