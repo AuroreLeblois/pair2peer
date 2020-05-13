@@ -14,7 +14,7 @@ const ChatsList = ({ handleSelectChat }) => {
   const OneChat = () => {
     return inbox.map((chatroom) => {
       return (
-        <Columns className="chatlist">
+        <Columns key={chatroom.chat_serial} className="chatlist">
           <Columns.Column renderAs="a" onClick={(evt) => handleSelectChat(evt, chatroom.chat_serial)} className="chatlist-content">
             <Container>
               <Media>

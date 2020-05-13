@@ -22,6 +22,7 @@ export const actions = {
   DELETE_IT_LANG: 'actions/DELETE_IT_LANG',
   UPDATE_IT_LANG: 'actions/UPDATE_IT_LANG',
   GET_USER_INBOX: 'actions/GET_USER_INBOX',
+  SUBMIT_MESSAGE: 'actions/SUBMIT_MESSAGE',
 };
 
 // == Actions creator
@@ -91,4 +92,8 @@ export const deleteIt = (itLanguage) => (
 
 export const getUserInbox = (data) => (
   { type: actions.GET_USER_INBOX, data }
+);
+
+export const submitMessage = (message, chatroom) => (
+  { type: actions.SUBMIT_MESSAGE, message, chatroom }
 );

@@ -1,8 +1,8 @@
 // == Import npm
 import React from 'react';
 import { Container, Heading } from 'react-bulma-components';
+
 // == Import css
-import './style.css';
 
 // == Composant
 const About = () => {
