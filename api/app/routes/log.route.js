@@ -90,7 +90,8 @@ module.exports = {
                         passwordConfirm: Joi.ref('password'),
                         country: Joi.string().trim().required(),
                         city: Joi.string().trim().required(),
-                        remote: Joi.string().required()
+                        remote: Joi.string().required(),
+                        // ["g-recaptcha-response"]: Joi.string().required()
                     }),
                     options: {
                         // false mean I go through each key (payload) even if one error appears	
@@ -103,6 +104,12 @@ module.exports = {
                         // errors object will be the object who contains all the error messages (in french)
                         const errors = {};
                         const details = err.details;
+                        // if (request.payload["g-recaptcha-response"] === undefined ||
+                        //     request.payload["g-recaptcha-response"] === '' ||
+                        //     request.payload["g-recaptcha-response"] === null) {
+                            
+                        //     return h.response('Vous devez remplir le captcha');
+                        // }
                         
                         // depend on each error, it will write a specific error message
                         for (let index = 0; index < details.length; index++) {
@@ -126,7 +133,7 @@ module.exports = {
                 }
             },
             handler: async (request, h) => {
-
+                // const captcha= request.payload["g-recaptcha-response"];
                 const { email, pseudo, password, country, city, remote } = request.payload;
                 // use User model to signup
                 const info = await User.signup(email, pseudo, password, country, city, remote);

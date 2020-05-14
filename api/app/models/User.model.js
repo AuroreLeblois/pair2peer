@@ -1,7 +1,6 @@
 const db = require('./db');
 const bcrypt = require('bcrypt');
 const Wreck = require('@hapi/wreck');
-const chocolat = 'chocolat';
 
 module.exports = class User {
 

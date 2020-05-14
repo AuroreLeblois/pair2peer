@@ -22,7 +22,7 @@ const db = require('./app/models/db');
     server.auth.strategy('base', 'cookie', {
         cookie: {
             name: 'cookie',
-            password : process.env.COOKIEPASSWORD,
+            password : 'Td2sXhE4Eghk8MBA3X96hgMqd66k8r2P',
             isSecure: false,
             ttl: 1000*60*20
         },
