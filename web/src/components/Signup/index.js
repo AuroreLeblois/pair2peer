@@ -12,6 +12,7 @@ const Signup = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { usersData } = useSelector((state) => state)
+  console.log(usersData);
 
   // Les hooks
   const [pseudo, setPseudo] = React.useState('');
@@ -47,7 +48,7 @@ const Signup = () => {
       <Columns.Column>
         <Columns>
           <Container>
-            <Content style={{ textAlign: "center" }}>
+            <Content style={{ textAlign: 'center' }}>
               <Heading size={3}>Inscription</Heading>
               {/* <Heading subtitle size={6}>Rejoignez les {usersData.maxUser} développeurs enregistrés !</Heading> */}
             </Content>

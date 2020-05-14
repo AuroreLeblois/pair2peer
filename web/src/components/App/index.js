@@ -19,6 +19,7 @@ import Home from 'src/components/Home';
 import NotFound from 'src/components/Page404';
 import Messaging from 'src/components/Messaging';
 import UserMap from 'src/components/Map';
+import About from 'src/components/About';
 
 import './styles.css';
 
@@ -30,7 +31,10 @@ const App = () => {
   const history = useHistory();
   const user = useSelector((state) => state.user);
 
+  console.log(document.cookie);
+
   const sessionUser = () => {
+    console.log('coucou')
     if (!user) {
       const userInfo = JSON.parse(sessionStorage.getItem('user'));
       const inbuxUserInfo = JSON.parse(sessionStorage.getItem('inbox'));
@@ -59,11 +63,12 @@ const App = () => {
       .then((res) => {
         const data = res.data;
         const filtersList = {};
-        const usersData = {};
+        let usersData = {};
+        console.log(res.data);
         filtersList.it_language = data.it_language;
         filtersList.language = data.language;
         filtersList.localisation = data.localisation;
-        usersData.maxUser = data.maxUser;
+        usersData = data.maxUser;
         dispatch(getFiltersList(filtersList, usersData));
       })
       .catch((err) => {
@@ -71,8 +76,7 @@ const App = () => {
       });
   };
 
-  useEffect(getFilters);
-
+  useEffect(getFilters, [user]);
 
   return (
     <div className="app">
@@ -91,6 +95,7 @@ const App = () => {
               <Route exact path="/profile" render={() => loginCheck(<Profile />)} />
               <Route exact path="/search" render={() => loginCheck(<Search />)} />
               <Route exact path="/inbox" render={() => loginCheck(<Messaging />)} />
+              <Route exact path="/about" render={About}/>
               <Route component={NotFound} />
             </Switch>
           </Container>

@@ -10,8 +10,8 @@
   height: 100%;
 };
 
-.is-4 {
-  display: inline-flex;
+.card-content {
+  height: 100% !important;
 };
 
 .picture-profile {
@@ -36,4 +36,8 @@ textarea,
 .textarea {
   min-height: inherit;
   height: auto;
+}
+
+.tags, .is-grouped {
+  margin-bottom: 0 !important;
 }

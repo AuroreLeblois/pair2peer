@@ -1,16 +1,19 @@
 // == Import npm
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Columns, Media, Image, Container, Button, Content, Form } from 'react-bulma-components';
 import useInputChange from 'src/store/hooks/useInputChange';
+import { submitMessage } from 'src/store/actions';
 
 // == Import css
 import './style.scss';
 
-const Messages = ({ selectedChat }) => {
-  const [input, handleInputChange] = useInputChange();
+const Messages = ({ selectedChat, refreshInbox }) => {
+  const dispatch = useDispatch();
 
+  let key = 1;
   const { inbox, user } = useSelector((state) => state);
+  const [input, handleInputChange] = useInputChange();
 
   const goodChat = inbox.filter((chatroom) => chatroom.chat_serial === selectedChat)[0];
 
@@ -20,7 +23,16 @@ const Messages = ({ selectedChat }) => {
     }
   };
 
-  console.log(goodChatMessages());
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    const data = {};
+    data.message = input[selectedChat];
+    dispatch(submitMessage(data, selectedChat));
+    input[selectedChat] = '';
+    refreshInbox();
+  };
+
+  useCallback(refreshInbox, [inbox]);
 
   const Message = () => {
     return (
@@ -44,7 +56,7 @@ const Messages = ({ selectedChat }) => {
         <Columns.Column className="inbox-messages-content">
           <Content>
             {goodChatMessages().map((message) => (
-              <Media>
+              <Media key={key++}>
                 <Media.Item renderAs="figure" position="left">
                   <Image size={32} alt="xooma-picture" src="https://i.imgur.com/GJ4Ittp.png" />
                 </Media.Item>
@@ -61,15 +73,6 @@ const Messages = ({ selectedChat }) => {
             ))}
           </Content>
         </Columns.Column>
-        <form>
-          <Form.Field>
-            <Form.Label>Message</Form.Label>
-            <Form.Control className="inbox-messages-form">
-              <Form.Textarea rows="3" placeholder="Tapez votre message ..." name="message" onChange={handleInputChange} value={input.message} />
-            </Form.Control>
-          </Form.Field>
-          <Button fullwidth color="success" type="submit">Envoyer</Button>
-        </form>
       </>
     );
   };
@@ -78,10 +81,23 @@ const Messages = ({ selectedChat }) => {
     <h1>Bienvenue</h1>
   );
 
+  if (!selectedChat) {
+    return <h1>Bienvenue</h1>;
+  }
+
 
   return (
     <>
-      {(selectedChat) ? <Message /> : <NoChat />}
+      <Message />
+      <form onSubmit={handleSubmit}>
+        <Form.Field>
+          <Form.Label>Message</Form.Label>
+          <Form.Control className="inbox-messages-form">
+            <Form.Textarea rows="3" placeholder="Tapez votre message ..." name={selectedChat} onChange={handleInputChange} value={input[selectedChat]} />
+          </Form.Control>
+        </Form.Field>
+        <Button fullwidth color="success" type="submit">Envoyer</Button>
+      </form>
     </>
   );
 };

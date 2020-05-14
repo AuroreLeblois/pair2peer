@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const Loading = () => (
-  <Modal closeOnBlur={false} closeOnEsc={false} showClose={false} show onClose={null}>
+  <Modal closeOnBlur={false} closeOnEsc={false} showClose={false} show onClose={() => {}}>
     <Modal.Content>
       <Section style={{ backgroundColor: 'white' }}>
         <FontAwesomeIcon size="xs" icon={faSpinner} />

@@ -39,7 +39,7 @@ const ModalAddLang = ({ modalLang, setModalLang }) => {
               <Form.Control>
                 <Form.Label>Langue</Form.Label>
                 <Form.Select onChange={handleInputChange} value={input.language} name="language">
-                  <option value="">{null}</option>
+                  <option value=""> -- Selectionner une option -- </option>
                   <LangOptions />
                 </Form.Select>
               </Form.Control>
