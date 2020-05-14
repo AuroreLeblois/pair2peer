@@ -33,6 +33,22 @@ const Messages = ({ selectedChat, refreshInbox }) => {
     refreshInbox();
   };
 
+  const goodNickname = () => {
+    return goodChat.users.map((chatuser) => {
+      if (chatuser.pseudo !== user.pseudo) {
+        return chatuser.pseudo;
+      }
+    });
+  };
+
+  const goodPicture = () => {
+    return goodChat.users.map((chatuser) => {
+      if (chatuser.pseudo !== user.pseudo) {
+        return chatuser.picture;
+      }
+    });
+  };
+
   useCallback(refreshInbox, [inbox]);
 
   const Message = () => {
@@ -43,11 +59,13 @@ const Messages = ({ selectedChat, refreshInbox }) => {
             <Container>
               <Media>
                 <Media.Item renderAs="figure" position="left">
-                  <Image size={32} alt="xooma-picture" src="https://i.imgur.com/GJ4Ittp.png" />
+                  <Image size={32} alt={`${goodNickname()}-picture`} src={goodPicture()} />
                 </Media.Item>
                 <Media.Item>
                   <Media.Content>
-                    <h6 className="chatlist-content-title">{goodChat.pseudo.filter((nickname) => nickname !== user.pseudo)}</h6>
+                    <h6 className="chatlist-content-title">
+                      {goodNickname()}
+                    </h6>
                   </Media.Content>
                 </Media.Item>
               </Media>
@@ -59,7 +77,7 @@ const Messages = ({ selectedChat, refreshInbox }) => {
             {goodChatMessages().map((message) => (
               <Media key={key++}>
                 <Media.Item renderAs="figure" position="left">
-                  <Image size={32} alt="xooma-picture" src="https://i.imgur.com/GJ4Ittp.png" />
+                  <Image size={32} alt={`${message.pseudo}-picture`} src={user.picture} />
                 </Media.Item>
                 <Media.Item>
                   <Media.Content>
