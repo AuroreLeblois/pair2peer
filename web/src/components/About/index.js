@@ -9,7 +9,18 @@ import './style.css';
 // == Composant
 const About = () => {
   return(
+  
+
     <section id="presentation">
+        <section class="hero">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title is-in-center">
+       Notre dream team
+      </h1>
+    </div>
+  </div>
+  </section>
       <div class="take-all-space is-three-quarters-mobile is-two-thirds-tablet is-half-desktop  is-one-quarter-fullhd">
         <article class="card-of-team">
           <div class="columns is-mobile">

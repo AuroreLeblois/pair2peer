@@ -13,6 +13,9 @@ max-width: 250px;
 margin-bottom: 2em;
 
 }
+.is-in-center{
+ text-align: center;
+}
 .fixed-long{
   height: 300px;
 }
@@ -28,6 +31,3 @@ margin-bottom: 2em;
 .victor{
   height: 120%;
 }
-
-
-

@@ -50,7 +50,7 @@ const Signup = () => {
           <Container>
             <Content style={{ textAlign: 'center' }}>
               <Heading size={3}>Inscription</Heading>
-              {/* <Heading subtitle size={6}>Rejoignez les {usersData.maxUser} développeurs enregistrés !</Heading> */}
+              <Heading subtitle size={6}>Rejoignez les {usersData.maxUser} développeurs enregistrés !</Heading>
             </Content>
           </Container>
         </Columns>
