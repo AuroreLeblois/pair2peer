@@ -11,6 +11,7 @@ import axios from 'axios';
 
 // == Import component
 import Loading from 'src/components/Loading';
+import { faCross } from '@fortawesome/free-solid-svg-icons';
 
 // == Composant
 const ProfileEdit = ({ handleClickPictureUpload, inputFile }) => {
@@ -49,18 +50,34 @@ const ProfileEdit = ({ handleClickPictureUpload, inputFile }) => {
     setOpenModal(false);
   };
 
-  const handleChangePictureUpload = () => {
-    axios({
-      method: 'post',
-      url: 'https://api.imgur.com/3/image/',
-      headers: { Authorization: 'Client-ID 0b8db3b78405b7a' }
-    })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const handleChangePictureUpload = (evt) => {
+    const file = evt.target.files[0];
+    const clientID = '7ab7a64158df6cd';
+    const formData = new FormData();
+    formData.append('image', file);
+    fetch('https://api.imgur.com/3/image', {
+      method: 'POST',
+      headers: {
+        Authorization: 'Client-ID 7ab7a64158df6cd',
+      },
+      body: formData,
+    }).then((res) => {
+      console.log(res);
+    }).catch((err) => {
+      console.log(err);
+    });
+    // axios.post('https://api.imgur.com/3/image', {
+    //   headers: {
+    //     Authorization: `Client-ID ${clientID}`,
+    //   },
+    //   data,
+    // })
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   if (!loading) {

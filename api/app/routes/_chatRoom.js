@@ -22,9 +22,7 @@ module.exports = {
 
                 // use User model to find one user by his email through the cookie
                 const user = await User.findOne(request.state.cookie);
-                const myChatRooms=await db.query(`SELECT * FROM chat_message WHERE "users"@> '[{"pseudo":"${user.pseudo}"}]';`
-                //,[user.pseudo]
-                );
+                const myChatRooms=await db.query(`SELECT * FROM chat_message WHERE "users"@> '[{"pseudo":"${user.pseudo}"}]'`);
                 return myChatRooms.rows;
             }
         });
