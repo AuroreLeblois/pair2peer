@@ -46,7 +46,7 @@ module.exports = class User {
         // send all informations about the user logged for the front in react
         const userInfos = await db.query(`SELECT * FROM usr_profile WHERE email = $1`, [email]);
         // add chat message
-        const chatInfos = await db.query(`SELECT * FROM chat_message WHERE "users"@> '[{"pseudo":"${userInfos.pseudo}"}]';`
+        const chatInfos = await db.query(`SELECT * FROM chat_message WHERE "users"@> '[{"pseudo":"${theUser.pseudo}"}]';`
         //, [userInfos.rows[0].pseudo]
         );
         
