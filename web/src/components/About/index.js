@@ -18,7 +18,7 @@ const About = () => {
           <Card.Content>
             <Media>
               <Media.Item>
-                <Heading size={4}>John Smith</Heading>
+                <Heading size={4}>Victor Greiveldinger</Heading>
                 <Heading subtitle size={6}>@johnsmith</Heading>
               </Media.Item>
             </Media>
@@ -34,7 +34,7 @@ const About = () => {
           <Card.Content>
             <Media>
               <Media.Item>
-                <Heading size={4}>John Smith</Heading>
+                <Heading size={4}>Charles Phonepraseuth</Heading>
                 <Heading subtitle size={6}>@johnsmith</Heading>
               </Media.Item>
             </Media>
@@ -50,7 +50,7 @@ const About = () => {
           <Card.Content>
             <Media>
               <Media.Item>
-                <Heading size={4}>John Smith</Heading>
+                <Heading size={4}>Aurore Leblois</Heading>
                 <Heading subtitle size={6}>@johnsmith</Heading>
               </Media.Item>
             </Media>
@@ -66,7 +66,7 @@ const About = () => {
           <Card.Content>
             <Media>
               <Media.Item>
-                <Heading size={4}>John Smith</Heading>
+                <Heading size={4}>Maximilien Bec</Heading>
                 <Heading subtitle size={6}>@johnsmith</Heading>
               </Media.Item>
             </Media>
