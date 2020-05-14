@@ -21,6 +21,11 @@ axios@^0.19.2:
   dependencies:
     follow-redirects "1.5.10"
 
+bulma@^0.8.2:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/bulma/-/bulma-0.8.2.tgz#5d928f16ed4a84549c2873f95c92c38c69c631a7"
+  integrity sha512-vMM/ijYSxX+Sm+nD7Lmc1UgWDy2JcL2nTKqwgEqXuOMU+IGALbXd5MLt/BcjBAPLIx36TtzhzBcSnOP974gcqA==
+
 checkbox@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/checkbox/-/checkbox-0.0.1.tgz#c407d7e51ee2183bee957dbc34960e3c00d0d165"
@@ -47,7 +52,7 @@ follow-redirects@1.5.10:
   dependencies:
     debug "=3.1.0"
 
-hoist-non-react-statics@^3.3.2:
+hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz#ece0acaf71d62c2969c2ec59feff42a4b1a85b45"
   integrity sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==
@@ -98,7 +103,7 @@ omit@^1.0.1:
   resolved "https://registry.yarnpkg.com/omit/-/omit-1.0.1.tgz#058a01b4b6db1287b36ecb58dfa8e18778958017"
   integrity sha1-BYoBtLbbEoezbstY36jhh3iVgBc=
 
-prop-types@^15.6.2:
+prop-types@^15.5.0, prop-types@^15.6.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -106,6 +111,14 @@ prop-types@^15.6.2:
     loose-envify "^1.4.0"
     object-assign "^4.1.1"
     react-is "^16.8.1"
+
+react-async-script@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-async-script/-/react-async-script-1.1.1.tgz#f481c6c5f094bf4b94a9d52da0d0dda2e1a74bdf"
+  integrity sha512-pmgS3O7JcX4YtH/Xy//NXylpD5CNb5T4/zqlVUV3HvcuyOanatvuveYoxl3X30ZSq/+q/+mSXcNS8xDVQJpSeA==
+  dependencies:
+    hoist-non-react-statics "^3.3.0"
+    prop-types "^15.5.0"
 
 react-dom@^16.13.1:
   version "16.13.1"
@@ -116,6 +129,14 @@ react-dom@^16.13.1:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
     scheduler "^0.19.1"
+
+react-google-recaptcha@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-google-recaptcha/-/react-google-recaptcha-2.0.1.tgz#3276b29659493f7ca2a5b7739f6c239293cdf1d8"
+  integrity sha512-4Y8awVnarn7+gdVpu8uvSmRJzzlMMoXqdhLoyToTOfVK6oM+NaChNI8NShnu75Q2YGHLvR1IA1FWZesuYHwn5w==
+  dependencies:
+    prop-types "^15.5.0"
+    react-async-script "^1.1.1"
 
 react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"

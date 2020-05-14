@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import { submitSignup } from 'src/store/actions';
 import { Columns, Form, Button, Box, Container, Content, Heading } from 'react-bulma-components';
+import ReCAPTCHA from "react-google-recaptcha";
+
+
 
 const Signup = () => {
   const history = useHistory();
@@ -46,7 +49,7 @@ const Signup = () => {
           <Container>
             <Content style={{ textAlign: "center" }}>
               <Heading size={3}>Inscription</Heading>
-              <Heading subtitle size={6}>Rejoignez les {usersData.maxUser} développeurs enregistrés !</Heading>
+              {/* <Heading subtitle size={6}>Rejoignez les {usersData.maxUser} développeurs enregistrés !</Heading> */}
             </Content>
           </Container>
         </Columns>
@@ -113,6 +116,13 @@ const Signup = () => {
             </Form.Field>
             <Columns.Column />
             <Button fullwidth type="submit" color="success">Valider</Button>
+            <Form.Field>
+              <Content style={{ margin: '15px 50px' }}>
+                <ReCAPTCHA
+                  sitekey="6LdCMPYUAAAAAN5j6Bxfdy1BlFpNwY5gVApE-5b3"
+                />
+              </Content>
+            </Form.Field>
           </form>
           <Columns.Column />
           <Columns.Column />
