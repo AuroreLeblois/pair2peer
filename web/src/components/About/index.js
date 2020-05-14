@@ -21,7 +21,7 @@ const About = () => {
     </div>
   </div>
   </section>
-      <div class="take-all-space is-three-quarters-mobile is-two-thirds-tablet is-half-desktop  is-one-quarter-fullhd">
+      <div class="take-all-space is-three-quarters-mobile is-two-thirds-tablet is-half-desktop is-one-quarter-fullhd">
         <article class="card-of-team">
           <div class="columns is-mobile">
             <div class="column">
