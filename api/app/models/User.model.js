@@ -46,8 +46,8 @@ module.exports = class User {
         // send all informations about the user logged for the front in react
         const userInfos = await db.query(`SELECT * FROM usr_profile WHERE email = $1`, [email]);
         // add chat message
-        const chatInfos = await db.query(`SELECT * FROM chat_message WHERE "pseudo" ? $1`, [userInfos.rows[0].pseudo]);
-        
+        const chatInfos = await db.query(`SELECT * FROM chat_message WHERE "users"@> '[{"pseudo":"${theUser.pseudo}"}]'`);
+
         // create user object who will contain 2 objects (informations about the user and his messages)
         const user = {
             info: userInfos.rows[0],
@@ -132,9 +132,14 @@ module.exports = class User {
     // ####               ####
     // ##   FindOne method  ##
     // ####               ####
-    static async findOne(pseudo) {
+    static async findOne(info) {
 
-        const user = await db.query(`SELECT * FROM usr_profile WHERE pseudo = $1`, [pseudo]);
+        let user;
+        if (info.pseudo) {
+            user = await db.query(`SELECT * FROM usr_profile WHERE pseudo = $1`, [info.pseudo]);
+        } else if (info.email) {
+            user = await db.query(`SELECT * FROM usr_profile WHERE email = $1`, [info.email]);
+        }
 
         const error = {
             statusCode: 400,

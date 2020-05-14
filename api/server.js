@@ -12,7 +12,20 @@ const db = require('./app/models/db');
                 origin: ['*'],
                 credentials: true
             }
-        }
+        },
+        cache: [
+            {
+                // if I didn't assign any name, this cache will be the default cache
+                provider: {
+                    constructor: require('@hapi/catbox-redis'),
+                    options: {
+                        // the partition will be the Redis prefix
+                        partition : 'pair2peer',
+                        password: process.env.CACHEPASSWORD
+                    }
+                }
+            }
+        ]
     });
 
     // pour éviter d'écrire les identifiants en dur, je les passerai en variables d'environnement
@@ -24,7 +37,7 @@ const db = require('./app/models/db');
             name: 'cookie',
             password : 'Td2sXhE4Eghk8MBA3X96hgMqd66k8r2P',
             isSecure: false,
-            ttl: 1000*60*20
+            ttl: 1000*60*60*24 // 24 hours
         },
         redirectTo: '/login',
         validateFunc: async (request, cookie) => {

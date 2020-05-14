@@ -1,12 +1,22 @@
-const vision = require('@hapi/vision');
-const inert = require('@hapi/inert');
 const Joi = require('@hapi/joi');
 const db = require('../models/db');
+const User = require('../models/User.model');
+const Chat = require('../models/Chat.model');
 
 module.exports = {
     name: 'chat pages',
     register: async (server) => {
-        await server.register([vision, inert]);
+
+        const chatsCache = server.cache({
+            expiresIn: 1000 * 60 * 60 * 24, // 24 hours
+            segment: 'chats',
+            generateFunc: async (pseudo) => {
+                
+                // use Chat model to find all chat rooms with their messages by pseudo
+                return await Chat.findBy(pseudo);
+            },
+            generateTimeout: 5000
+        });
 
         server.route({
             method: 'GET',
@@ -21,10 +31,12 @@ module.exports = {
                 tags: ['api', 'chatroom', 'everything']
             },
             handler: async function (request, h) {
-                const myEmail= request.state.cookie.email;
-                const me= await db.query(`SELECT * FROM usr WHERE email=$1`,[myEmail]);
-                const myChatRooms=await db.query(`SELECT * FROM chat_message  WHERE pseudo ? $1;`,[me.rows[0].pseudo]);
-                return myChatRooms.rows;
+
+                // use User model to find one user by his email through the cookie
+                const user = await User.findOne(request.state.cookie);
+                
+                // set all user's chats into the cache 
+                return await chatsCache.get(user.pseudo)
             }
         });
 
