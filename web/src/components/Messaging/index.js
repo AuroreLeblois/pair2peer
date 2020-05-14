@@ -18,7 +18,6 @@ const Messaging = () => {
   const [selectedChat, setSelectedChat] = useState('');
 
   const handleSelectChat = (evt, chatSerial) => {
-    console.log(chatSerial);
     setSelectedChat(chatSerial);
   };
 

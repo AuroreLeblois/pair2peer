@@ -20,6 +20,7 @@ import NotFound from 'src/components/Page404';
 import Messaging from 'src/components/Messaging';
 import UserMap from 'src/components/Map';
 import About from 'src/components/About';
+import UserProfile from 'src/components/UserProfile';
 
 import './styles.css';
 
@@ -93,9 +94,10 @@ const App = () => {
               <Route exact path="/signup" component={Signup} />
               <Route exact path="/map" component={UserMap} />
               <Route exact path="/profile" render={() => loginCheck(<Profile />)} />
+              <Route exact path="/profile/:pseudo" render={() => loginCheck(<UserProfile />)} />
               <Route exact path="/search" render={() => loginCheck(<Search />)} />
               <Route exact path="/inbox" render={() => loginCheck(<Messaging />)} />
-              <Route exact path="/about" render={About}/>
+              <Route exact path="/about" render={About} />
               <Route component={NotFound} />
             </Switch>
           </Container>
