@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 // == Import npm
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -19,12 +20,22 @@ const ChatsList = ({ handleSelectChat }) => {
             <Container>
               <Media>
                 <Media.Item renderAs="figure" position="left">
-                  <Image size={32} alt="xooma-picture" src="https://i.imgur.com/GJ4Ittp.png" />
+                  <Image size={32} alt="xooma-picture" src={
+                    chatroom.users.map((users) => {
+                      if (users.pseudo !== user.pseudo) {
+                        return users.picture;
+                      }
+                    })
+                  } />
                 </Media.Item>
                 <Media.Item>
                   <Media.Content>
                     <h6 className="chatlist-content-title">
-                      {chatroom.pseudo.filter((nickname) => nickname !== user.pseudo)}
+                      {chatroom.users.map((users) => {
+                        if (users.pseudo !== user.pseudo) {
+                          return users.pseudo;
+                        }
+                      })}
                     </h6>
                     <p className="chatlist-content-msg">{cutStringToNCharacter(chatroom.messages[chatroom.messages.length - 1].content, 20)}...</p>
                   </Media.Content>
