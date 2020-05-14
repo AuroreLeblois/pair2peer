@@ -8,14 +8,14 @@ module.exports = {
     register: async (server) => {
 
         const chatsCache = server.cache({
-            expiresIn: 1000 * 60 * 60 * 24, // 24 hours
+            expiresIn: 1000, //1000 * 60 * 60 * 24, // 24 hours
             segment: 'chats',
             generateFunc: async (pseudo) => {
-                
+                console.log('coucou de la fonction cache')
                 // use Chat model to find all chat rooms with their messages by pseudo
                 return await Chat.findBy(pseudo);
             },
-            generateTimeout: 5000
+            generateTimeout: 1000
         });
 
         server.route({
@@ -34,7 +34,7 @@ module.exports = {
 
                 // use User model to find one user by his email through the cookie
                 const user = await User.findOne(request.state.cookie);
-                
+                console.log('coucou de la route')
                 // set all user's chats into the cache 
                 return await chatsCache.get(user.pseudo)
             }
