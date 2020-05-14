@@ -17,6 +17,7 @@ export default (store) => (next) => (action) => {
         .then((res) => {
           // Redirection to '/', object { user } from reponse to reducer state
           const { data } = res;
+          console.log(res);
           store.dispatch(getAuthentified(action.history, data.info));
           store.dispatch(getUserInbox(data.inbox));
           store.dispatch({ type: actions.CLEAR_ERRORS_MSG });
