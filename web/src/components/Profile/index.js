@@ -1,8 +1,11 @@
+/* eslint-disable react/jsx-filename-extension */
 // == Import npm
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { firstLetterToUppercase } from 'src/store/utils';
-import { Columns, Image, Media, Container, Heading, Hero, Form, Button, Box } from 'react-bulma-components';
+import { Columns, Image, Media, Container, Heading, Hero, Icon, Button, Box } from 'react-bulma-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 // == Import
 import Loading from 'src/components/Loading';
@@ -11,8 +14,14 @@ import SkillsEdit from './skillsEdit';
 
 // == Composant
 const Profile = () => {
+  const inputFile = useRef(null);
   const [activeTab, setActiveTab] = useState();
   const user = useSelector((state) => state.user);
+
+  const handleClickPictureUpload = () => {
+    console.log('pouet');
+    inputFile.current.click();
+  };
 
   if (user) {
     return (
@@ -36,8 +45,11 @@ const Profile = () => {
             <Columns.Column>
               <Container className="picture-profile">
                 <Media>
-                  <Media.Item renderAs="figure" position="left">
+                  <Media.Item onClick={handleClickPictureUpload} renderAs="a" position="left">
                     <Image size={128} rounded src={user.picture} />
+                    <Icon pull="right" color="danger" renderAs="a">
+                      <FontAwesomeIcon className="edit-picture" size="lg" icon={faEdit} />
+                    </Icon>
                   </Media.Item>
                   <Media.Content>
                     <Hero>
@@ -53,7 +65,7 @@ const Profile = () => {
               </Container>
             </Columns.Column>
             <Columns.Column />
-            {(activeTab) ? <SkillsEdit /> : <ProfileEdit /> }
+            {(activeTab) ? <SkillsEdit /> : <ProfileEdit handleClickPictureUpload={handleClickPictureUpload} inputFile={inputFile} /> }
           </Box>
         </Columns.Column>
 

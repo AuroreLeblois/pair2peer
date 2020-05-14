@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 // == Import npm
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';

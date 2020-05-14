@@ -41,3 +41,9 @@ textarea,
 .tags, .is-grouped {
   margin-bottom: 0 !important;
 }
+
+.edit-picture {
+  margin-top: -3rem;
+  margin-left: -1rem;
+  z-index: 999999;
+}
