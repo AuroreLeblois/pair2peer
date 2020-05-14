@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 // == Import npm
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -116,14 +117,21 @@ const Signup = () => {
               </Form.Control>
             </Form.Field>
             <Columns.Column />
+            <Columns>
+              <Columns.Column />
+                <Form.Field>
+                  <Container>
+                    <Content style={{ textAlign: 'center' }}>
+                      <ReCAPTCHA
+                        sitekey="6LdCMPYUAAAAAN5j6Bxfdy1BlFpNwY5gVApE-5b3"
+                      />
+                    </Content>
+                  </Container>
+                </Form.Field>
+              <Columns.Column />
+            </Columns>
             <Button fullwidth type="submit" color="success">Valider</Button>
-            <Form.Field>
-              <Content style={{ margin: '15px 50px' }}>
-                <ReCAPTCHA
-                  sitekey="6LdCMPYUAAAAAN5j6Bxfdy1BlFpNwY5gVApE-5b3"
-                />
-              </Content>
-            </Form.Field>
+            <Columns.Column />
           </form>
           <Columns.Column />
           <Columns.Column />

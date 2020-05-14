@@ -1,6 +1,8 @@
+/* eslint-disable react/jsx-filename-extension */
 /* eslint-disable max-len */
 // == Import npm
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import axios from 'axios';
 import { API_URI } from 'src/store/utils';
@@ -11,7 +13,7 @@ import './style.css';
 // Composant React, toutes les définitions de variables et de fonctions doivent se trouver dedans
 // On laisse à l'extérieur uniquement les imports/exports
 const UserMap = () => {
-
+  const { user } = useSelector((state) => state);
   // J'initie le state pour stocker les users en réponse de la requête axios
   // La première variables stocke les données, la deuxième sert à définir les données qui seront stockées dans la première
   const [users, setUsers] = useState();
@@ -36,6 +38,21 @@ const UserMap = () => {
   // Sert à plein d'autres choses aussi https://fr.reactjs.org/docs/hooks-effect.html
   useEffect(getUsersData, []);
 
+  const UsersPopup = () => {
+    if (user) {
+      return (
+        <Popup>
+          <div>
+            <h2>Pseudo :{user.pseudo}</h2>
+            <p>Ville : {user.city}</p>
+            <p>Remote : {user.remote}</p>
+          </div>
+        </Popup>
+      );
+    }
+    return null;
+  };
+
   // Rendu du composant, c'est ici que tout se passe
 
   // Le temps de la requêtes, users n'est pas défini
@@ -56,16 +73,11 @@ const UserMap = () => {
           position={user.localisation}
           key={user.pseudo}
         >
-          <Popup>
-            <div>
-              <h2>Pseudo :{user.pseudo}</h2>
-              <p>Ville : {user.city}</p>
-              <p>Remote : {user.remote}</p>
-            </div>
-          </Popup>
+          <UsersPopup />
         </Marker>
       ))}
     </Map>
+
   );
 };
 
