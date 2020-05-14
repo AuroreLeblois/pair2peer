@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 // == Import npm
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -6,12 +7,13 @@ import { Columns, Container, Heading, Form, Button, Modal, Section, Icon } from 
 import { actions, updateProfile } from 'src/store/actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faFacebook, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import axios from 'axios';
 
 // == Import component
 import Loading from 'src/components/Loading';
 
 // == Composant
-const ProfileEdit = () => {
+const ProfileEdit = ({ handleClickPictureUpload, inputFile }) => {
   const dispatch = useDispatch();
   const { user, loading } = useSelector((state) => state);
   const [openModal, setOpenModal] = useState(false);
@@ -47,12 +49,27 @@ const ProfileEdit = () => {
     setOpenModal(false);
   };
 
+  const handleChangePictureUpload = () => {
+    axios({
+      method: 'post',
+      url: 'https://api.imgur.com/3/image/',
+      headers: { Authorization: 'Client-ID 0b8db3b78405b7a' }
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   if (!loading) {
     return (
       <>
         <Columns.Column>
           <Container>
             <form>
+              <input id="user-picture" ref={inputFile} onChange={handleChangePictureUpload} type="file" name="picture" style={{ display: 'none' }} />
               <Form.Field>
                 <Form.Field.Body>
                   <Form.Field>

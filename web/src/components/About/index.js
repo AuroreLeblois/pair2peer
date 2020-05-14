@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
-import { Columns, Card, Media, Heading, Content, Image } from 'react-bulma-components';
+import { Columns, Card, Media, Heading, Content } from 'react-bulma-components';
 
 // == Import css
 import Max from './max.jpg';
@@ -10,7 +10,7 @@ import Charles from './charles.jpg';
 
 // == Composant
 const About = () => {
-  return(
+  return (
     <Columns>
       <Columns.Column>
         <Card>
