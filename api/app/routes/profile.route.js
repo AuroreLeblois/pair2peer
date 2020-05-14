@@ -84,9 +84,8 @@ module.exports = {
             },
             handler: async (request, h) => {
 
-                const { pseudo } = request.params;
                 // use User model to see other user profile
-                const profile = await User.findOne(pseudo);
+                const profile = await User.findOne(request.params);
                 
                 if (profile.statusCode) {
                     // if error, send error messages

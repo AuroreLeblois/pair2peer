@@ -24,8 +24,7 @@ module.exports = class Admin {
             } else {
                 query[item] = query[item].toLowerCase()
             }
-        } 
-        console.log(query)
+        }
 
         const keys = Object.keys(query);
         const values = Object.values(query);

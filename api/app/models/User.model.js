@@ -1,6 +1,7 @@
 const db = require('./db');
 const bcrypt = require('bcrypt');
 const Wreck = require('@hapi/wreck');
+const chocolat = 'chocolat';
 
 module.exports = class User {
 
@@ -132,9 +133,14 @@ module.exports = class User {
     // ####               ####
     // ##   FindOne method  ##
     // ####               ####
-    static async findOne(pseudo) {
+    static async findOne(info) {
 
-        const user = await db.query(`SELECT * FROM usr_profile WHERE pseudo = $1`, [pseudo]);
+        let user;
+        if (info.pseudo) {
+            user = await db.query(`SELECT * FROM usr_profile WHERE pseudo = $1`, [info.pseudo]);
+        } else if (info.email) {
+            user = await db.query(`SELECT * FROM usr_profile WHERE email = $1`, [info.email]);
+        }
 
         const error = {
             statusCode: 400,
