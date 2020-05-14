@@ -9,7 +9,12 @@
   flex-wrap: wrap;
 }
 .card-of-team{
-max-width: 23%;
+max-width: 250px;
+margin-bottom: 2em;
+
+}
+.fixed-long{
+  height: 300px;
 }
 .contouring{
   border-radius: 10px;

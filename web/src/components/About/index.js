@@ -30,7 +30,7 @@ const About = () => {
                     </div>
                   </div>
                   <div class="content">
-                    Product Owner, Lead devolopper-back
+                  Moi, prochaine bataille rangée je reste à Kaamelott. On plaisante, on plaisante… Ah, ben tourné vers là-bas c'est sûr, moi non plus je vois rien. La vache! Ca vous rend pas aimable en tout cas, hein!
                     <br/>
                     <a href="#">linkedin</a> <a href="#">Autres projets</a>
                     <br/>
@@ -61,7 +61,7 @@ const About = () => {
                     </div>
                   </div>
                   <div class="content">
-                    Ah ben non tant que vous nous obligez pas à les manger! Non Provençal c’est mon nom.
+                  Alors vous allez peut-être me dire que maintenant ils croient qu'on est là-bas? Je suis chef de guerre moi, je suis pas là pour secouer des drapeaux et jouer de la trompette. Ah ben un peu oui, surtout que s'ils ont vu d'où venait la pierre ils sont en train de radiner droit sur nous! Il s’est fait chier dessus par un bouc! Mais Attila vous y attend, Sire! Attila! Le Fléau de Dieu!
                     <br/>
                     <a href="#">#css</a> <a href="#">#responsive</a>
                     <br/>
@@ -82,7 +82,7 @@ const About = () => {
                     <img src={Victor} alt="Victor, notre git master"/>
                   </figure>
                 </div>
-                <div class="card-content">
+                <div class="card-content fixed-long">
                   <div class="media">
                     <div class="media"> 
                     </div>
@@ -92,7 +92,7 @@ const About = () => {
                     </div>
                   </div>
                   <div class="content">
-                    Ah ben non tant que vous nous obligez pas à les manger! Non Provençal c’est mon nom.
+                  Oh ben ça va on plaisante! C’est du patrimoine ça? Allez en garde ma mignonne!
                     <br/>
                     <a href="#">#css</a> <a href="#">#responsive</a>
                     <br/>
@@ -123,7 +123,7 @@ const About = () => {
                     </div>
                   </div>
                   <div class="content">
-                    Ah ben non tant que vous nous obligez pas à les manger! Non Provençal c’est mon nom.
+                  Là c’est une table ronde. Pour que les chevaliers de Bretagne se réunissent autour. Toute façon autant vous y faire parce qu’à partir de maintenant on va s’appeler «Les Chevaliers de la Table Ronde». Et alors c'est pas permis? A genoux, pas à genoux c’est une chose... Enfin en attendant je vous donne pas tout notre or.
                     <br/>
                     <a href="#">#css</a> <a href="#">#responsive</a>
                     <br/>
