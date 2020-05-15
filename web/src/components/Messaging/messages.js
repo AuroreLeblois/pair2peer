@@ -2,7 +2,7 @@
 // == Import npm
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Columns, Media, Image, Container, Button, Content, Form } from 'react-bulma-components';
+import { Columns, Media, Image, Container, Button, Content, Form, Box } from 'react-bulma-components';
 import useInputChange from 'src/store/hooks/useInputChange';
 import { submitMessage } from 'src/store/actions';
 
@@ -51,6 +51,10 @@ const Messages = ({ selectedChat, refreshInbox }) => {
 
   useCallback(refreshInbox, [inbox]);
 
+  const chatDiv = document.getElementsByClassName('inbox-messages-content');
+  console.log(chatDiv)
+  chatDiv.scrollTop = chatDiv.scrollHeight;
+
   const Message = () => {
     return (
       <>
@@ -74,22 +78,46 @@ const Messages = ({ selectedChat, refreshInbox }) => {
         </Columns>
         <Columns.Column className="inbox-messages-content">
           <Content>
-            {goodChatMessages().map((message) => (
-              <Media key={key++}>
-                <Media.Item renderAs="figure" position="left">
-                  <Image size={32} alt={`${message.pseudo}-picture`} src={user.picture} />
-                </Media.Item>
-                <Media.Item>
-                  <Media.Content>
-                    <h6 className="chatlist-content-title">
-                      {message.pseudo}
-                    </h6>
-                    <p className="chatlist-content-msg">{message.date}</p>
-                    <p className="chatlist-content-msg">{message.content}</p>
-                  </Media.Content>
-                </Media.Item>
-              </Media>
-            ))}
+            {goodChatMessages().map((message) => {
+              if (message.pseudo === user.pseudo) {
+                return (
+                  <Box>
+                    <Media key={key++}>
+                      <Media.Item renderAs="figure" position="left">
+                        <Image size={32} alt={`${message.pseudo}-picture`} src={user.picture} />
+                      </Media.Item>
+                      <Media.Item>
+                        <Media.Content>
+                          <h6 className="chatlist-content-title">
+                            {message.pseudo}
+                          </h6>
+                          <p className="chatlist-content-msg">{message.date}</p>
+                          <p className="chatlist-content-msg">{message.content}</p>
+                        </Media.Content>
+                      </Media.Item>
+                    </Media>
+                  </Box>
+                );
+              }
+              return (
+                <Box className="inbox-messages-user">
+                  <Media key={key++}>
+                    <Media.Item renderAs="figure" position="left">
+                      <Image size={32} alt={`${message.pseudo}-picture`} src={user.picture} />
+                    </Media.Item>
+                    <Media.Item>
+                      <Media.Content>
+                        <h6 className="chatlist-content-title">
+                          {message.pseudo}
+                        </h6>
+                        <p className="chatlist-content-msg">{message.date}</p>
+                        <p className="chatlist-content-msg">{message.content}</p>
+                      </Media.Content>
+                    </Media.Item>
+                  </Media>
+                </Box>
+              );
+            })}
           </Content>
         </Columns.Column>
       </>

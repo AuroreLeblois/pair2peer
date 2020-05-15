@@ -12,8 +12,8 @@ import './style.scss';
 const ChatsList = ({ handleSelectChat }) => {
   const { inbox, user } = useSelector((state) => state);
 
-  const OneChat = () => {
-    return inbox.map((chatroom) => {
+  return (
+    inbox.map((chatroom) => {
       return (
         <Columns key={chatroom.chat_serial} className="chatlist">
           <Columns.Column renderAs="a" onClick={(evt) => handleSelectChat(evt, chatroom.chat_serial)} className="chatlist-content">
@@ -37,7 +37,7 @@ const ChatsList = ({ handleSelectChat }) => {
                         }
                       })}
                     </h6>
-                    <p className="chatlist-content-msg">{cutStringToNCharacter(chatroom.messages[chatroom.messages.length - 1].content, 20)}...</p>
+                    <p className="chatlist-content-msg">{cutStringToNCharacter(chatroom.messages[chatroom.messages.length - 1].content, 40)}...</p>
                   </Media.Content>
                 </Media.Item>
               </Media>
@@ -45,13 +45,7 @@ const ChatsList = ({ handleSelectChat }) => {
           </Columns.Column>
         </Columns>
       );
-    });
-  };
-
-  return (
-    <Columns gapless>
-      <OneChat />
-    </Columns>
+    })
   );
 };
 
