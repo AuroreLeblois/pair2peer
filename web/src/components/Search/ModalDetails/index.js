@@ -2,6 +2,7 @@
 // == Import npm
 import React, { useState, Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { Content, Modal, Media, Image, Level, Button, Container, Tag, Heading, Icon, Progress, Columns } from 'react-bulma-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faLinkedin, faFacebook } from '@fortawesome/free-brands-svg-icons';
@@ -98,9 +99,9 @@ const UserProfile = ({ modalUserDetails, setModalUserDetails }) => {
             </Media>
             <Media>
               <Media.Item>
-                {(selectedUser.github_link !== '') ? <GithubIcon /> : null}
-                {(selectedUser.linkedin_link !== '') ? <LinkedinIcon /> : null}
-                {(selectedUser.facebook_link !== '') ? <FacebookIcon /> : null}
+                {(selectedUser.github_link === '' || selectedUser.github_link === null) ? null : <a href={selectedUser.github_link} target="_blank"><GithubIcon /></a>}
+                {(selectedUser.linkedin_link === '' || selectedUser.linkedin_link === null) ? null : <a href={selectedUser.linkedin_link} target="_blank"><LinkedinIcon /></a>}
+                {(selectedUser.facebook_link === '' || selectedUser.facebook_link === null) ? null : <a href={selectedUser.facebook_link} target="_blank"><FacebookIcon /></a>}
               </Media.Item>
             </Media>
           </Modal.Card.Body>
