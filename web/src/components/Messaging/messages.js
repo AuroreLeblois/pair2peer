@@ -9,7 +9,7 @@ import { submitMessage } from 'src/store/actions';
 // == Import css
 import './style.scss';
 
-const Messages = ({ selectedChat, refreshInbox }) => {
+const Messages = ({ refreshInbox, selectedChat }) => {
   const dispatch = useDispatch();
 
   let key = 1;
@@ -48,7 +48,7 @@ const Messages = ({ selectedChat, refreshInbox }) => {
     });
   };
 
-  // useCallback(refreshInbox, [inbox]);
+  useCallback(refreshInbox);
 
   const Message = () => {
     return (
@@ -130,7 +130,7 @@ const Messages = ({ selectedChat, refreshInbox }) => {
         <Form.Field>
           <Form.Label>Message</Form.Label>
           <Form.Control className="inbox-messages-form">
-            <Form.Textarea rows="3" placeholder="Tapez votre message ..." name={selectedChat} onChange={handleInputChange} value={input[selectedChat]} />
+            <Form.Input rows="3" placeholder="Tapez votre message ..." name={selectedChat} onChange={handleInputChange} value={input[selectedChat]} />
           </Form.Control>
         </Form.Field>
         <Button fullwidth color="success" type="submit">Envoyer</Button>
