@@ -38,7 +38,7 @@ const UserMap = () => {
   // Sert à plein d'autres choses aussi https://fr.reactjs.org/docs/hooks-effect.html
   useEffect(getUsersData, []);
 
-  const UsersPopup = ({userData}) => {
+  const UsersPopup = ({ userData }) => {
     if (user) {
       return (
         <Popup>

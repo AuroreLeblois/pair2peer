@@ -1,5 +1,6 @@
+/* eslint-disable react/jsx-filename-extension */
 // == Import npm
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Columns, Content, Container, Heading } from 'react-bulma-components';
 

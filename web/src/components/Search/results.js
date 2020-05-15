@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 // == Import npm
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,12 +12,14 @@ import { getUsersList } from 'src/store/actions';
 
 // == Import component
 import Cards from './cards';
+import ModalDetails from './ModalDetails';
 
 // == Composant
-const Results = () => {
+const Results = ({ setActiveModalDetails }) => {
   const [activePage, setActivePage] = useState(1);
   // pending MaxPage waiting from axios
   const [pendingMaxPage, setPendingMaxPage] = useState(10);
+  const [modalUserDetails, setModalUserDetails] = useState(false);
 
   const { usersData, search } = useSelector((state) => state);
 
@@ -59,13 +62,14 @@ const Results = () => {
   return (
     <>
       <Columns>
-        <Cards users={usersData.users} />
+        <Cards users={usersData.users} setModalUserDetails={setModalUserDetails} />
       </Columns>
       <Columns>
         <Columns.Column>
           <Pagination current={activePage} total={maxPage} onChange={handleChange} delta={maxPage} />
         </Columns.Column>
       </Columns>
+      <ModalDetails modalUserDetails={modalUserDetails} setModalUserDetails={setModalUserDetails} />
     </>
   );
 };

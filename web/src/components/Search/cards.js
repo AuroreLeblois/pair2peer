@@ -7,12 +7,12 @@ import { Card, Media, Content, Heading, Form, Tag, Image, Columns, Hero, Contain
 import { selectedUserDetails } from 'src/store/actions';
 
 
-const Cards = ({ users }) => {
+const Cards = ({ users, setModalUserDetails }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state);
 
   let key = 1;
-
+  
   const ItLabels = ({ user }) => {
     if (user.it_language[0].name !== null) {
       return user.it_language.map((label) => (
@@ -37,6 +37,7 @@ const Cards = ({ users }) => {
 
   const handleClickUserDetails = (evt, user) => {
     dispatch(selectedUserDetails(user));
+    setModalUserDetails(true);
   };
 
   if (!users) {
@@ -45,8 +46,7 @@ const Cards = ({ users }) => {
 
   return users.map((user) => (
     <>
-      <Columns.Column key={key++} size={4}>
-        <Link to={`/profile/${user.pseudo}`} onClick={(evt) => handleClickUserDetails(evt, user)}>
+      <Columns.Column key={key++} size={4} onClick={(evt) => handleClickUserDetails(evt, user)}>
           <Card>
             <Card.Content>
               <Media>
@@ -83,7 +83,6 @@ const Cards = ({ users }) => {
               </Media>
             </Card.Content>
           </Card>
-        </Link>
       </Columns.Column>
     </>
   ));
