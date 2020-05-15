@@ -80,7 +80,7 @@ const About = () => {
                     <FontAwesomeIcon size="2x" icon={faGithub} />
                   </Icon>
                 </Link>
-                <Link to="">
+                <Link to="https://www.linkedin.com/in/aurore-leblois-4909a0a9/">
                   <Icon className="about-icons" color="dark">
                     <FontAwesomeIcon size="2x" icon={faLinkedin} />
                   </Icon>

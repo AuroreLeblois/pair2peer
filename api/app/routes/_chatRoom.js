@@ -198,8 +198,11 @@ module.exports = {
              
                const me= await db.query(`SELECT * FROM usr WHERE email=$1`,[email]);
                 const myID= me.rows[0].id;
-                const newMessage=await db.query(`INSERT INTO usr_message_chat("date",script,usr_id,chat_id) VALUES(NOW(),$1,$2,$3)RETURNING *;`,[message,myID,chatID]);
-                return h.response(newMessage.rows[0]).code(200);
+                await db.query(`INSERT INTO usr_message_chat("date",script,usr_id,chat_id) VALUES(NOW(),$1,$2,$3);`,[message,myID,chatID]);
+                const conv= await db.query(`SELECT * FROM chat_message
+                                            WHERE to_json(ARRAY(SELECT jsonb_array_elements(users) ->> 'pseudo'))::jsonb ? $1
+                                            `, [me.rows[0].pseudo]);
+                return h.response(conv.rows).code(200);
             }
         
         });
