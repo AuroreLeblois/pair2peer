@@ -8,7 +8,7 @@ module.exports = {
     register: async (server) => {
 
         const chatsCache = server.cache({
-            expiresIn: 1000, //1000 * 60 * 60 * 24, // 24 hours
+            expiresIn: 1000*60, //1000 * 60 * 60 * 24, // 24 hours
             segment: 'chats',
             generateFunc: async (pseudo) => {
                 console.log('coucou de la fonction cache')
