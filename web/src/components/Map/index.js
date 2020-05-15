@@ -63,7 +63,7 @@ const UserMap = () => {
   }
 
   return (
-    <Map className="map" center={[48.84664340683584, 2.3455810546875]} zoom={7}>
+    <Map className="map" center={[46.84664340683584, 2.4333]} zoom={6}>
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
