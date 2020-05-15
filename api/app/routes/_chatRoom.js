@@ -326,12 +326,12 @@ module.exports = {
                                                 WHERE usr_id=$1
                                                 AND chat_serial=$2;`,[me.rows[0].id, chatSerial]);
                 if(!isInChat.rows[0]){
-                    const error= `Vous n'êtes pas ce chat... petit voyou`
+                    const error= `Vous n'êtes pas ce tchat... petit voyou`
                     return h.response(error).code(403)
                 }
                 else{
                     await db.query(`DELETE FROM usr_message_chat WHERE chat_id=$1;`,[chatExists.rows[0].id]);
-                    return `chat supprimé`
+                    return `tchat supprimé`
                 }
             }
         });
