@@ -199,6 +199,15 @@ module.exports = {
              
                const me= await db.query(`SELECT * FROM usr WHERE email=$1`,[email]);
                 const myID= me.rows[0].id;
+                const usrInChat= await db.query(`SELECT * FROM all_my_message_in_chat
+                                                WHERE usr_id=$1
+                                                AND chat_id=$2`,[myID, chatID]);
+                if(!usrInChat.rows[0]){
+                    error.push("Vous n'êtes pas invité sur cette chatroom!")
+                        return h.response(error).code(403);
+
+                }
+                
                 await db.query(`INSERT INTO usr_message_chat("date",script,usr_id,chat_id) VALUES(NOW(),$1,$2,$3);`,[message,myID,chatID]);
                 const conv= await db.query(`SELECT * FROM chat_message
                                             WHERE to_json(ARRAY(SELECT jsonb_array_elements(users) ->> 'pseudo'))::jsonb ? $1
