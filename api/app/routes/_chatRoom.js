@@ -207,7 +207,7 @@ module.exports = {
                         return h.response(error).code(403);
 
                 }
-                
+
                 await db.query(`INSERT INTO usr_message_chat("date",script,usr_id,chat_id) VALUES(NOW(),$1,$2,$3);`,[message,myID,chatID]);
                 const conv= await db.query(`SELECT * FROM chat_message
                                             WHERE to_json(ARRAY(SELECT jsonb_array_elements(users) ->> 'pseudo'))::jsonb ? $1
@@ -292,6 +292,50 @@ module.exports = {
         }
         
         });
+
+        server.route({
+            method: 'DELETE',
+            path: '/chatroom/{chatSerial}',
+            options: {
+                auth: {
+                    strategy: 'base',
+                    mode: 'required',
+                    scope: ['user', 'admin']
+                },
+                validate: {
+                    params: Joi.object({
+                        chatSerial: Joi.string().alphanum().required(),
+                    }),
+                },
+                description: 'my chat rooms',
+                tags: ['api', 'chatroom', 'delete']
+            },
+            handler: async (request, h) => {
+                const chatSerial= request.params.chatSerial;
+                const email= request.state.cookie.email;
+                const me= await db.query(`SELECT * FROM usr 
+                                            WHERE email=$1`,[email]);
+                const chatExists= await db.query(`SELECT * FROM chat 
+                                                WHERE chat_serial=$1`,[chatSerial]);
+                if(!chatExists.rows[0]){
+                    const error=`chat not found `
+                    return h.response(error).code(404);
+                }
+
+                const isInChat=await db.query(`SELECT * FROM all_my_message_in_chat
+                                                WHERE usr_id=$1
+                                                AND chat_serial=$2;`,[me.rows[0].id, chatSerial]);
+                if(!isInChat.rows[0]){
+                    const error= `Vous n'êtes pas ce chat... petit voyou`
+                    return h.response(error).code(403)
+                }
+                else{
+                    await db.query(`DELETE FROM usr_message_chat WHERE chat_id=$1;`,[chatExists.rows[0].id]);
+                    return `chat supprimé`
+                }
+            }
+        });
+
 
 }
 }
