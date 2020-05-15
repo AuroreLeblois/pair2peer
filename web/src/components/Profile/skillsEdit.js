@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 // == Import npm
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -88,13 +89,11 @@ const SkillsEdit = () => {
         <Container>
           <Columns>
             {user.language.map((language) => (
-              <Columns.Column key={key++} size={2}>
-                <Form.Control>
-                  <Tag.Group gapless>
-                    <Tag size="medium">{language}</Tag>
-                    <Tag size="medium" onClick={() => toggleModal('language', language)} color="danger" remove renderAs="a" />
-                  </Tag.Group>
-                </Form.Control>
+              <Columns.Column key={key++} size={3}>
+                <Tag.Group gapless>
+                  <Tag size="medium">{language}</Tag>
+                  <Tag size="medium" onClick={() => toggleModal('language', language)} color="danger" remove renderAs="a" />
+                </Tag.Group>
               </Columns.Column>
             ))}
           </Columns>

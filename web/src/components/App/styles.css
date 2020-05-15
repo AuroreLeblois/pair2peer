@@ -11,7 +11,7 @@
 };
 
 .card-content {
-  height: 100% !important;
+  min-height: 50vh;
 };
 
 .picture-profile {
@@ -50,4 +50,8 @@ textarea,
 
 .about-icons {
   margin-right: 1rem;
+}
+
+.is-multiline, .media-content {
+  overflow: hidden;
 }

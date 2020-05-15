@@ -16,8 +16,8 @@ export default (store) => (next) => (action) => {
       )
         .then((res) => {
           console.log(res);
-          // store.dispatch(getUserInbox(res.data));
-          // sessionStorage.inbox = JSON.stringify(res.data);
+          store.dispatch(getUserInbox(res.data));
+          sessionStorage.inbox = JSON.stringify(res.data);
         })
         .catch((err) => {
           console.log(err.response);
