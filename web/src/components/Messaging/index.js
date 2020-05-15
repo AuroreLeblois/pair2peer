@@ -1,5 +1,6 @@
+/* eslint-disable react/jsx-filename-extension */
 // == Import npm
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Columns, Box, Heading, Content, Button } from 'react-bulma-components';
 import axios from 'axios';
@@ -14,7 +15,6 @@ import './style.scss';
 
 const Messaging = () => {
   const dispatch = useDispatch();
-  const { inbox } = useSelector((state) => state);
   const [selectedChat, setSelectedChat] = useState('');
 
   const handleSelectChat = (evt, chatSerial) => {
@@ -36,6 +36,7 @@ const Messaging = () => {
       });
   };
 
+  useCallback(refreshInbox, [refreshInbox]);
   useInterval(refreshInbox, 6000 * 10);
 
   return (
@@ -47,7 +48,7 @@ const Messaging = () => {
       </Content>
       <Box className="inbox">
         <Columns>
-          <Columns.Column size={2} className="inbox-chatlist">
+          <Columns.Column size={3} className="inbox-chatlist">
             <ChatsList handleSelectChat={handleSelectChat} />
           </Columns.Column>
           <Columns.Column className="inbox-messages">
