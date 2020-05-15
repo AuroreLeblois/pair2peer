@@ -1,6 +1,9 @@
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
-import { Columns, Card, Media, Heading, Content } from 'react-bulma-components';
+import { Columns, Card, Media, Heading, Content, Icon } from 'react-bulma-components';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 // == Import css
 import Max from './max.jpg';
@@ -19,7 +22,17 @@ const About = () => {
             <Media>
               <Media.Item>
                 <Heading size={4}>Victor Greiveldinger</Heading>
-                <Heading subtitle size={6}>@johnsmith</Heading>
+                <Heading subtitle size={6}>Technical Referent, Frontend Developer</Heading>
+                <Link to="">
+                  <Icon className="about-icons" color="dark">
+                    <FontAwesomeIcon size="2x" icon={faGithub} />
+                  </Icon>
+                </Link>
+                <Link to="">
+                  <Icon className="about-icons" color="dark">
+                    <FontAwesomeIcon size="2x" icon={faLinkedin} />
+                  </Icon>
+                </Link>
               </Media.Item>
             </Media>
             <Content>
@@ -35,7 +48,17 @@ const About = () => {
             <Media>
               <Media.Item>
                 <Heading size={4}>Charles Phonepraseuth</Heading>
-                <Heading subtitle size={6}>@johnsmith</Heading>
+                <Heading subtitle size={6}>Product Owner, Lead Backend Developer</Heading>
+                <Link to="">
+                  <Icon className="about-icons" color="dark">
+                    <FontAwesomeIcon size="2x" icon={faGithub} />
+                  </Icon>
+                </Link>
+                <Link to="">
+                  <Icon className="about-icons" color="dark">
+                    <FontAwesomeIcon size="2x" icon={faLinkedin} />
+                  </Icon>
+                </Link>
               </Media.Item>
             </Media>
             <Content>
@@ -51,7 +74,17 @@ const About = () => {
             <Media>
               <Media.Item>
                 <Heading size={4}>Aurore Leblois</Heading>
-                <Heading subtitle size={6}>@johnsmith</Heading>
+                <Heading subtitle size={6}>SCRUM Master, Backend Developer</Heading>
+                <Link to="">
+                  <Icon className="about-icons" color="dark">
+                    <FontAwesomeIcon size="2x" icon={faGithub} />
+                  </Icon>
+                </Link>
+                <Link to="">
+                  <Icon className="about-icons" color="dark">
+                    <FontAwesomeIcon size="2x" icon={faLinkedin} />
+                  </Icon>
+                </Link>
               </Media.Item>
             </Media>
             <Content>
@@ -67,7 +100,17 @@ const About = () => {
             <Media>
               <Media.Item>
                 <Heading size={4}>Maximilien Bec</Heading>
-                <Heading subtitle size={6}>@johnsmith</Heading>
+                <Heading subtitle size={6}>Lead Frontend Developer</Heading>
+                <Link to="">
+                  <Icon className="about-icons" color="dark">
+                    <FontAwesomeIcon size="2x" icon={faGithub} />
+                  </Icon>
+                </Link>
+                <Link to="">
+                  <Icon className="about-icons" color="dark">
+                    <FontAwesomeIcon size="2x" icon={faLinkedin} />
+                  </Icon>
+                </Link>
               </Media.Item>
             </Media>
             <Content>

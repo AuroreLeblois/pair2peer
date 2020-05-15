@@ -90,6 +90,12 @@ export default (state = initialState, action = {}) => {
         inbox: action.data,
       };
     }
+    case actions.SELECTED_USER_DETAILS: {
+      return {
+        ...state,
+        selectedUser: action.user,
+      };
+    }
     default: {
       return state;
     }

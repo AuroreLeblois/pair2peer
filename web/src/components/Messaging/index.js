@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-filename-extension */
 // == Import npm
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Columns, Box, Heading, Content, Button } from 'react-bulma-components';
 import axios from 'axios';
@@ -36,7 +36,6 @@ const Messaging = () => {
       });
   };
 
-  useCallback(refreshInbox, [refreshInbox]);
   useInterval(refreshInbox, 6000 * 10);
 
   return (

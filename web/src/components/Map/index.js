@@ -38,14 +38,14 @@ const UserMap = () => {
   // Sert à plein d'autres choses aussi https://fr.reactjs.org/docs/hooks-effect.html
   useEffect(getUsersData, []);
 
-  const UsersPopup = () => {
+  const UsersPopup = ({userData}) => {
     if (user) {
       return (
         <Popup>
           <div>
-            <h2>Pseudo :{user.pseudo}</h2>
-            <p>Ville : {user.city}</p>
-            <p>Remote : {user.remote}</p>
+            <h2>Pseudo :{userData.pseudo}</h2>
+            <p>Ville : {userData.city}</p>
+            <p>Remote : {userData.remote}</p>
           </div>
         </Popup>
       );
@@ -68,12 +68,12 @@ const UserMap = () => {
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {users.map((user) => (
+      {users.map((userData) => (
         <Marker
-          position={user.localisation}
-          key={user.pseudo}
+          position={userData.localisation}
+          key={userData.pseudo}
         >
-          <UsersPopup />
+          <UsersPopup userData={userData} />
         </Marker>
       ))}
     </Map>
