@@ -18,7 +18,7 @@ const Cards = ({ users, setModalUserDetails }) => {
       return user.it_language.map((label) => (
         <Fragment key={key++}>
           <Form.Control>
-            <Tag color="dark">{label.name}</Tag>
+            <Tag color="danger">{label.name}</Tag>
           </Form.Control>
         </Fragment>
       ));
