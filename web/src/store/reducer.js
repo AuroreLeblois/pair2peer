@@ -96,6 +96,10 @@ export default (state = initialState, action = {}) => {
         selectedUser: action.user,
       };
     }
+    case actions.DESELECT_USER_DETAILS: {
+      console.log('coucou')
+      return omit({ ...state }, 'selectedUser');
+    }
     default: {
       return state;
     }

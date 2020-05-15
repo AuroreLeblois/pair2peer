@@ -20,7 +20,7 @@ import NotFound from 'src/components/Page404';
 import Messaging from 'src/components/Messaging';
 import UserMap from 'src/components/Map';
 import About from 'src/components/About';
-import UserProfile from 'src/components/UserProfile';
+import UserProfile from 'src/components/Search/ModalDetails';
 
 import './styles.css';
 
