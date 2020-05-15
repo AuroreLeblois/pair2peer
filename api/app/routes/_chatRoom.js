@@ -65,7 +65,8 @@ module.exports = {
                          const chatName= chatExists.rows[0].name;
                          //on verifie que le user soit dans la chatroom pour éviter les indésirables
                          const usrInChat= await db.query(`SELECT * FROM all_my_message_in_chat
-                                                            WHERE usr_id=$1`,[me.rows[0].id]);
+                                                            WHERE usr_id=$1
+                                                            AND chat_id=$2`,[me.rows[0].id, chatExists.rows[0].id]);
                         if(!usrInChat.rows[0]){
                             error.push("Vous n'êtes pas invité sur cette chatroom!")
                             return h.response(error).code(403);
