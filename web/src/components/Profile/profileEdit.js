@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { firstLetterToUppercase } from 'src/store/utils';
-import { Columns, Container, Heading, Form, Button, Modal, Section, Icon } from 'react-bulma-components';
+import { Columns, Container, Heading, Form, Button, Modal, Section, Icon, Help } from 'react-bulma-components';
 import { actions, updateProfile } from 'src/store/actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faFacebook, faLinkedin } from '@fortawesome/free-brands-svg-icons';
@@ -26,6 +26,7 @@ const ProfileEdit = ({ handleClickPictureUpload, inputFile }) => {
     city: user.city,
     country: user.country,
     remote: user.remote,
+    picture: user.picture,
     description: (user.description) ? user.description : '',
     disponibility: (user.disponibility) ? user.disponibility : '',
     linkedin_link: (user.linkedin_link) ? user.linkedin_link : '',
@@ -193,6 +194,13 @@ const ProfileEdit = ({ handleClickPictureUpload, inputFile }) => {
                   <Icon align="left" color="dark">
                     <FontAwesomeIcon size="lg" icon={faFacebook} />
                   </Icon>
+                </Form.Control>
+              </Form.Field>
+              <Form.Field>
+                <Form.Label>Avatar</Form.Label>
+                <Form.Help>Hebergez votre image sur <a href="http://imgur.com/" target="_blank">Imgur</a></Form.Help>
+                <Form.Control>
+                  <Form.Input value={userInfos.picture} name="picture" type="text" onChange={handleChange} />
                 </Form.Control>
               </Form.Field>
               <Button.Group position="right">

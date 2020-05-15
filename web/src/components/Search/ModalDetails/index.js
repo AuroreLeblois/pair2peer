@@ -1,24 +1,69 @@
 /* eslint-disable react/jsx-filename-extension */
 // == Import npm
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Content, Modal, Media, Image, Level, Button } from 'react-bulma-components';
-import { actions, selectedUserDetails } from 'src/store/actions';
+import { Content, Modal, Media, Image, Level, Button, Container, Tag, Heading, Icon, Progress, Columns } from 'react-bulma-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithub, faLinkedin, faFacebook } from '@fortawesome/free-brands-svg-icons';
+import { faColumns } from '@fortawesome/free-solid-svg-icons';
 
 // == Composant
 const UserProfile = ({ modalUserDetails, setModalUserDetails }) => {
   const { selectedUser } = useSelector((state) => state);
-
+  let key = 1;
   console.log(selectedUser)
+
+  const ItLabels = () => {
+    if (selectedUser.it_language[0].name !== null) {
+      return selectedUser.it_language.map((label) => (
+        <Fragment key={key++}>
+          <Columns vCentered>
+            <Columns.Column size={2}>
+              <Tag size="medium" color="dark">{label.name}</Tag>
+            </Columns.Column>
+            <Columns.Column>
+              <Progress color="danger" value={label.level} max={10} />
+            </Columns.Column>
+          </Columns>
+        </Fragment>
+      ));
+    }
+    return null;
+  };
+
+  const LanguagesLabels = () => {
+    if (selectedUser.language[0] !== null) {
+      return selectedUser.language.map((language) => (
+        <Tag size="medium" key={key++}>{language}</Tag>
+      ));
+    }
+    return null;
+  };
+
+  const LinkedinIcon = () => (
+    <Icon className="about-icons" color="dark">
+      <FontAwesomeIcon size="lg" icon={faLinkedin} />
+    </Icon>
+  );
+
+  const GithubIcon = () => (
+    <Icon className="about-icons" color="dark">
+      <FontAwesomeIcon size="lg" icon={faGithub} />
+    </Icon>
+  );
+
+  const FacebookIcon = () => (
+    <Icon className="about-icons" color="dark">
+      <FontAwesomeIcon size="lg" icon={faFacebook} />
+    </Icon>
+  );
 
   if (selectedUser) {
     return (
       <Modal closeOnBlur show={modalUserDetails} onClose={() => setModalUserDetails(false)}>
         <Modal.Card>
           <Modal.Card.Head onClose={() => setModalUserDetails(false)}>
-            <Modal.Card.Title>
-              Détails du profil de {selectedUser.pseudo}
-            </Modal.Card.Title>
+            <Modal.Card.Title>{selectedUser.pseudo}</Modal.Card.Title>
           </Modal.Card.Head>
           <Modal.Card.Body>
             <Media>
@@ -27,26 +72,40 @@ const UserProfile = ({ modalUserDetails, setModalUserDetails }) => {
               </Media.Item>
               <Media.Item>
                 <Content>
-                  <p>
-                    <strong>John Smith</strong> <small>@johnsmith</small> <small>31m</small>
-                    <br />
-                    If the children of the Modal is a card, the close button will be on the Card Head instead than the top-right corner
-                    You can also pass showClose = false to Card.Head to hide the close button
-                  </p>
+                  <Heading size={5}>{selectedUser.pseudo}</Heading>
+                  <Heading renderAs="p" size={6} subtitle>{selectedUser.city}, {selectedUser.country}</Heading>
+                  <p>{selectedUser.description}</p>
                 </Content>
-                <Level breakpoint="mobile">
-                  <Level.Side align="left">
-                    <Button link>Like</Button>
-                    <Button link>Share</Button>
-                  </Level.Side>
-                </Level>
+              </Media.Item>
+            </Media>
+            <Media>
+              <Media.Item>
+                <Heading subtitle size={6}>Langages de programmation</Heading>
+                <Tag.Group>
+                  <Container>
+                    <ItLabels />
+                  </Container>
+                </Tag.Group>
+              </Media.Item>
+            </Media>
+            <Media>
+              <Media.Item>
+                <Heading subtitle size={6}>Langues</Heading>
+                <Tag.Group>
+                  <LanguagesLabels />
+                </Tag.Group>
+              </Media.Item>
+            </Media>
+            <Media>
+              <Media.Item>
+                {(selectedUser.github_link !== '') ? <GithubIcon /> : null}
+                {(selectedUser.linkedin_link !== '') ? <LinkedinIcon /> : null}
+                {(selectedUser.facebook_link !== '') ? <FacebookIcon /> : null}
               </Media.Item>
             </Media>
           </Modal.Card.Body>
           <Modal.Card.Foot style={{ alignItems: 'center', justifyContent: 'center' }}>
-            <p>
-              Lorem Ipsum...
-            </p>
+            <Button color="success">Contacter {selectedUser.pseudo}</Button>
           </Modal.Card.Foot>
         </Modal.Card>
       </Modal>
