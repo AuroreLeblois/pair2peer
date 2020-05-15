@@ -23,6 +23,8 @@ export const actions = {
   UPDATE_IT_LANG: 'actions/UPDATE_IT_LANG',
   GET_USER_INBOX: 'actions/GET_USER_INBOX',
   SUBMIT_MESSAGE: 'actions/SUBMIT_MESSAGE',
+  SELECTED_USER_DETAILS: 'actions/SELECTED_USER_DETAILS',
+  DESELECT_USER_DETAILS: 'actions/DESELECT_USER_DETAILS',
 };
 
 // == Actions creator
@@ -96,4 +98,8 @@ export const getUserInbox = (data) => (
 
 export const submitMessage = (message, chatroom) => (
   { type: actions.SUBMIT_MESSAGE, message, chatroom }
+);
+
+export const selectedUserDetails = (user) => (
+  { type: actions.SELECTED_USER_DETAILS, user }
 );

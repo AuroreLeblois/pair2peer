@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-filename-extension */
 // == Import npm
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Columns, Media, Image, Container, Button, Content, Form, Box } from 'react-bulma-components';
 import useInputChange from 'src/store/hooks/useInputChange';
@@ -30,7 +30,6 @@ const Messages = ({ selectedChat, refreshInbox }) => {
     data.message = input[selectedChat];
     dispatch(submitMessage(data, selectedChat));
     input[selectedChat] = '';
-    refreshInbox();
   };
 
   const goodNickname = () => {
@@ -49,11 +48,7 @@ const Messages = ({ selectedChat, refreshInbox }) => {
     });
   };
 
-  useCallback(refreshInbox, [inbox]);
-
-  const chatDiv = document.getElementsByClassName('inbox-messages-content');
-  console.log(chatDiv)
-  chatDiv.scrollTop = chatDiv.scrollHeight;
+  // useCallback(refreshInbox, [inbox]);
 
   const Message = () => {
     return (
@@ -124,14 +119,9 @@ const Messages = ({ selectedChat, refreshInbox }) => {
     );
   };
 
-  const NoChat = () => (
-    <h1>Bienvenue</h1>
-  );
-
   if (!selectedChat) {
     return <h1>Bienvenue</h1>;
   }
-
 
   return (
     <>

@@ -7,7 +7,7 @@ import { Container, Heading } from 'react-bulma-components';
 // == Composant
 const Home = () => {
   return (
-    <Container class="Container">
+    <Container className="Container">
       <Heading>
         Peer2Pair
       </Heading>
