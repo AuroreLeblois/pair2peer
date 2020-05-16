@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import axios from 'axios';
 import { API_URI } from 'src/store/utils';
+import MarkerclusterGroup from 'react-leaflet-markercluster';
 
 // == Import css
 import './style.css';
@@ -68,14 +69,18 @@ const UserMap = () => {
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      
       {users.map((userData) => (
+        <MarkerclusterGroup>
         <Marker
           position={userData.localisation}
           key={userData.pseudo}
         >
           <UsersPopup userData={userData} />
         </Marker>
+        </MarkerclusterGroup>
       ))}
+      
     </Map>
 
   );
