@@ -10,6 +10,7 @@ import { API_URI } from 'src/store/utils';
 
 // == Import css
 import './style.css';
+import 'react-leaflet-markercluster/dist/styles.min.css';
 
 // Composant React, toutes les définitions de variables et de fonctions doivent se trouver dedans
 // On laisse à l'extérieur uniquement les imports/exports
@@ -69,21 +70,7 @@ const UserMap = () => {
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-
-      
-      {users.map((userData) => (
-        
-        <Marker
-          position={userData.localisation}
-          key={userData.pseudo}
-        >
-          <UsersPopup userData={userData} />
-        </Marker>
-        
-      ))}
-      
-
-     
+      <MarkerClusterGroup>
         {users.map((userData) => (
           <Marker
             position={userData.localisation}
@@ -92,8 +79,7 @@ const UserMap = () => {
             <UsersPopup userData={userData} />
           </Marker>
         ))}
-     
-
+      </MarkerClusterGroup>
     </Map>
 
   );
