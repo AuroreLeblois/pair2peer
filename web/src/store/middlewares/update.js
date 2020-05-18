@@ -1,7 +1,7 @@
 /* eslint-disable no-fallthrough */
 import axios from 'axios';
-import { actions, updateUser } from 'src/store/actions';
-import { API_URI, displayErrorsMessages } from 'src/store/utils';
+import { actions, updateUser, displayErrorsMessages } from 'src/store/actions';
+import { API_URI } from 'src/store/utils';
 
 export default (store) => (next) => (action) => {
   switch (action.type) {

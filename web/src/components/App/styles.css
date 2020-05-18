@@ -56,3 +56,13 @@ textarea,
 .is-multiline, .media-content {
   overflow: hidden;
 }
+
+.container-home {
+  background-image: url('../../assets/images/wave.svg');
+  background-position: top;
+  background-repeat: no-repeat;
+}
+
+.title.is-3 {
+  padding-top: 1rem;
+}

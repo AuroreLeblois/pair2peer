@@ -26,6 +26,7 @@ export default (store) => (next) => (action) => {
           sessionStorage.inbox = JSON.stringify(data.inbox);
         })
         .catch((err) => {
+          console.log(err.response);
           store.dispatch({ type: actions.SET_LOADER });
           const { message } = err.response.data;
           store.dispatch(displayErrorsMessages(message));
@@ -40,6 +41,7 @@ export default (store) => (next) => (action) => {
         .then((res) => {
           window.sessionStorage.clear();
           store.dispatch(getLogout(action.history));
+          store.dispatch({ type: actions.CLEAR_ERRORS_MSG });
         })
         .catch((err) => {
           console.log(err);
