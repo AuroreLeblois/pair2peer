@@ -91,7 +91,7 @@ module.exports = {
                         country: Joi.string().trim().required(),
                         city: Joi.string().trim().required(),
                         remote: Joi.string().required(),
-                        // ["g-recaptcha-response"]: Joi.string().required()
+                        captchaValue: Joi.string().required()
                     }),
                     options: {
                         // false mean I go through each key (payload) even if one error appears	
@@ -104,9 +104,9 @@ module.exports = {
                         // errors object will be the object who contains all the error messages (in french)
                         const errors = {};
                         const details = err.details;
-                        // if (request.payload["g-recaptcha-response"] === undefined ||
-                        //     request.payload["g-recaptcha-response"] === '' ||
-                        //     request.payload["g-recaptcha-response"] === null) {
+                        // if (request.payload.captchaValue === undefined ||
+                        //     request.payload.captchaValue === '' ||
+                        //     request.payload.captchaValue === null) {
                             
                         //     return h.response('Vous devez remplir le captcha');
                         // }

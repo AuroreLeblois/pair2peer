@@ -103,8 +103,8 @@ module.exports = {
                
                 validate: {
                     payload: Joi.object({
-                    //    nameForChatRoom: Joi.string().required(),
                        invited:Joi.string().required(),
+                       message:Joi.string().required()
                     }),
                 },
                 description: 'create a chat room',
@@ -112,6 +112,7 @@ module.exports = {
             },
             handler: async function (request, h) {
                 const invited= request.payload.invited;
+                const message= request.payload.message;
                 // const chatName= request.payload.nameForChatRoom;
                 error=[];
                 // if(chatName.toLowerCase().includes('truncate')
@@ -124,7 +125,10 @@ module.exports = {
                 // }
                 // else{
                    
-    
+                    if(message.lenght=0){
+                        error.push(`Merci d'écrire quelque chose pour votre premier message`)
+                        return h.response(error)
+                    }
                     const invitedInfo= await db.query(`SELECT * FROM usr WHERE pseudo=$1`,[invited]);
                     if(!invitedInfo.rows[0]){
                         error.push("invalid user name")
@@ -139,11 +143,13 @@ module.exports = {
 
                     const myID= me.rows[0].id;
                     const myPseudo= me.rows[0].pseudo;
+                    //si on essaye de s'inviter nous-même...
                     if(invited===myPseudo){
                        error.push(`Vous ne pouvez pas vous inviter vous-même`);
                        return h.response(error).code(400) 
                     }
                     const chatName= `${invitedPseudo} + ${myPseudo}`;
+                    //si la conversation existe déjà
                     const alreadyChatting=await db.query(`SELECT * FROM chat WHERE "name"=$1`,[chatName]);
                     if(alreadyChatting.rows[0]){
                         error.push(`Vous discutez déjà avec cette personne`);
@@ -160,8 +166,8 @@ module.exports = {
                         await db.query(`INSERT INTO usr_message_chat ( usr_id, chat_id, "date") 
                                         VALUES($1,$2, NOW())`,[invitedID, ChatID]);
                          
-                        await db.query(`INSERT INTO usr_message_chat ( usr_id, chat_id, "date") 
-                                        VALUES($1,$2, NOW())`,[myID, ChatID]);
+                        await db.query(`INSERT INTO usr_message_chat ( usr_id, chat_id,script, "date") 
+                                        VALUES($1,$2, $3, NOW())`,[myID, ChatID, message]);
                                 
                         const messages= await db.query(`SELECT * FROM all_my_message_in_chat 
                                                         WHERE chat_id=$1 
