@@ -20,6 +20,7 @@ export default (store) => (next) => (action) => {
           console.log(res);
           store.dispatch(getAuthentified(action.history, data.info));
           store.dispatch(getUserInbox(data.inbox));
+          store.dispatch({ type: actions.SET_LOADER });
           store.dispatch({ type: actions.CLEAR_ERRORS_MSG });
           sessionStorage.user = JSON.stringify(data.info);
           sessionStorage.inbox = JSON.stringify(data.inbox);

@@ -67,27 +67,6 @@ const UserProfile = ({ modalUserDetails, setModalUserDetails }) => {
     </Icon>
   );
 
-  const handleContactUser = () => {
-    dispatch({ type: actions.SET_LOADER });
-    const data = {};
-    data.invited = selectedUser.pseudo;
-    axios.post(
-      `${API_URI}/chatroom`,
-      data,
-      { withCredentials: true },
-    )
-      .then((res) => {
-        console.log(res);
-        setSelectedChat(res.data);
-        setContactUser(true);
-        dispatch({ type: actions.SET_LOADER });
-      })
-      .catch((err) => {
-        console.log(err.response);
-        dispatch({ type: actions.SET_LOADER });
-      });
-  };
-
   if (selectedUser) {
     return (
       <>
@@ -136,7 +115,7 @@ const UserProfile = ({ modalUserDetails, setModalUserDetails }) => {
               </Media>
             </Modal.Card.Body>
             <Modal.Card.Foot style={{ alignItems: 'center', justifyContent: 'center' }}>
-              <Button loading={loading} onClick={handleContactUser} color="success">Contacter {selectedUser.pseudo}</Button>
+              <Button onClick={() => setContactUser(true)} color="success">Contacter {selectedUser.pseudo}</Button>
             </Modal.Card.Foot>
           </Modal.Card>
         </Modal>
