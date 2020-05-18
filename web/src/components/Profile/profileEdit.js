@@ -44,7 +44,6 @@ const ProfileEdit = ({ handleClickPictureUpload, inputFile }) => {
 
   const handleSubmitEditProfile = (evt) => {
     evt.preventDefault();
-    userInfos.remote = userInfos.remote === 'true' ? true : false;
     if (userInfos.disponibility) {
       userInfos.disponibility = parseInt(userInfos.disponibility, 10);
     } else {
