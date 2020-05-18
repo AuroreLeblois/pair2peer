@@ -7,9 +7,15 @@ import { Content, Modal, Media, Image, Level, Button, Container, Tag, Heading, I
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faLinkedin, faFacebook } from '@fortawesome/free-brands-svg-icons';
 import { faColumns } from '@fortawesome/free-solid-svg-icons';
+import { API_URI } from 'src/store/actions';
+import axios from 'axios';
+
+// == import components
+import ContactUser from './contact';
 
 // == Composant
 const UserProfile = ({ modalUserDetails, setModalUserDetails }) => {
+  const [contactUser, setContactUser] = useState(false);
   const { selectedUser } = useSelector((state) => state);
   let key = 1;
   console.log(selectedUser)
@@ -59,57 +65,77 @@ const UserProfile = ({ modalUserDetails, setModalUserDetails }) => {
     </Icon>
   );
 
+  const handleContactUser = () => {
+    const data = {};
+    data.invited = selectedUser.pseudo;
+    axios.post(
+      `${API_URI}/chatroom`,
+      data,
+      { withCredentials: true },
+    )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      })
+    // setContactUser(true);
+  };
+
   if (selectedUser) {
     return (
-      <Modal closeOnBlur show={modalUserDetails} onClose={() => setModalUserDetails(false)}>
-        <Modal.Card>
-          <Modal.Card.Head onClose={() => setModalUserDetails(false)}>
-            <Modal.Card.Title>{selectedUser.pseudo}</Modal.Card.Title>
-          </Modal.Card.Head>
-          <Modal.Card.Body>
-            <Media>
-              <Media.Item renderAs="figure" position="left">
-                <Image size={128} alt={`${selectedUser.pseudo}-picture`} src={selectedUser.picture} />
-              </Media.Item>
-              <Media.Item>
-                <Content>
-                  <Heading size={5}>{selectedUser.pseudo}</Heading>
-                  <Heading renderAs="p" size={6} subtitle>{selectedUser.city}, {selectedUser.country}</Heading>
-                  <p>{selectedUser.description}</p>
-                </Content>
-              </Media.Item>
-            </Media>
-            <Media>
-              <Media.Item>
-                <Heading subtitle size={6}>Langages de programmation</Heading>
-                <Tag.Group>
-                  <Container>
-                    <ItLabels />
-                  </Container>
-                </Tag.Group>
-              </Media.Item>
-            </Media>
-            <Media>
-              <Media.Item>
-                <Heading subtitle size={6}>Langues</Heading>
-                <Tag.Group>
-                  <LanguagesLabels />
-                </Tag.Group>
-              </Media.Item>
-            </Media>
-            <Media>
-              <Media.Item>
-                {(selectedUser.github_link === '' || selectedUser.github_link === null) ? null : <a href={selectedUser.github_link} target="_blank"><GithubIcon /></a>}
-                {(selectedUser.linkedin_link === '' || selectedUser.linkedin_link === null) ? null : <a href={selectedUser.linkedin_link} target="_blank"><LinkedinIcon /></a>}
-                {(selectedUser.facebook_link === '' || selectedUser.facebook_link === null) ? null : <a href={selectedUser.facebook_link} target="_blank"><FacebookIcon /></a>}
-              </Media.Item>
-            </Media>
-          </Modal.Card.Body>
-          <Modal.Card.Foot style={{ alignItems: 'center', justifyContent: 'center' }}>
-            <Button color="success">Contacter {selectedUser.pseudo}</Button>
-          </Modal.Card.Foot>
-        </Modal.Card>
-      </Modal>
+      <>
+        <Modal closeOnBlur show={modalUserDetails} onClose={() => setModalUserDetails(false)}>
+          <Modal.Card>
+            <Modal.Card.Head onClose={() => setModalUserDetails(false)}>
+              <Modal.Card.Title>{selectedUser.pseudo}</Modal.Card.Title>
+            </Modal.Card.Head>
+            <Modal.Card.Body>
+              <Media>
+                <Media.Item renderAs="figure" position="left">
+                  <Image size={128} alt={`${selectedUser.pseudo}-picture`} src={selectedUser.picture} />
+                </Media.Item>
+                <Media.Item>
+                  <Content>
+                    <Heading size={5}>{selectedUser.pseudo}</Heading>
+                    <Heading renderAs="p" size={6} subtitle>{selectedUser.city}, {selectedUser.country}</Heading>
+                    <p>{selectedUser.description}</p>
+                  </Content>
+                </Media.Item>
+              </Media>
+              <Media>
+                <Media.Item>
+                  <Heading subtitle size={6}>Langages de programmation</Heading>
+                  <Tag.Group>
+                    <Container>
+                      <ItLabels />
+                    </Container>
+                  </Tag.Group>
+                </Media.Item>
+              </Media>
+              <Media>
+                <Media.Item>
+                  <Heading subtitle size={6}>Langues</Heading>
+                  <Tag.Group>
+                    <LanguagesLabels />
+                  </Tag.Group>
+                </Media.Item>
+              </Media>
+              <Media>
+                <Media.Item>
+                  {(selectedUser.github_link === '' || selectedUser.github_link === null) ? null : <a href={selectedUser.github_link} target="_blank"><GithubIcon /></a>}
+                  {(selectedUser.linkedin_link === '' || selectedUser.linkedin_link === null) ? null : <a href={selectedUser.linkedin_link} target="_blank"><LinkedinIcon /></a>}
+                  {(selectedUser.facebook_link === '' || selectedUser.facebook_link === null) ? null : <a href={selectedUser.facebook_link} target="_blank"><FacebookIcon /></a>}
+                </Media.Item>
+              </Media>
+            </Modal.Card.Body>
+            <Modal.Card.Foot style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <Button onClick={handleContactUser} color="success">Contacter {selectedUser.pseudo}</Button>
+            </Modal.Card.Foot>
+          </Modal.Card>
+        </Modal>
+        <ContactUser contactUser={contactUser} setContactUser={setContactUser} selectedUser={selectedUser} />
+      </>
     );
   }
   return null;

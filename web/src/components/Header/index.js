@@ -21,7 +21,6 @@ const Header = () => {
   const handleLogout = () => {
     dispatch(submitLogout(history));
     setActiveNavbar(!activeNavbar);
-    dispatch({ type: actions.SET_LOADER });
   };
 
   const { user } = useSelector((state) => state);

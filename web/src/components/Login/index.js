@@ -2,7 +2,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
-import { submitLogin } from 'src/store/actions';
+import { submitLogin, actions } from 'src/store/actions';
 import useInputChange from 'src/store/hooks/useInputChange';
 import { Button, Form, Box, Columns, Heading, Content, Container } from 'react-bulma-components';
 
@@ -12,7 +12,7 @@ import { Button, Form, Box, Columns, Heading, Content, Container } from 'react-b
 const Login = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { errors } = useSelector((state) => state);
+  const { errors, loading } = useSelector((state) => state);
   const [input, handleInputChange] = useInputChange();
 
   const ErrorMessage = ({ message }) => (
@@ -22,6 +22,7 @@ const Login = () => {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     dispatch(submitLogin(history, input));
+    dispatch({ type: actions.SET_LOADER });
   };
 
   return (
@@ -55,7 +56,7 @@ const Login = () => {
                 </Form.Control>
               </Form.Field>
               <Columns.Column />
-              <Button fullwidth color="success">Connexion</Button>
+              <Button loading={loading} fullwidth color="success">Connexion</Button>
             </form>
             <Columns.Column />
             <Columns.Column />
