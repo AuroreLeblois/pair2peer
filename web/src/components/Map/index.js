@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import MarkerClusterGroup from "react-leaflet-markercluster";
+import { Heading } from 'react-bulma-components';
 import axios from 'axios';
 import { API_URI } from 'src/store/utils';
 
@@ -41,13 +42,14 @@ const UserMap = () => {
   useEffect(getUsersData, []);
 
   const UsersPopup = ({ userData }) => {
+    console.log(userData)
     if (user) {
       return (
         <Popup>
           <div>
-            <h2>Pseudo :{userData.pseudo}</h2>
-            <p>Ville : {userData.city}</p>
-            <p>Remote : {userData.remote}</p>
+            <Heading size={6}>{userData.pseudo}</Heading>
+            <Heading subtitle size={6}>{userData.city}</Heading>
+            <p>{(userData.remote) ? 'Préfère travailler en remote' : 'Privilégie la rencontre'}</p>
           </div>
         </Popup>
       );
