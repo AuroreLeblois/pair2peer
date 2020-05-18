@@ -5,23 +5,41 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Modal, Form, Button, Section, Heading, Columns } from 'react-bulma-components';
 import useInputChange from 'src/store/hooks/useInputChange';
+import { actions, API_URI } from 'src/store/actions';
+import axios from 'axios';
 
 // == Composant
-const ContactUser = ({ contactUser, setContactUser, selectedUser }) => {
+const ContactUser = ({ contactUser, setContactUser, selectedUser, selectedChat }) => {
+  const dispatch = useDispatch();
   const [input, handleInputChange] = useInputChange();
+
+  const handleSubmitMessage = (evt) => {
+    evt.preventDefault();
+    dispatch({ type: actions.SET_LOADER });
+    axios.post(
+      `${API_URI}/chatroom/${selectedChat}`,
+      { withCredentials: true },
+    )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  };
 
   return (
     <Modal closeOnBlur show={contactUser} onClose={() => setContactUser(false)}>
       <Modal.Content>
         <Section style={{ backgroundColor: 'white' }}>
           <Heading renderAs="p" size={5}>Contacter {selectedUser.pseudo}</Heading>
-          <form>
+          <form onSubmit={handleSubmitMessage}>
             <Columns.Column>
               <Form.Field>
                 <Form.Field>
                   <Form.Control>
                     <Form.Label>Pseudo</Form.Label>
-                    <Form.Input disabled value={selectedUser.pseudo} name="message" />
+                    <Form.Input disabled value={selectedUser.pseudo} name="pseudo" />
                   </Form.Control>
                 </Form.Field>
               </Form.Field>
@@ -36,7 +54,7 @@ const ContactUser = ({ contactUser, setContactUser, selectedUser }) => {
             </Columns.Column>
             <Button.Group position="right">
               <Button type="button" onClick={() => setContactUser(false)} color="danger">Annuler</Button>
-              <Button color="success">Valider</Button>
+              <Button type="submit" color="success">Valider</Button>
             </Button.Group>
           </form>
         </Section>
