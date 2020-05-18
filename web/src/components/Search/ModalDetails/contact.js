@@ -3,7 +3,7 @@
 import React, { useState, Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Modal, Form, Button, Section, Heading, Columns, Message } from 'react-bulma-components';
+import { Modal, Form, Button, Section, Heading, Columns, Notification } from 'react-bulma-components';
 import useInputChange from 'src/store/hooks/useInputChange';
 import { actions, API_URI } from 'src/store/actions';
 import axios from 'axios';
@@ -81,16 +81,11 @@ const ContactUser = ({ contactUser, setContactUser, selectedUser, selectedChat }
       <Modal show={messageSent}>
         <Modal.Content closeOnBlur onClose={closeModale}>
           <Section style={{ backgroundColor: 'white' }}>
-            <Message color="success">
-              <Message.Header>
-                Message envoyé !
-                <Button onClick={closeModale} remove />
-              </Message.Header>
-              <Message.Body>
-                <Heading size={6}>Message envoyé !</Heading>
-                <Heading subtitle size={6}>Si vous désirez continuer la discussion, veuillez vous rendre dans l'onglet messagerie de votre profil.</Heading>
-              </Message.Body>
-            </Message>
+            <Notification color="success">
+              <Heading size={6}>Message envoyé !</Heading>
+              <Heading subtitle size={6}>Si vous désirez continuer la discussion, veuillez vous rendre dans l'onglet messagerie de votre profil.</Heading>
+              <Button onClick={closeModale} remove />
+            </Notification>
           </Section>
         </Modal.Content>
       </Modal>

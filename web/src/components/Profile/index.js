@@ -45,11 +45,8 @@ const Profile = () => {
             <Columns.Column>
               <Container className="picture-profile">
                 <Media>
-                  <Media.Item onClick={handleClickPictureUpload} renderAs="a" position="left">
+                  <Media.Item position="left">
                     <Image size={128} rounded src={user.picture} />
-                    <Icon pull="right" color="danger">
-                      <FontAwesomeIcon className="edit-picture" size="lg" icon={faEdit} />
-                    </Icon>
                   </Media.Item>
                   <Media.Content>
                     <Hero>
