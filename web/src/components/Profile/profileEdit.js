@@ -61,6 +61,7 @@ const ProfileEdit = ({ handleClickPictureUpload, inputFile }) => {
       { withCredentials: true },
     )
       .then((res) => {
+        console.log('coucou')
         dispatch(submitLogout(history));
       })
       .catch((err) => {

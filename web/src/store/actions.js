@@ -25,6 +25,7 @@ export const actions = {
   SUBMIT_MESSAGE: 'actions/SUBMIT_MESSAGE',
   SELECTED_USER_DETAILS: 'actions/SELECTED_USER_DETAILS',
   DESELECT_USER_DETAILS: 'actions/DESELECT_USER_DETAILS',
+  REDIRECT_LOGIN: 'actions/REDIRECT_LOGIN',
 };
 
 // == Actions creator
@@ -70,6 +71,10 @@ export const updateProfile = (data) => (
 
 export const submitSignup = (history, data) => (
   { type: actions.SUBMIT_SIGNUP, history, data }
+);
+
+export const redirectLogin = (history) => (
+  { type: actions.REDIRECT_LOGIN, history }
 );
 
 export const submitUpdateLang = (data) => (
