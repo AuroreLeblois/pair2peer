@@ -22,7 +22,7 @@ module.exports = class Search {
             if (!query[item]) {
                 delete query[item]
             } else {
-                query[item] = query[item].toString().toLowerCase().replace(regex, "%20");
+                query[item] = query[item].toString().replace(regex, "%20");
             }
         }
         
@@ -46,7 +46,7 @@ module.exports = class Search {
                 return `${keys[index]} = ${value} `;
             } else {
                 // it will build the query from other input like country, city etc
-                return `${keys[index]} = '${value}' `;
+                return `${keys[index]} = '${value.toLowerCase()}' `;
             }
         }).join('AND ');
 
