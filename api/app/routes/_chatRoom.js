@@ -144,6 +144,11 @@ module.exports = {
                        return h.response(error).code(400) 
                     }
                     const chatName= `${invitedPseudo} + ${myPseudo}`;
+                    const alreadyChatting=await db.query(`SELECT * FROM chat WHERE "name"=$1`,[chatName]);
+                    if(alreadyChatting.rows[0]){
+                        error.push(`Vous discutez déjà avec cette personne`);
+                        return h.response(error).code(400);
+                    }
                     //maintenant que l'on trouve 2 utilisateurs
                     //on créer la chat room
                     const newChat= await db.query(`INSERT INTO chat ("name")VALUES ($1) RETURNING *`,[chatName]);
