@@ -23,6 +23,8 @@ const Signup = () => {
   const [country, setCountry] = React.useState('');
   const [city, setCity] = React.useState('');
   const [remote, setRemote] = useState('');
+  const [captchaValue, setCaptchaValue] = useState('');
+
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -34,6 +36,7 @@ const Signup = () => {
       country,
       city,
       remote,
+      captchaValue,
     };
     dispatch(submitSignup(history, newUser));
   };
@@ -41,6 +44,11 @@ const Signup = () => {
   const handleRadioChange = (evt) => {
     const target = evt.target
     setRemote(target.value);
+  };
+
+  const handleChange = (captchaValue) => {
+    console.log("Captcha value:", captchaValue);
+    setCaptchaValue(captchaValue);
   };
 
   return (
@@ -124,6 +132,7 @@ const Signup = () => {
                     <Content style={{ textAlign: 'center' }}>
                       <ReCAPTCHA
                         sitekey="6LdCMPYUAAAAAN5j6Bxfdy1BlFpNwY5gVApE-5b3"
+                        onChange={handleChange}
                       />
                     </Content>
                   </Container>
