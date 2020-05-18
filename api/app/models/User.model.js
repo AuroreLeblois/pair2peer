@@ -63,7 +63,7 @@ module.exports = class User {
     // ####               ####
     // ##   Signup method   ##
     // ####               ####
-    static async signup(email, pseudo, password, country, city, remote) {
+    static async signup(email, pseudo, password, country, city, remote, captchaValue) {
 
         const registered = await db.query('SELECT pseudo FROM usr WHERE email = $1', [email]);
         const nameRegistered = await db.query('SELECT pseudo FROM usr');
@@ -71,6 +71,11 @@ module.exports = class User {
         // use extern API to find coordinates
         console.log(process.env.APIKEY)
         const api = await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}&apiKey=${process.env.APIKEY}`, {
+            json: true
+        });
+
+        // use extern API to implement captcha to increase security
+        const captcha = await Wreck.get(`https://google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_KEY}&response=${captchaValue}`, {
             json: true
         });
         
@@ -86,6 +91,11 @@ module.exports = class User {
             errorList.message.wrongAddress = 'Le pays ou la ville n\'existe pas'
         };
 
+        // check if the captcha is valid
+        if (!captcha.payload.success) {
+            errorList.message.wrongCaptcha = 'Le captcha n\'est pas valide, veuillez réessayer'
+        }
+
         // check the errors that I cannot verify inside the failAction
         if (registered.rows[0]) {
             errorList.message.emailUsed = 'Cet email existe déjà';
@@ -99,7 +109,8 @@ module.exports = class User {
 
         if (errorList.message.usernameUsed
             || errorList.message.emailUsed
-            || errorList.message.wrongAddress) {
+            || errorList.message.wrongAddress
+            || errorList.message.wrongCaptcha) {
             return errorList;
         };
 

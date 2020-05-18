@@ -104,12 +104,6 @@ module.exports = {
                         // errors object will be the object who contains all the error messages (in french)
                         const errors = {};
                         const details = err.details;
-                        // if (request.payload.captchaValue === undefined ||
-                        //     request.payload.captchaValue === '' ||
-                        //     request.payload.captchaValue === null) {
-                            
-                        //     return h.response('Vous devez remplir le captcha');
-                        // }
                         
                         // depend on each error, it will write a specific error message
                         for (let index = 0; index < details.length; index++) {
@@ -124,6 +118,8 @@ module.exports = {
                                 errors[path] = 'Le mot de passe doit contenir 8 caractères minimum';
                             } else if (path === 'passwordConfirm' && typeError === 'any.only') {
                                 errors[path] = 'Le mot de passe et la confirmation ne correspondent pas';
+                            } else if (path === 'captchaValue' && typeError === 'string.base') {
+                                errors[path] = 'Le captcha doit être validé';
                             };
                         };
 
@@ -133,10 +129,10 @@ module.exports = {
                 }
             },
             handler: async (request, h) => {
-                // const captcha= request.payload["g-recaptcha-response"];
-                const { email, pseudo, password, country, city, remote } = request.payload;
+
+                const { email, pseudo, password, country, city, remote, captchaValue } = request.payload;
                 // use User model to signup
-                const info = await User.signup(email, pseudo, password, country, city, remote);
+                const info = await User.signup(email, pseudo, password, country, city, remote, captchaValue);
 
                 if (info.statusCode) {
                     // if error, send error messages

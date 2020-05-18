@@ -49,7 +49,6 @@ const Results = ({ setActiveModalDetails }) => {
         usersData.maxPage = data.maxPage;
         usersData.maxUsers = data.maxUser;
         usersData.users = data.users;
-        history.push(`/search?page_nb=${activePage}&user_nb=12`);
         dispatch(getUsersList(usersData));
       })
       .catch((err) => {
