@@ -3,7 +3,7 @@ import React, { Fragment, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { firstLetterToUppercase } from 'src/store/utils';
 import { Link } from 'react-router-dom';
-import { Card, Media, Content, Heading, Form, Tag, Image, Columns, Hero, Container, Progress } from 'react-bulma-components';
+import { Card, Media, Content, Heading, Form, Tag, Image, Columns, Hero, Container, Button } from 'react-bulma-components';
 import { selectedUserDetails } from 'src/store/actions';
 
 
@@ -12,7 +12,7 @@ const Cards = ({ users, setModalUserDetails }) => {
   const { user } = useSelector((state) => state);
 
   let key = 1;
-  
+
   const ItLabels = ({ user }) => {
     if (user.it_language[0].name !== null) {
       return user.it_language.map((label) => (
@@ -46,43 +46,48 @@ const Cards = ({ users, setModalUserDetails }) => {
 
   return users.map((user) => (
     <>
-      <Columns.Column key={key++} size={4} onClick={(evt) => handleClickUserDetails(evt, user)}>
-          <Card>
-            <Card.Content>
-              <Media>
-                <Media.Item renderAs="figure" position="left">
-                  <Image size={128} src={user.picture} />
-                </Media.Item>
-                <Media.Content>
-                  <Hero>
-                    <Hero.Body>
-                      <Container>
-                        <Heading renderAs="p" size={4}>{user.pseudo}</Heading>
-                        <Heading renderAs="p" subtitle size={6}>{user.city}, {user.country}</Heading>
-                      </Container>
-                    </Hero.Body>
-                  </Hero>
-                </Media.Content>
-              </Media>
-              <Media>
-                <Media.Item>
-                  <Tag.Group>
-                    <LanguagesLabels user={user} />
-                  </Tag.Group>
-                </Media.Item>
-              </Media>
-              <Content>
-                {(user.description) ? user.description : null}
-              </Content>
-              <Media>
-                <Media.Item>
-                  <Form.Field multiline kind="group">
-                    <ItLabels user={user} />
-                  </Form.Field>
-                </Media.Item>
-              </Media>
-            </Card.Content>
-          </Card>
+      <Columns.Column key={key++} size={4}>
+        <Card>
+          <Card.Content>
+            <Media>
+              <Media.Item renderAs="figure" position="left">
+                <Image size={128} src={user.picture} />
+              </Media.Item>
+              <Media.Content>
+                <Hero>
+                  <Hero.Body>
+                    <Container>
+                      <Heading renderAs="p" size={4}>{user.pseudo}</Heading>
+                      <Heading renderAs="p" subtitle size={6}>{user.city}, {user.country}</Heading>
+                    </Container>
+                  </Hero.Body>
+                </Hero>
+              </Media.Content>
+            </Media>
+            <Media>
+              <Media.Item>
+                <Tag.Group>
+                  <LanguagesLabels user={user} />
+                </Tag.Group>
+              </Media.Item>
+            </Media>
+            <Content>
+              {(user.description) ? user.description : null}
+            </Content>
+            <Media>
+              <Media.Item>
+                <Form.Field multiline kind="group">
+                  <ItLabels user={user} />
+                </Form.Field>
+              </Media.Item>
+            </Media>
+            <Media>
+              <Media.Item>
+                <Button onClick={(evt) => handleClickUserDetails(evt, user)}>Détails ...</Button>
+              </Media.Item>
+            </Media>
+          </Card.Content>
+        </Card>
       </Columns.Column>
     </>
   ));

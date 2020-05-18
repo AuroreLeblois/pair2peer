@@ -10,9 +10,9 @@
   height: 100%;
 };
 
-.card-content {
-  min-height: 50vh;
-};
+.card {
+  height: 100%;
+}
 
 .picture-profile {
   display: flex;
@@ -49,7 +49,8 @@ textarea,
 }
 
 .about-icons {
-  margin-right: 1rem;
+  padding-left: 1rem;
+  margin-right: 1.5rem;
 }
 
 .is-multiline, .media-content {
