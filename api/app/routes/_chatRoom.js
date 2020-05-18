@@ -123,6 +123,7 @@ module.exports = {
                 //    return h.response(error).code(403);
                 // }
                 // else{
+                   
     
                     const invitedInfo= await db.query(`SELECT * FROM usr WHERE pseudo=$1`,[invited]);
                     if(!invitedInfo.rows[0]){
@@ -138,6 +139,10 @@ module.exports = {
 
                     const myID= me.rows[0].id;
                     const myPseudo= me.rows[0].pseudo;
+                    if(invited===myPseudo){
+                       error.push(`Vous ne pouvez pas vous inviter vous-même`);
+                       return h.response(error).code(400) 
+                    }
                     const chatName= `${invitedPseudo} + ${myPseudo}`;
                     //maintenant que l'on trouve 2 utilisateurs
                     //on créer la chat room
