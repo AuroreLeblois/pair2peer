@@ -162,7 +162,7 @@ module.exports = {
                                                         WHERE chat_id=$1 
                                                         ORDER BY "date" ASC`,[ChatID]);
                         
-                        return h.response(messages.rows).code(200);
+                        return h.response(messages.rows[0].chat_serial).code(200);
                 }
             // }
         }
