@@ -18,10 +18,12 @@ export default (store) => (next) => (action) => {
         .then((res) => {
           console.log(res);
           store.dispatch(redirectLogin(action.history));
+          store.dispatch({ type: actions.SET_LOADER });
           store.dispatch({ type: actions.CLEAR_ERRORS_MSG });
         })
         .catch((err) => {
           console.log(err.response);
+          store.dispatch({ type: actions.SET_LOADER });
           const { message } = err.response.data;
           store.dispatch(displayErrorsMessages(message));
         });
