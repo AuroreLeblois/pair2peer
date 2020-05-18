@@ -94,11 +94,12 @@ const Messages = ({ refreshInbox, selectedChat }) => {
                   </Box>
                 );
               }
+              {console.log(message)}
               return (
                 <Box className="inbox-messages-user">
                   <Media key={key++}>
                     <Media.Item renderAs="figure" position="left">
-                      <Image size={32} alt={`${message.pseudo}-picture`} src={user.picture} />
+                      <Image size={32} alt={`${message.pseudo}-picture`} src={goodPicture()} />
                     </Media.Item>
                     <Media.Item>
                       <Media.Content>
