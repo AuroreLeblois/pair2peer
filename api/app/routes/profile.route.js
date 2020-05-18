@@ -61,7 +61,7 @@ module.exports = {
                 // collect email through cookie and then delete the user
                 const email = request.state.cookie.email;
                 await User.delete(email);
-                return h.redirect('/');
+                return h.response(`profil supprimé`).code(200);
             }
         });
 
