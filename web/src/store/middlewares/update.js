@@ -1,6 +1,6 @@
 /* eslint-disable no-fallthrough */
 import axios from 'axios';
-import { actions, updateUser } from 'src/store/actions';
+import { actions, updateUser, displayErrorsMessages } from 'src/store/actions';
 import { API_URI } from 'src/store/utils';
 
 export default (store) => (next) => (action) => {
@@ -17,9 +17,13 @@ export default (store) => (next) => (action) => {
           const data = res.data[0];
           store.dispatch(updateUser(data));
           sessionStorage.user = JSON.stringify(data);
+          store.dispatch({ type: actions.CLEAR_ERRORS_MSG });
         })
         .catch((err) => {
           console.log(err.response);
+          const { message } = err.response.data;
+          store.dispatch(displayErrorsMessages(message));
+          store.dispatch({ type: actions.SET_LOADER });
         });
       return;
     }
@@ -34,9 +38,13 @@ export default (store) => (next) => (action) => {
           const data = res.data[0];
           store.dispatch(updateUser(data));
           sessionStorage.user = JSON.stringify(data);
+          store.dispatch({ type: actions.CLEAR_ERRORS_MSG });
         })
         .catch((err) => {
           console.log(err);
+          const { message } = err.response.data;
+          store.dispatch(displayErrorsMessages(message));
+          store.dispatch({ type: actions.SET_LOADER });
         });
       return;
     }
@@ -53,9 +61,13 @@ export default (store) => (next) => (action) => {
           const data = res.data[0];
           store.dispatch(updateUser(data));
           sessionStorage.user = JSON.stringify(data);
+          store.dispatch({ type: actions.CLEAR_ERRORS_MSG });
         })
         .catch((err) => {
           console.log(err.response);
+          const { message } = err.response.data;
+          store.dispatch(displayErrorsMessages(message));
+          store.dispatch({ type: actions.SET_LOADER });
         });
       return;
     }
@@ -70,9 +82,13 @@ export default (store) => (next) => (action) => {
           const data = res.data[0];
           store.dispatch(updateUser(data));
           sessionStorage.user = JSON.stringify(data);
+          store.dispatch({ type: actions.CLEAR_ERRORS_MSG });
         })
         .catch((err) => {
           console.log(err);
+          const { message } = err.response.data;
+          store.dispatch(displayErrorsMessages(message));
+          store.dispatch({ type: actions.SET_LOADER });
         });
       return;
     }
@@ -89,10 +105,14 @@ export default (store) => (next) => (action) => {
           const data = res.data.newPro;
           store.dispatch(updateUser(data));
           sessionStorage.user = JSON.stringify(data);
+          store.dispatch({ type: actions.CLEAR_ERRORS_MSG });
         })
         .catch((err) => {
           console.log(err);
           console.log(err.response);
+          const { message } = err.response.data;
+          store.dispatch(displayErrorsMessages(message));
+          store.dispatch({ type: actions.SET_LOADER });
         });
       return;
     }

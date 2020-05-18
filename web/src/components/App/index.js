@@ -1,7 +1,7 @@
 // == Import npm
 import React, { useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory, useLocation } from 'react-router-dom';
 import { getFiltersList, getAuthentified, getUserInbox } from 'src/store/actions';
 import { API_URI } from 'src/store/utils';
 import { Container, Hero } from 'react-bulma-components';
@@ -28,11 +28,10 @@ import './styles.css';
 
 // == Composant
 const App = () => {
+  const location = useLocation();
   const dispatch = useDispatch();
   const history = useHistory();
   const user = useSelector((state) => state.user);
-
-  console.log(document.cookie);
 
   const sessionUser = () => {
     if (!user) {
@@ -85,7 +84,7 @@ const App = () => {
           <Header />
         </Hero.Head>
 
-        <Hero.Body color="primary">
+        <Hero.Body className={(location.pathname === '/') ? 'container-home' : null} color="primary">
           <Container>
             <Switch>
               <Route exact path="/" component={Home} />

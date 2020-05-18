@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { firstLetterToUppercase, API_URI } from 'src/store/utils';
-import { Columns, Container, Heading, Form, Button, Modal, Section, Icon, Help } from 'react-bulma-components';
+import { Columns, Container, Heading, Form, Button, Modal, Section, Icon, Notification } from 'react-bulma-components';
 import { actions, updateProfile, submitLogout } from 'src/store/actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faFacebook, faLinkedin } from '@fortawesome/free-brands-svg-icons';
@@ -12,14 +12,12 @@ import axios from 'axios';
 
 // == Import component
 import Loading from 'src/components/Loading';
-import { faCross } from '@fortawesome/free-solid-svg-icons';
 
 // == Composant
 const ProfileEdit = ({ handleClickPictureUpload, inputFile }) => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { user, loading } = useSelector((state) => state);
-  const [picture, setPicture] = useState({});
+  const { user, loading, errors } = useSelector((state) => state);
   const [openModal, setOpenModal] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [userInfos, setUserInfos] = useState({
@@ -54,6 +52,16 @@ const ProfileEdit = ({ handleClickPictureUpload, inputFile }) => {
     setOpenModal(false);
   };
 
+  const ErrorsMessage = () => {
+    return (
+      <Notification color="danger">
+        {Object.keys(errors).map((objectKey, index) => (
+          <p>{errors[objectKey]}</p>
+        ))}
+      </Notification>
+    );
+  };
+
   const handleDeleteProfile = (evt) => {
     axios.delete(
       `${API_URI}/profile`,
@@ -68,43 +76,13 @@ const ProfileEdit = ({ handleClickPictureUpload, inputFile }) => {
       });
   };
 
-  const handleChangePictureUpload = (evt) => {
-    const picture = evt.target.files[0];
-    const clientID = '7ab7a64158df6cd';
-    // const formData = new FormData();
-    // formData.append('image', picture);
-    // fetch('https://api.imgur.com/3/image', {
-    //   method: 'POST',
-    //   headers: {
-    //     Authorization: 'Client-ID 7ab7a64158df6cd',
-    //   },
-    //   body: formData,
-    // }).then((res) => {
-    //   console.log(res);
-    // }).catch((err) => {
-    //   console.log(err);
-    // });
-    axios.post('https://api.imgur.com/3/image', {
-      headers: {
-        Authorization: `Client-ID ${clientID}`,
-      },
-      data,
-    })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   if (!loading) {
     return (
       <>
         <Columns.Column>
           <Container>
+            {(errors) ? <ErrorsMessage /> : null}
             <form>
-              <input id="user-picture" ref={inputFile} onChange={handleChangePictureUpload} type="file" name="picture" style={{ display: 'none' }} />
               <Form.Field>
                 <Form.Field.Body>
                   <Form.Field>

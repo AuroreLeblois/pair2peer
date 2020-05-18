@@ -1,7 +1,7 @@
 // == Import npm
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { firstLetterToUppercase } from 'src/store/utils';
 import { Navbar, Button, Heading, Container } from 'react-bulma-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,6 +15,7 @@ import './styles.css';
 // == Composant
 const Header = () => {
   const [activeNavbar, setActiveNavbar] = useState(false);
+  const location = useLocation();
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -68,7 +69,7 @@ const Header = () => {
   );
 
   return (
-    <Navbar active={activeNavbar}>
+    <Navbar color={(location.pathname === '/') ? 'danger' : 'light'} active={activeNavbar}>
       <Container>
         <Navbar.Brand className="logo">
           <Navbar.Item renderAs="div">
@@ -81,7 +82,7 @@ const Header = () => {
           </Navbar.Item>
           <Navbar.Burger onClick={() => setActiveNavbar(!activeNavbar)} />
         </Navbar.Brand>
-        <Navbar.Menu>
+        <Navbar.Menu color="danger">
           <Navbar.Container position="end">
             <Navbar.Container>
               <Navbar.Item renderAs="div" onClick={() => setActiveNavbar(!activeNavbar)}>

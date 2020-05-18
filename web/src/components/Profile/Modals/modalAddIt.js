@@ -70,7 +70,7 @@ const ModalAddIt = ({ modalIt, itClicked, setModalIt }) => {
                   <Form.Field>
                     <Form.Control>
                       <Form.Label>Language</Form.Label>
-                      <Form.Select onChange={handleInputChange} value={(input.name) ? input.name : ''} name="name">
+                      <Form.Select required onChange={handleInputChange} value={(input.name) ? input.name : ''} name="name">
                         <option value=""> -- Selectionner une option -- </option>
                         <ItOptions />
                       </Form.Select>
@@ -79,7 +79,7 @@ const ModalAddIt = ({ modalIt, itClicked, setModalIt }) => {
                   <Form.Field>
                     <Form.Control>
                       <Form.Label>Niveau</Form.Label>
-                      <Form.Select onChange={handleInputChange} value={(input.level) ? input.level : goodLevelIt()} name="level">
+                      <Form.Select required onChange={handleInputChange} value={(input.level) ? input.level : goodLevelIt()} name="level">
                         <option value=""> -- Selectionner une option -- </option>
                         <LvlOptions />
                       </Form.Select>

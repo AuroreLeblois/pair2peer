@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import { submitLogin, actions } from 'src/store/actions';
 import useInputChange from 'src/store/hooks/useInputChange';
-import { Button, Form, Box, Columns, Heading, Content, Container } from 'react-bulma-components';
+import { Button, Form, Box, Columns, Heading, Content, Container, Notification } from 'react-bulma-components';
 
 // == Import
 
@@ -25,6 +25,16 @@ const Login = () => {
     dispatch({ type: actions.SET_LOADER });
   };
 
+  const ErrorsMessage = () => {
+    return (
+      <Notification color="danger">
+        {Object.keys(errors).map((objectKey, index) => (
+          <p>{errors[objectKey]}</p>
+        ))}
+      </Notification>
+    );
+  };
+
   return (
     <>
       <Columns gapless>
@@ -40,19 +50,18 @@ const Login = () => {
           </Columns>
           <Columns.Column />
           <Box>
+            {(errors) ? <ErrorsMessage /> : null}
             <form onSubmit={handleSubmit}>
               <Form.Field>
                 <Form.Control>
                   <Form.Label>Email</Form.Label>
-                  <Form.Input name="email" onChange={handleInputChange} value={input.email} />
-                  {(errors && errors.errorEmail) ? <ErrorMessage message={errors.errorEmail} /> : null}
+                  <Form.Input required name="email" onChange={handleInputChange} value={input.email} />
                 </Form.Control>
               </Form.Field>
               <Form.Field>
                 <Form.Control>
                   <Form.Label>Mot de passe</Form.Label>
-                  <Form.Input name="password" type="password" onChange={handleInputChange} value={input.password} />
-                  {(errors && errors.errorPassword) ? <ErrorMessage message={errors.errorPassword} /> : null}
+                  <Form.Input required name="password" type="password" onChange={handleInputChange} value={input.password} />
                 </Form.Control>
               </Form.Field>
               <Columns.Column />

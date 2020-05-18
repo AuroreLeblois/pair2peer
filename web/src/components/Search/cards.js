@@ -83,7 +83,9 @@ const Cards = ({ users, setModalUserDetails }) => {
             </Media>
             <Media>
               <Media.Item>
-                <Button onClick={(evt) => handleClickUserDetails(evt, user)}>Détails ...</Button>
+                <Button.Group position="right">
+                  <Button onClick={(evt) => handleClickUserDetails(evt, user)}>Détails ...</Button>
+                </Button.Group>
               </Media.Item>
             </Media>
           </Card.Content>

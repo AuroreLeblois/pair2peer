@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import { submitSignup, actions } from 'src/store/actions';
-import { Columns, Form, Button, Box, Container, Content, Heading } from 'react-bulma-components';
+import { Columns, Form, Button, Box, Container, Content, Heading, Notification } from 'react-bulma-components';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 
@@ -12,7 +12,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 const Signup = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { usersData, loading } = useSelector((state) => state)
+  const { usersData, loading, errors } = useSelector((state) => state)
   console.log(usersData);
 
   // Les hooks
@@ -52,6 +52,17 @@ const Signup = () => {
     setCaptchaValue(captchaValue);
   };
 
+  const ErrorsMessage = () => {
+    return (
+      <Notification color="danger">
+        {Object.keys(errors).map((objectKey, index) => (
+          <p>{errors[objectKey]}</p>
+        ))}
+      </Notification>
+    );
+  };
+
+
   return (
     <Columns>
       <Columns.Column />
@@ -66,6 +77,7 @@ const Signup = () => {
         </Columns>
         <Columns.Column />
         <Box>
+          {(errors) ? <ErrorsMessage /> : null}
           <form onSubmit={handleSubmit}>
             <Form.Field>
               <Form.Field>
