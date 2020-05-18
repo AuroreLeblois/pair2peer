@@ -71,14 +71,14 @@ const Signup = () => {
               <Form.Field>
                 <Form.Control>
                   <Form.Label>Pseudo</Form.Label>
-                  <Form.Input name="name" type="text" value={pseudo} onChange={(e) => setPseudo(e.target.value)} />
+                  <Form.Input required name="name" type="text" value={pseudo} onChange={(e) => setPseudo(e.target.value)} />
                 </Form.Control>
               </Form.Field>
 
               <Form.Field>
                 <Form.Control>
                   <Form.Label>Email</Form.Label>
-                  <Form.Input name="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                  <Form.Input required name="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </Form.Control>
               </Form.Field>
             </Form.Field>
@@ -87,14 +87,14 @@ const Signup = () => {
               <Form.Field>
                 <Form.Control>
                   <Form.Label>Mot de passe</Form.Label>
-                  <Form.Input name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                  <Form.Input required name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 </Form.Control>
               </Form.Field>
 
               <Form.Field>
                 <Form.Control>
                   <Form.Label>Confirmer le mot de passe</Form.Label>
-                  <Form.Input name="passwordConfirm" type="password" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
+                  <Form.Input required name="passwordConfirm" type="password" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
                 </Form.Control>
               </Form.Field>
             </Form.Field>
@@ -103,13 +103,13 @@ const Signup = () => {
               <Form.Field>
                 <Form.Control>
                   <Form.Label>Ville</Form.Label>
-                  <Form.Input name="city" type="text" value={city} onChange={(e) => setCity(e.target.value)} />
+                  <Form.Input required name="city" type="text" value={city} onChange={(e) => setCity(e.target.value)} />
                 </Form.Control>
               </Form.Field>
               <Form.Field>
                 <Form.Control>
                   <Form.Label>Pays</Form.Label>
-                  <Form.Input name="country" type="text" value={country} onChange={(e) => setCountry(e.target.value)} />
+                  <Form.Input required name="country" type="text" value={country} onChange={(e) => setCountry(e.target.value)} />
                 </Form.Control>
               </Form.Field>
             </Form.Field>
@@ -117,10 +117,10 @@ const Signup = () => {
             <Form.Field>
               <Form.Label>Comment souhaitez-vous travailler ?</Form.Label>
               <Form.Control>
-                <Form.Radio value="true" name="remote" checked={remote === 'true'} onChange={handleRadioChange}>
+                <Form.Radio required value="true" name="remote" checked={remote === 'true'} onChange={handleRadioChange}>
                   Remote
                 </Form.Radio>
-                <Form.Radio value="false" name="remote" checked={remote === 'false'} onChange={handleRadioChange}>
+                <Form.Radio required value="false" name="remote" checked={remote === 'false'} onChange={handleRadioChange}>
                   Rencontre
                 </Form.Radio>
               </Form.Control>
@@ -128,28 +128,17 @@ const Signup = () => {
             <Columns.Column />
             <Columns>
               <Columns.Column />
-<<<<<<< HEAD
                 <Form.Field>
                   <Container>
                     <Content style={{ textAlign: 'center' }}>
                       <ReCAPTCHA
+                        required
                         sitekey="6LdCMPYUAAAAAN5j6Bxfdy1BlFpNwY5gVApE-5b3"
                         onChange={handleChange}
                       />
                     </Content>
                   </Container>
                 </Form.Field>
-=======
-              <Form.Field>
-                <Container>
-                  <Content style={{ textAlign: 'center' }}>
-                    <ReCAPTCHA
-                      sitekey="6LdCMPYUAAAAAN5j6Bxfdy1BlFpNwY5gVApE-5b3"
-                    />
-                  </Content>
-                </Container>
-              </Form.Field>
->>>>>>> de61d4910f1395d5fb7a73abc8783d9cb646ccf2
               <Columns.Column />
             </Columns>
             <Button loading={loading} fullwidth type="submit" color="success">Valider</Button>
