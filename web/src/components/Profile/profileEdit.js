@@ -2,9 +2,10 @@
 // == Import npm
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { firstLetterToUppercase } from 'src/store/utils';
+import { useHistory } from 'react-router-dom';
+import { firstLetterToUppercase, API_URI } from 'src/store/utils';
 import { Columns, Container, Heading, Form, Button, Modal, Section, Icon, Help } from 'react-bulma-components';
-import { actions, updateProfile } from 'src/store/actions';
+import { actions, updateProfile, submitLogout } from 'src/store/actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faFacebook, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import axios from 'axios';
@@ -15,10 +16,12 @@ import { faCross } from '@fortawesome/free-solid-svg-icons';
 
 // == Composant
 const ProfileEdit = ({ handleClickPictureUpload, inputFile }) => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const { user, loading } = useSelector((state) => state);
   const [picture, setPicture] = useState({});
   const [openModal, setOpenModal] = useState(false);
+  const [openModalDelete, setOpenModalDelete] = useState(false);
   const [userInfos, setUserInfos] = useState({
     pseudo: user.pseudo,
     password: '',
@@ -50,6 +53,20 @@ const ProfileEdit = ({ handleClickPictureUpload, inputFile }) => {
     dispatch(updateProfile(userInfos));
     dispatch({ type: actions.SET_LOADER });
     setOpenModal(false);
+  };
+
+  const handleDeleteProfile = (evt) => {
+    axios.delete(
+      `${API_URI}/profile`,
+      { withCredentials: true },
+    )
+      .then((res) => {
+        console.log('coucou')
+        dispatch(submitLogout(history));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleChangePictureUpload = (evt) => {
@@ -204,6 +221,7 @@ const ProfileEdit = ({ handleClickPictureUpload, inputFile }) => {
                 </Form.Control>
               </Form.Field>
               <Button.Group position="right">
+                <Button renderAs="a" onClick={() => setOpenModalDelete(true)} color="danger">Supprimer mon profil</Button>
                 <Button renderAs="a" onClick={() => setOpenModal(true)} color="success">Sauvegarder</Button>
               </Button.Group>
               <Modal closeOnBlur show={openModal} onClose={() => setOpenModal(false)}>
@@ -218,6 +236,18 @@ const ProfileEdit = ({ handleClickPictureUpload, inputFile }) => {
                 </Modal.Content>
               </Modal>
             </form>
+            <Modal closeOnBlur show={openModalDelete} onClose={() => setOpenModalDelete(false)}>
+              <Modal.Content>
+                <Section style={{ backgroundColor: 'white' }}>
+                  <Heading renderAs="p" size={5}>Êtes vous sur de vouloir supprimer votre profil ?</Heading>
+                  <Heading renderAs="p" subtitle size={6}>Attention, aucun retour en arrière possible, cette action est irrémédiable</Heading>
+                  <Button.Group position="right">
+                    <Button onClick={() => setOpenModalDelete(false)}>Annuler</Button>
+                    <Button onClick={handleDeleteProfile} color="danger">Supprimer mon profil</Button>
+                  </Button.Group>
+                </Section>
+              </Modal.Content>
+            </Modal>
           </Container>
         </Columns.Column>
       </>

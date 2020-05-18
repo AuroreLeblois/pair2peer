@@ -1,6 +1,6 @@
 /* eslint-disable no-fallthrough */
 import axios from 'axios';
-import { actions, getAuthentified, displayErrorsMessages } from 'src/store/actions';
+import { actions, displayErrorsMessages, redirectLogin } from 'src/store/actions';
 import { API_URI } from 'src/store/utils';
 
 
@@ -17,12 +17,13 @@ export default (store) => (next) => (action) => {
       )
         .then((res) => {
           console.log(res);
-          // Redirection to '/', object { user } from reponse to reducer state
-          store.dispatch(getAuthentified(action.history, res.data));
+          store.dispatch(redirectLogin(action.history));
+          store.dispatch({ type: actions.SET_LOADER });
           store.dispatch({ type: actions.CLEAR_ERRORS_MSG });
         })
         .catch((err) => {
           console.log(err.response);
+          store.dispatch({ type: actions.SET_LOADER });
           const { message } = err.response.data;
           store.dispatch(displayErrorsMessages(message));
         });

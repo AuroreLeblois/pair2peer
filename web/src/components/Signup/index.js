@@ -3,16 +3,16 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
-import { submitSignup } from 'src/store/actions';
+import { submitSignup, actions } from 'src/store/actions';
 import { Columns, Form, Button, Box, Container, Content, Heading } from 'react-bulma-components';
-import ReCAPTCHA from "react-google-recaptcha";
+import ReCAPTCHA from 'react-google-recaptcha';
 
 
 
 const Signup = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { usersData } = useSelector((state) => state)
+  const { usersData, loading } = useSelector((state) => state)
   console.log(usersData);
 
   // Les hooks
@@ -39,6 +39,7 @@ const Signup = () => {
       captchaValue,
     };
     dispatch(submitSignup(history, newUser));
+    dispatch({ type: actions.SET_LOADER });
   };
 
   const handleRadioChange = (evt) => {
@@ -127,6 +128,7 @@ const Signup = () => {
             <Columns.Column />
             <Columns>
               <Columns.Column />
+<<<<<<< HEAD
                 <Form.Field>
                   <Container>
                     <Content style={{ textAlign: 'center' }}>
@@ -137,9 +139,20 @@ const Signup = () => {
                     </Content>
                   </Container>
                 </Form.Field>
+=======
+              <Form.Field>
+                <Container>
+                  <Content style={{ textAlign: 'center' }}>
+                    <ReCAPTCHA
+                      sitekey="6LdCMPYUAAAAAN5j6Bxfdy1BlFpNwY5gVApE-5b3"
+                    />
+                  </Content>
+                </Container>
+              </Form.Field>
+>>>>>>> de61d4910f1395d5fb7a73abc8783d9cb646ccf2
               <Columns.Column />
             </Columns>
-            <Button fullwidth type="submit" color="success">Valider</Button>
+            <Button loading={loading} fullwidth type="submit" color="success">Valider</Button>
             <Columns.Column />
           </form>
           <Columns.Column />

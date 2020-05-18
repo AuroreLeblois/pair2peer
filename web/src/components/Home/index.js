@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <Container className="Container">
       <Heading>
-        Peer2Pair
+        Pair2Peer
       </Heading>
       <Heading subtitle size={3}>
         Le site de pair-programming entre pairs

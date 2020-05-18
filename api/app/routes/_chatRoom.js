@@ -123,6 +123,7 @@ module.exports = {
                 //    return h.response(error).code(403);
                 // }
                 // else{
+                   
     
                     const invitedInfo= await db.query(`SELECT * FROM usr WHERE pseudo=$1`,[invited]);
                     if(!invitedInfo.rows[0]){
@@ -138,7 +139,16 @@ module.exports = {
 
                     const myID= me.rows[0].id;
                     const myPseudo= me.rows[0].pseudo;
+                    if(invited===myPseudo){
+                       error.push(`Vous ne pouvez pas vous inviter vous-même`);
+                       return h.response(error).code(400) 
+                    }
                     const chatName= `${invitedPseudo} + ${myPseudo}`;
+                    const alreadyChatting=await db.query(`SELECT * FROM chat WHERE "name"=$1`,[chatName]);
+                    if(alreadyChatting.rows[0]){
+                        error.push(`Vous discutez déjà avec cette personne`);
+                        return h.response(error).code(400);
+                    }
                     //maintenant que l'on trouve 2 utilisateurs
                     //on créer la chat room
                     const newChat= await db.query(`INSERT INTO chat ("name")VALUES ($1) RETURNING *`,[chatName]);
@@ -157,7 +167,7 @@ module.exports = {
                                                         WHERE chat_id=$1 
                                                         ORDER BY "date" ASC`,[ChatID]);
                         
-                        return h.response(messages.rows).code(200);
+                        return h.response(messages.rows[0].chat_serial).code(200);
                 }
             // }
         }
