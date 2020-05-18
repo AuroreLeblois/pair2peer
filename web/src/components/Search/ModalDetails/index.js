@@ -7,7 +7,7 @@ import { Content, Modal, Media, Image, Level, Button, Container, Tag, Heading, I
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faLinkedin, faFacebook } from '@fortawesome/free-brands-svg-icons';
 import { faColumns } from '@fortawesome/free-solid-svg-icons';
-import { API_URI } from 'src/store/actions';
+import { API_URI, actions } from 'src/store/actions';
 import axios from 'axios';
 
 // == import components
@@ -15,10 +15,12 @@ import ContactUser from './contact';
 
 // == Composant
 const UserProfile = ({ modalUserDetails, setModalUserDetails }) => {
+  const dispatch = useDispatch();
   const [contactUser, setContactUser] = useState(false);
-  const { selectedUser } = useSelector((state) => state);
+  const [selectedChat, setSelectedChat] = useState();
+  const { selectedUser, loading } = useSelector((state) => state);
   let key = 1;
-  console.log(selectedUser)
+  console.log(selectedUser);
 
   const ItLabels = () => {
     if (selectedUser.it_language[0].name !== null) {
@@ -66,6 +68,7 @@ const UserProfile = ({ modalUserDetails, setModalUserDetails }) => {
   );
 
   const handleContactUser = () => {
+    dispatch({ type: actions.SET_LOADER });
     const data = {};
     data.invited = selectedUser.pseudo;
     axios.post(
@@ -75,11 +78,14 @@ const UserProfile = ({ modalUserDetails, setModalUserDetails }) => {
     )
       .then((res) => {
         console.log(res);
+        setSelectedChat(res.data);
+        setContactUser(true);
+        dispatch({ type: actions.SET_LOADER });
       })
       .catch((err) => {
         console.log(err.response);
-      })
-    // setContactUser(true);
+        dispatch({ type: actions.SET_LOADER });
+      });
   };
 
   if (selectedUser) {
@@ -130,11 +136,11 @@ const UserProfile = ({ modalUserDetails, setModalUserDetails }) => {
               </Media>
             </Modal.Card.Body>
             <Modal.Card.Foot style={{ alignItems: 'center', justifyContent: 'center' }}>
-              <Button onClick={handleContactUser} color="success">Contacter {selectedUser.pseudo}</Button>
+              <Button loading={loading} onClick={handleContactUser} color="success">Contacter {selectedUser.pseudo}</Button>
             </Modal.Card.Foot>
           </Modal.Card>
         </Modal>
-        <ContactUser contactUser={contactUser} setContactUser={setContactUser} selectedUser={selectedUser} />
+        <ContactUser contactUser={contactUser} setContactUser={setContactUser} selectedUser={selectedUser} selectedChat={selectedChat} />
       </>
     );
   }
