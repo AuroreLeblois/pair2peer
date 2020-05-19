@@ -33,10 +33,10 @@ module.exports = class Admin {
         for (let index = 0; index < keys.length; index++) {
             // it will check if the it_language is already here into the database
             if (keys[index] === 'it_language' && !it_language.rows[0].name.includes(values[index])) {
-                await db.query(`INSERT INTO it_lang (name) VALUES ('${values[index]}')`)
+                await db.query(`INSERT INTO it_lang (name) VALUES ('$1')`, [values[index]])
                 // if will check if the language is already here into the database
             } else if (keys[index] === 'language' && !language.rows[0].name.includes(values[index])) {
-                await db.query(`INSERT INTO lang (name) VALUES ('${values[index]}')`)
+                await db.query(`INSERT INTO lang (name) VALUES ('$1')`, [values[index]])
             }
         };
 

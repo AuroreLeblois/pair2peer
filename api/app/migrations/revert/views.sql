@@ -8,7 +8,9 @@ DROP VIEW
     usr_map,
     all_language,
     all_it_language,
-    all_country_city,
-    all_my_message_in_chat;
+    all_country_city;
+
+ALTER TABLE usr DROP COLUMN "status";
+DROP TYPE etat;
 
 COMMIT;
