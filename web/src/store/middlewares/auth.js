@@ -40,6 +40,7 @@ export default (store) => (next) => (action) => {
       )
         .then((res) => {
           window.sessionStorage.clear();
+          store.dispatch({ type: actions.SET_LOADER });
           store.dispatch(getLogout(action.history));
           store.dispatch({ type: actions.CLEAR_ERRORS_MSG });
         })
