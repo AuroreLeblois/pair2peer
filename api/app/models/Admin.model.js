@@ -74,11 +74,8 @@ module.exports = class Admin {
     // ####               ####
     static async setRole(changeRole, userID) {
 
-    
         //on a l'utilisateur maintenant on change son role
-        //si le payload dit user
-       
-            
+        //si le payload dit user   
         await db.query(`UPDATE usr
                         SET role= $1
                         WHERE "id"=$2`,[changeRole,userID])

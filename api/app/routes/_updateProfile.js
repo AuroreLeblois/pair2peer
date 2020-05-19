@@ -4,6 +4,7 @@ const db = require('../models/db');
 const bcrypt = require('bcrypt');
 const Joi = require('@hapi/joi');
 const Wreck= require('@hapi/wreck');
+const Update= require('../models/Update.model')
 const APIKEY= process.env.APIKEY;
 module.exports = {
     name: 'profile pages',
@@ -112,19 +113,8 @@ module.exports = {
                 const userCity=userDetails.rows[0].city;
                 //les données du formulaire:
                 //les données utilisateur brutes
-                const password= request.payload.password;
-                const picture= request.payload.picture;
-                const country= request.payload.country;
-                const city= request.payload.city;
-                const remote= request.payload.remote;
-                const description= request.payload.description;
-                const validatePassword= request.payload.validatePassword;
-                const pseudo= request.payload.pseudo;
-                const linkedin_link=request.payload.linkedin_link;
-                const facebook_link= request.payload.facebook_link;
-                const github_link= request.payload.github_link;
-                const disponibility= request.payload.disponibility;
-                
+                const {password, picture,country, city, remote, description, validatePassword, pseudo, linkedin_link, facebook_link, github_link,disponibility}= request.payload;
+
                 //on compare le mdp avec la validation si mdp changé
                 //déjà, est ce que le user a rentré un mdp?
                 const errorList = {
@@ -139,9 +129,7 @@ module.exports = {
                         //est ce que le mdp ===  validation?
                         if(password===validatePassword){
                             const hashPassword = bcrypt.hashSync(password, 10);
-                            await db.query(`UPDATE usr
-                                            SET "password"= $1
-                                            WHERE "id"=$2`,[hashPassword, userID]);
+                            await Update.passwordUpdate(hashPassword,userID);
                         }
                         else{
                             errorList.message.errorPassword='La validation et le mot de passe sont différents.';
@@ -154,7 +142,7 @@ module.exports = {
                     //oui mais le pseudo doit être unique
                     const pseudoExists= await db.query(`SELECT pseudo FROM usr WHERE pseudo= $1;` ,[pseudo]);
                     if(!pseudoExists.rows[0]){
-                        await db.query(`UPDATE usr SET pseudo=$1 WHERE "id"=$2;`,[pseudo,userID]);
+                       await Update.pseudoUpdate(pseudo,userID);
                     }
                     //si le pseudo existe=> on le dit à l'utilisateur
                     else{
@@ -178,37 +166,23 @@ module.exports = {
                         const api= await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}&apiKey=${APIKEY}`,{
                             json:true
                         });
-                    
                         const latitude= api.payload.items[0].position.lat;
                         const longitude= api.payload.items[0].position.lng;
-
-                        await db.query(`INSERT INTO usr_detail ("city", "country", "remote", latitude, longitude, usr_id,description,disponibility,linkedin_link,facebook_link, github_link )
-                        VALUES ($1 , $2 , $3 , $4 , $5,$6,$7,$8,$9,$10,$11);`
-                        ,[city, country, remote,latitude, longitude, disponibility, userID,description, disponibility, linkedin_link, facebook_link,github_link]);
-
-                        }
-
-                            
+                        await Update.detailInsert(city, country, remote,latitude, longitude, disponibility, userID,description, disponibility, linkedin_link, facebook_link,github_link);
+                        }         
                     }//sinon on update
-                         else{
-                            if(city!==userCity &&country!==userCountry
-                                ||country==userCountry&& city!==userCity
-                                ||city==userCity&&country!==userCountry){
+                    else{
+                        if(city!==userCity &&country!==userCountry
+                            ||country==userCountry&& city!==userCity
+                            ||city==userCity&&country!==userCountry){
         
-                                const api= await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}&apiKey=${APIKEY}`,{
-                                    json:true
-                                });
-                                const latitude= api.payload.items[0].position.lat;
-                                const longitude= api.payload.items[0].position.lng;
+                            const api= await Wreck.get(`https://geocode.search.hereapi.com/v1/geocode?q=${country}+${city}&apiKey=${APIKEY}`,{
+                                json:true
+                            });
+                            const latitude= api.payload.items[0].position.lat;
+                            const longitude= api.payload.items[0].position.lng;
 
-                                await db.query(`UPDATE usr_detail
-                                                SET "city"=$1, 
-                                                "country"=$2,
-                                                latitude=$3,
-                                                longitude=$4
-                                                WHERE usr_id=$5`,
-                                                [city, country,latitude,
-                                                longitude,userID]);
+                            await Update.localisationUpdate(city,country,latitude,longitude,userID);
 
                             }
                             if(city===null||city===undefined){
@@ -228,21 +202,8 @@ module.exports = {
                                 ||errorList.message.pseudo) {
                                 return errorList;
                             }
-                              
-                             await db.query(`UPDATE usr_detail
-                                            SET "remote"=$1,
-                                            description=$2,
-                                            disponibility=$3,
-                                            linkedin_link=$4,
-                                            facebook_link=$5,
-                                            github_link=$6,
-                                            picture=$7
-                                            WHERE usr_id=$8`,
-                                            [remote, description, 
-                                            disponibility,linkedin_link,
-                                            facebook_link,github_link, picture,
-                                            userID]);
-                                        };
+                             await Update.detailUpdate(remote, description, disponibility,linkedin_link,facebook_link,github_link, picture,userID)
+                        };
                     
                     }
                    
@@ -282,9 +243,6 @@ module.exports = {
                         const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
                         const userID= result.rows[0].id;
                         const language=request.payload.language;
-
-        
-                
                         const langExists= await db.query(`SELECT * 
                                                           FROM lang
                                                           WHERE "name" =$1`, [language]);
@@ -294,16 +252,13 @@ module.exports = {
                                                             WHERE usr_id = $1 AND lang_id= $2`,[userID, langID]);
                                                            
                         if(!userKnowsLang.rows[0]){
-                        await db.query(`INSERT INTO usr_speaks_lang (usr_id, lang_id) 
-                                        VALUES ($1, $2);`,[userID,langID]);
+                        await Update.insertLang(userID,langID);
                         }
                         const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
-                         return newUser.rows;
+                        return newUser.rows;
                     }
                 });
                     
-                
-
                  server.route({
                     method: 'DELETE',
                     path: '/profile/languages/{language}',
@@ -331,9 +286,7 @@ module.exports = {
                                                         FROM lang
                                                         WHERE "name" =$1;`, [language]);
                             const langID= langExists.rows[0].id;
-                            await db.query(`DELETE FROM usr_speaks_lang
-                                            where usr_id=$1
-                                            AND lang_id=$2;`,[userID,langID]);
+                            await Update.deleteLang(userID,langID);
                             const newUser=await db.query(`SELECT * FROM usr_profile 
                                                             WHERE id=$1;`,[userID]);
                             return newUser.rows;
@@ -381,16 +334,10 @@ module.exports = {
                                                     [userID, itLangID]);
             
                 if(!userKnowsIt.rows[0]){
-                     await db.query(`INSERT INTO usr_knows_it_lang (usr_id, it_lang_id, "level", search) 
-                                    VALUES ($1, $2, $3, $4)`,
-                                    [userID, itLangID, it_language[0].level, it_language[0].search]);
-                        }
+                     await Update.insertIT(userID, itLangID, it_language[0].level, it_language[0].search)
+                }
                 else{
-                    await db.query(`UPDATE usr_knows_it_lang 
-                                    SET "level"= $1, search=$2
-                                    WHERE usr_id=$3
-                                    AND it_lang_id =$4`,
-                                    [it_language[0].level,it_language[0].search, userID,itLangID]);
+                    await Update.updateIT(it_language[0].level, it_language[0].search,userID, itLangID)
                 }
                     
                 const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
@@ -434,12 +381,9 @@ module.exports = {
                                               
                             const itLangID= itLangExists.rows[0].id;
               
-                            await db.query(`DELETE FROM usr_knows_it_lang
-                                            WHERE usr_id=$1
-                                            AND it_lang_id=$2;`,
-                                            [userID,itLangID]);
-                         
-                            const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,
+                            await Update.deleteIT(userID,itLangID);
+                            const newUser=await db.query(`SELECT * FROM usr_profile 
+                                                        WHERE id=$1`,
                                                         [userID]);
                             return newUser.rows;
                         }

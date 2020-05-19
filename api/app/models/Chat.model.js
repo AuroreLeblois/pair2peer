@@ -12,77 +12,46 @@ module.exports = class Chat {
 
 
      // ####                          ####
-    // ##   simple delete method      ##
+    // ##   create chat method      ##
     // ####                           ####
-    // static async deleteChat(info) {
-    //     await db.query(`DELETE FROM usr_message_chat WHERE chat_id=$1;`,[info.id]);
-    // };
-    // ####                          ####
-    // ##   simple delete method      ##
-    // ####                           ####
-    static async deleteChat(chatID) {
-        await db.query(`DELETE FROM usr_message_chat WHERE chat_id=$1;`,[chatID]);
-        return 'ok'
+    static async insertMessage(invitedID,ChatID,myID,message) {
+        await db.query(`INSERT INTO usr_message_chat ( usr_id, chat_id, "date") 
+        VALUES($1,$2, NOW())`,[invitedID, ChatID]);
+
+        await db.query(`INSERT INTO usr_message_chat ( usr_id, chat_id,script, "date") 
+        VALUES($1,$2, $3, NOW())`,[myID, ChatID, message]);
     };
-    
+
      // ####                          ####
-    // ##   Just delete messages      ##
+    // ##   post message method      ##
     // ####                           ####
-    static async deleteOld(chat) {
-        const deleteMessage= await db.query(`SELECT * FROM usr_message_chat
-                                            WHERE chat_id=$1
-                                            AND (NOW()-"date")>'30 days'`,[chat]);
-        if(deleteMessage.rows[0]){
-                await db.query(`DELETE FROM usr_message_chat
-                                WHERE chat_id=$1
-                                AND (NOW()-"date")>'30 days'`,[chat]);
-        }
+    static async insertNewMessage(message, chatID,myID) {
+        await db.query(`INSERT INTO usr_message_chat("date",script,usr_id,chat_id) VALUES(NOW(),$1,$2,$3);`,[message,myID,chatID]);
     };
-
-    // ####               ####
-    // ##   Find One      ##
-    // ####               ####
-    static async findChatRoom(chatSerial) {
-        let error=[];
-       const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`,[chatSerial]);
-            return chatExists.rows;
-        
+    // ####                          ####
+    // ##   post message method      ##
+    // ####                           ####
+    static async addNewChatter(chatName, chatID,pseudo,newChatterID) {
+        await db.query(`UPDATE chat 
+                        SET name='${chatName} + ${pseudo}'
+                        WHERE id=$1`,[chatID]);
+        await db.query(`INSERT INTO usr_message_chat ("date", usr_id, chat_id) 
+                        VALUES(NOW(),$1,$2)`,[newChatterID, chatID]);
     };
-
-    // ####                    ####
-    // ##   Verify method      ##
-    // ####                    ####
-   
-    static async areYouInvited(user,chat) {
-        const usrInChat= await db.query(`SELECT * FROM all_my_message_in_chat
-                                        WHERE usr_id=$1
-                                        AND chat_id=$2`,[user, chat]);
-        return usrInChat
-        
+    // ####                          ####
+    // ##   delete old message method      ##
+    // ####                           ####
+    static async deleteOldInChat(chatID) {
+        await db.query(`DELETE FROM usr_message_chat
+                        WHERE chat_id=$1
+                        AND (NOW()-"date")>'30 days`,[chatID]);
     };
-
-    // ####                                  ####
-    // ##   delete old messages method      ##
-    // ####                                   ####
-    static async deleteAndReturnMessages(userID) {
-        const oldChat= await db.query(`SELECT * FROM all_my_message_in_chat 
-                                        WHERE usr_id=$1
-                                        ORDER BY date DESC;`,[userID]);
-        const chatToDelete= oldChat.rows[0].date;
-        const newChat= await db.query(`SELECT * FROM all_my_message_in_chat 
-                                        WHERE chat_id=$1
-                                        ORDER BY date ASC;`,[oldChat.rows[0].chat_id]);
-        const mostRecentMes= newChat.rows[0].date;
-        const interval=((chatToDelete-mostRecentMes)/1000)/60;
-        const limit= 43800;
-        if(interval>limit){
-            await db.query(`DELETE FROM chat WHERE id=$1;`,[oldChat.rows[0].chat_id]);
-        }
-        const userChatRoom= await db.query(`SELECT DISTINCT chat_serial, chat_id 
-                                            FROM all_my_message_in_chat 
-                                            WHERE usr_id=$1`,[user.rows[0].id]);
-        return userChatRoom.rows;
-    
+    // ####                          ####
+    // ##   delete chat method      ##
+    // ####                           ####
+    static async deleteChatRoom(chatID) {
+        await db.query(`DELETE FROM usr_message_chat 
+                        WHERE chat_id=$1;`,[chatID]);
     };
 };
  

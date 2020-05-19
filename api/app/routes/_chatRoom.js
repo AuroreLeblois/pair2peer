@@ -1,6 +1,7 @@
 const Joi = require('@hapi/joi');
 const db = require('../models/db');
 const User = require('../models/User.model');
+const Chat = require('../models/Chat.model')
 
 module.exports = {
     name: 'chat pages',
@@ -62,7 +63,7 @@ module.exports = {
                          return h.response(error).code(404);
                      }
                      else{
-                         const chatName= chatExists.rows[0].name;
+                         const chatID= chatExists.rows[0].id;
                          //on verifie que le user soit dans la chatroom pour éviter les indésirables
                          const usrInChat= await db.query(`SELECT * FROM all_my_message_in_chat
                                                             WHERE usr_id=$1
@@ -74,11 +75,9 @@ module.exports = {
                         }
                          const deleteMessage= await db.query(`SELECT * FROM usr_message_chat
                                                               WHERE chat_id=$1
-                                                              AND (NOW()-"date")>'30 days'`,[chatExists.rows[0].id]);
+                                                              AND (NOW()-"date")>'30 days'`,[chatID]);
                         if(deleteMessage.rows[0]){
-                            await db.query(`DELETE FROM usr_message_chat
-                                            WHERE chat_id=$1
-                                            AND (NOW()-"date")>'30 days`,[chatExists.rows[0].id]);
+                            Chat.deleteOldInChat(ChatID);
                         }
                          const messages= await db.query(`SELECT * FROM
                                                         chat_message 
@@ -113,18 +112,7 @@ module.exports = {
             handler: async function (request, h) {
                 const invited= request.payload.invited;
                 const message= request.payload.message;
-                // const chatName= request.payload.nameForChatRoom;
                 error=[];
-                // if(chatName.toLowerCase().includes('truncate')
-                //     ||chatName.toLowerCase().includes('drop table')
-                //     ||chatName.toLowerCase().includes('database')
-                //     ||chatName.toLowerCase().includes('delete from')
-                //     ||chatName.toLowerCase().includes('*')){
-                //    error.push(`invalid name for chat room`);
-                //    return h.response(error).code(403);
-                // }
-                // else{
-                   
                     if(message.lenght=0){
                         error.push(`Merci d'écrire quelque chose pour votre premier message`)
                         return h.response(error)
@@ -163,11 +151,7 @@ module.exports = {
                         return h.response(error).code(400);
                     }
                     else{
-                        await db.query(`INSERT INTO usr_message_chat ( usr_id, chat_id, "date") 
-                                        VALUES($1,$2, NOW())`,[invitedID, ChatID]);
-                         
-                        await db.query(`INSERT INTO usr_message_chat ( usr_id, chat_id,script, "date") 
-                                        VALUES($1,$2, $3, NOW())`,[myID, ChatID, message]);
+                        await Chat.insertMessage(invitedID,ChatID,myID,message);
                                 
                         const messages= await db.query(`SELECT * FROM all_my_message_in_chat 
                                                         WHERE chat_id=$1 
@@ -224,7 +208,7 @@ module.exports = {
 
                 }
 
-                await db.query(`INSERT INTO usr_message_chat("date",script,usr_id,chat_id) VALUES(NOW(),$1,$2,$3);`,[message,myID,chatID]);
+                await Chat.insertNewMessage(message, chatID,myID);
                 const conv= await db.query(`SELECT * FROM chat_message
                                             WHERE to_json(ARRAY(SELECT jsonb_array_elements(users) ->> 'pseudo'))::jsonb ? $1
                                             `, [me.rows[0].pseudo]);
@@ -294,11 +278,8 @@ module.exports = {
                     return h.response(error).code(200);   
                 }
                 else{
-                await db.query(`UPDATE chat 
-                                SET name='${chatName} + ${newInvited.rows[0].pseudo}'
-                                WHERE id=$1`,[chatID]);
-                await db.query(`INSERT INTO usr_message_chat ("date", usr_id, chat_id) 
-                                VALUES(NOW(),$1,$2)`,[newChatterID, chatID]);
+                  const pseudo= newInvited.rows[0].pseudo;
+                  await Chat.addNewChatter(chatName, chatID,pseudo,newChatterID);
                 const messages= await db.query(`SELECT * FROM all_my_message_in_chat
                                                 WHERE chat_id=$1`,[chatID]);
 
@@ -330,14 +311,14 @@ module.exports = {
                 const chatSerial= request.params.chatSerial;
                 const email= request.state.cookie.email;
                 const me= await db.query(`SELECT * FROM usr 
-                                            WHERE email=$1`,[email]);
+                                          WHERE email=$1`,[email]);
                 const chatExists= await db.query(`SELECT * FROM chat 
-                                                WHERE chat_serial=$1`,[chatSerial]);
+                                                  WHERE chat_serial=$1`,[chatSerial]);
                 if(!chatExists.rows[0]){
                     const error=`chat not found `
                     return h.response(error).code(404);
                 }
-
+                const chatID= chatExists.rows[0].id;
                 const isInChat=await db.query(`SELECT * FROM all_my_message_in_chat
                                                 WHERE usr_id=$1
                                                 AND chat_serial=$2;`,[me.rows[0].id, chatSerial]);
@@ -346,7 +327,7 @@ module.exports = {
                     return h.response(error).code(403)
                 }
                 else{
-                    await db.query(`DELETE FROM usr_message_chat WHERE chat_id=$1;`,[chatExists.rows[0].id]);
+                    await Chat.deleteChatRoom(chatID);
                     return `tchat supprimé`
                 }
             }
