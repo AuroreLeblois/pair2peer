@@ -110,7 +110,7 @@ module.exports = {
 
                             let path = details[index].path[0];
                             let typeError = details[index].type;
-
+                            console.log(err.details)
                             // no need to write a specific error message if the input is empty because the constraint is set on the front side
                             if (path === 'email' && typeError === 'string.email') {
                                 errors[path] = 'L\'email n\'est pas un email valide';
@@ -118,7 +118,7 @@ module.exports = {
                                 errors[path] = 'Le mot de passe doit contenir 8 caractères minimum';
                             } else if (path === 'passwordConfirm' && typeError === 'any.only') {
                                 errors[path] = 'Le mot de passe et la confirmation ne correspondent pas';
-                            } else if (path === 'captchaValue' && typeError === 'string.base') {
+                            } else if (path === 'captchaValue' && typeError === 'string.empty') {
                                 errors[path] = 'Le captcha doit être validé';
                             };
                         };
