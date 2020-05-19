@@ -66,3 +66,7 @@ textarea,
 .title.is-3 {
   padding-top: 1rem;
 }
+
+.navbar.is-danger {
+  background-color: #FF2B56 !important;
+}
