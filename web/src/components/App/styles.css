@@ -63,6 +63,23 @@ textarea,
   background-repeat: no-repeat;
 }
 
+.container-login {
+  background-image: url('../../assets/images/loading.png');
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.container-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../../assets/images/loading.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 40vh;
+}
+
 .title.is-3 {
   padding-top: 1rem;
 }
@@ -70,3 +87,7 @@ textarea,
 .navbar.is-danger {
   background-color: #FF2B56 !important;
 }
+
+/* .modal-background {
+  background: rgba(255, 43, 86, 0.9) !important;
+} */

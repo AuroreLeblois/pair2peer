@@ -6,10 +6,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 // == Import css
-import Max from './max.jpg';
-import Victor from './victor.jpg';
-import Aurore from './aurore.jpg';
-import Charles from './charles.jpg';
+import Max from 'src/assets/images/max.jpg';
+import Victor from 'src/assets/images/victor.jpg';
+import Aurore from 'src/assets/images/aurore.jpg';
+import Charles from 'src/assets/images/charles.jpg';
 
 // == Composant
 const About = () => {

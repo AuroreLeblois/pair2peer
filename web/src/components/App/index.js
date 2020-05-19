@@ -21,6 +21,7 @@ import Messaging from 'src/components/Messaging';
 import UserMap from 'src/components/Map';
 import About from 'src/components/About';
 import UserProfile from 'src/components/Search/ModalDetails';
+import Loading from 'src/components/Loading';
 
 import './styles.css';
 
@@ -31,7 +32,7 @@ const App = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const history = useHistory();
-  const user = useSelector((state) => state.user);
+  const { user, loading } = useSelector((state) => state);
 
   const sessionUser = () => {
     if (!user) {
@@ -75,6 +76,20 @@ const App = () => {
       });
   };
 
+  const switchClasses = () => {
+    switch (location.pathname) {
+      case '/': {
+        return 'container-home'
+      }
+      case '/login': {
+        return 'container-login'
+      }
+      default: {
+        return null;
+      }
+    }
+  };
+
   useEffect(getFilters, [user]);
 
   return (
@@ -84,7 +99,7 @@ const App = () => {
           <Header />
         </Hero.Head>
 
-        <Hero.Body className={(location.pathname === '/') ? 'container-home' : null} color="primary">
+        <Hero.Body className={switchClasses()} color="primary">
           <Container>
             <Switch>
               <Route exact path="/" component={Home} />
@@ -96,6 +111,7 @@ const App = () => {
               <Route exact path="/search" render={() => loginCheck(<Search />)} />
               <Route exact path="/inbox" render={() => loginCheck(<Messaging />)} />
               <Route exact path="/about" render={About} />
+              <Route exact path="/logout" render={Loading} />
               <Route component={NotFound} />
             </Switch>
           </Container>
