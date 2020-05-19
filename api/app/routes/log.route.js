@@ -1,5 +1,6 @@
 const Joi = require('@hapi/joi');
-const User = require('../models/User.model')
+const User = require('../models/User.model');
+const Mail = require('../models/Mail.model');
 
 module.exports = {
     name: 'logs pages',
@@ -41,9 +42,14 @@ module.exports = {
                     // if error, send error messages
                     return h.response(info).code(400);
                 } else {
-                    // if success, set the cookie and send user informations
-                    request.cookieAuth.set({ email });
-                    return info;
+                    // check if the account is activated
+                    if (info.info.status === 'actif') {
+                        // if success, set the cookie and send user informations
+                        request.cookieAuth.set({ email });
+                        return info;
+                    } else {
+                        return "Le compte n'est pas activé"
+                    }
                 }
             }
         });
@@ -110,7 +116,7 @@ module.exports = {
 
                             let path = details[index].path[0];
                             let typeError = details[index].type;
-                            console.log(err.details)
+
                             // no need to write a specific error message if the input is empty because the constraint is set on the front side
                             if (path === 'email' && typeError === 'string.email') {
                                 errors[path] = 'L\'email n\'est pas un email valide';
@@ -138,9 +144,25 @@ module.exports = {
                     // if error, send error messages
                     return h.response(info).code(400);
                 } else {
-                    // if success, send new user's informations
+                    // if success, send an email to verify the veracity of the account
+                    await Mail.mailer(email);
+                    // and then send new user's informations
                     return info;
                 }
+            }
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/activation/user/{email}',
+            config: {
+                description: 'Activation of the account',
+                tags: ['api', 'activation']
+            },
+            handler: async (request, h) => {
+
+                await Mail.activation(request.params.email);
+                return 'Compte validé !'
             }
         });
 
