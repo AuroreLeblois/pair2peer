@@ -2,14 +2,13 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { firstLetterToUppercase } from 'src/store/utils';
 import { Navbar, Button, Heading, Container } from 'react-bulma-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCodeBranch } from '@fortawesome/free-solid-svg-icons';
-
-// == Import
 import { submitLogout, actions } from 'src/store/actions';
 import 'react-bulma-components/dist/react-bulma-components.min.css';
+
+// == Import
 import './styles.css';
 
 // == Composant
@@ -21,6 +20,7 @@ const Header = () => {
 
   const handleLogout = () => {
     dispatch(submitLogout(history));
+    dispatch({ type: actions.SET_LOADER });
     setActiveNavbar(!activeNavbar);
   };
 
