@@ -3,11 +3,16 @@
 BEGIN;
 
 -- XXX Add DDLs here.
+CREATE TYPE etat AS ENUM ('actif', 'inactif');
+
+ALTER TABLE usr ADD COLUMN "status" etat DEFAULT 'inactif';
+
 CREATE VIEW usr_profile AS
     SELECT
         usr.id,
         usr.pseudo, 
 		usr.email,
+        usr.status,
 		usr_detail.picture,
 		usr_detail.country,
 		usr_detail.city,
@@ -34,7 +39,8 @@ CREATE VIEW usr_profile AS
 		usr_detail.city, usr_detail.remote,
 		usr_detail.description, usr_detail.picture,
         usr_detail.disponibility, usr_detail.facebook_link,
-        usr_detail.github_link, usr_detail.linkedin_link;
+        usr_detail.github_link, usr_detail.linkedin_link,
+        usr.status;
 
 CREATE VIEW usr_map AS
 	SELECT 
@@ -60,22 +66,5 @@ CREATE VIEW all_country_city AS (
 	FROM usr_detail
 	GROUP BY country
 );
-CREATE view all_my_message_in_chat AS
-    SELECT
-    usr_message_chat.script as "message",
-    usr_message_chat.date,
-    usr_message_chat.usr_id as"usr_id",
-    usr_message_chat.chat_id,
-    chat_serial,
-	pseudo
-    FROM usr_message_chat
-    JOIN chat ON chat.id= usr_message_chat.chat_id
-	JOIN usr ON usr_id=usr.id
-    GROUP BY chat_id,
-    chat_serial,
-    usr_message_chat.date,
-    "message",
-    usr_id,
-	pseudo;
 
 COMMIT;
