@@ -22,6 +22,7 @@ import UserMap from 'src/components/Map';
 import About from 'src/components/About';
 import UserProfile from 'src/components/Search/ModalDetails';
 import Loading from 'src/components/Loading';
+import Contact from 'src/components/Contact';
 
 import './styles.css';
 
@@ -110,6 +111,7 @@ const App = () => {
               <Route exact path="/profile/:pseudo" render={() => loginCheck(<UserProfile />)} />
               <Route exact path="/search" render={() => loginCheck(<Search />)} />
               <Route exact path="/inbox" render={() => loginCheck(<Messaging />)} />
+              <Route exact path="/contact" render={Contact} />
               <Route exact path="/about" render={About} />
               <Route exact path="/logout" render={Loading} />
               <Route component={NotFound} />
