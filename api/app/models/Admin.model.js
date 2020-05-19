@@ -50,5 +50,39 @@ module.exports = class Admin {
         info.it_language = it_language.rows[0].name
 
         return info;
-    }
-};
+    };
+
+    // ####               ####
+    // ##   Add method      ##
+    // ####               ####
+    static async deleteProfile(pseudo) {
+        const result = await db.query(`SELECT * FROM usr 
+                                        WHERE pseudo = $1`, [pseudo]);
+                const user= result.rows[0];
+                const userID= result.rows[0].id;
+                if(!user){
+                    return `profil introuvable`;
+                }
+                else{
+                    await db.query(`DELETE FROM usr
+                                    WHERE "id"=$1`, [userID]);
+                    return `profil supprimé`;
+                }
+    };
+    // ####                    ####
+    // ##   Add method      ##
+    // ####               ####
+    static async setRole(changeRole, userID) {
+
+    
+        //on a l'utilisateur maintenant on change son role
+        //si le payload dit user
+       
+            
+        await db.query(`UPDATE usr
+                        SET role= $1
+                        WHERE "id"=$2`,[changeRole,userID])
+              
+        return 'ok'
+        };
+}

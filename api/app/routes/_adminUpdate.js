@@ -2,6 +2,7 @@ const vision = require('@hapi/vision');
 const inert = require('@hapi/inert');
 const db = require('../models/db');
 const Joi = require('@hapi/joi');
+const Admin= require('../models/Admin.model');
 
 module.exports = {
     name: 'admin handle profile',
@@ -54,40 +55,15 @@ module.exports = {
                     tags: ['api', 'profile', 'patch profile']
                 },
                 handler: async (request, h) => {
+                    const pseudo= request.params.pseudo;
+                    const result = await db.query(`SELECT * FROM usr 
+                                                    WHERE pseudo = $1`, [pseudo]);
+                    const userID= result.rows[0].id;
+                    const changeRole= request.payload.setRole;
                     
-                        const pseudo= request.params.pseudo;
-                        const result = await db.query(`SELECT * FROM usr 
-                                                        WHERE pseudo = $1`, [pseudo]);
-                        const userID= result.rows[0].id;
-                        const userRole= result.rows[0].role;
-                        const changeRole= request.payload.setRole;
-                        //on a l'utilisateur maintenant on change son role
-                        //si le payload dit user
-                        if(changeRole==='user'){
-                            if(userRole!=='user'){
-                                await db.query(`UPDATE usr
-                                                SET role= 'user'
-                                                WHERE "id"=$1`,[userID])
-                            }
-                        }
-                        //si le payload dit admin
-                        else if(changeRole==='admin'){
-                            if(userRole!=='admin'){
-                                await db.query(`UPDATE usr
-                                                SET role= 'admin'
-                                                WHERE "id"=$1`,[userID])
-                            }
-                        }
-                        //si on veux bannir quelqu'un
-                        else if(changeRole==='ban'){
-                            if(userRole!=='banned'){
-                                await db.query(`UPDATE usr
-                                                SET role= 'banned'
-                                                WHERE "id"=$1`,[userID])
-                            }
-                        }
-                        user= await db.query(`SELECT * FROM usr WHERE "id"=$1`,[userID]);
-                        return  user;
+                     await Admin.setRole(changeRole,userID);   
+                     const user= await db.query(`SELECT * FROM usr WHERE "id"=$1`,[userID]);
+                    return  user.rows[0];
                         }
       
                 
@@ -112,18 +88,8 @@ module.exports = {
                 },
                 handler: async (request, h) => {
                 const pseudo= request.params.pseudo;
-                const result = await db.query(`SELECT * FROM usr 
-                                                        WHERE pseudo = $1`, [pseudo]);
-                const user= result.rows[0];
-                const userID= result.rows[0].id;
-                if(!user){
-                    return h.response().code(400);
-                }
-                else{
-                    await db.query(`DELETE FROM usr
-                                    WHERE "id"=$1`, [userID]);
-                    return h.response().code(200);
-                }
+                  const info= await Admin.deleteProfile(pseudo);
+                  return h.response(info).code(200);
                 }
             });
         }
