@@ -181,9 +181,7 @@ module.exports = {
                             });
                             const latitude= api.payload.items[0].position.lat;
                             const longitude= api.payload.items[0].position.lng;
-
                             await Update.localisationUpdate(city,country,latitude,longitude,userID);
-
                             }
                             if(city===null||city===undefined){
                                 errorList.message.city=`Il vous faut définir votre ville`;
