@@ -208,7 +208,6 @@ module.exports = {
                 };
                 const chatSerial= request.params.chatSerial;
                const message= request.payload.message;
-                const email= request.state.cookie.email;
 
                 const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`,[chatSerial]);
 
@@ -227,7 +226,7 @@ module.exports = {
                 }
                 if(errorList.message.chat
                     ||errorList.message.invited) {
-                      return errorList;
+                        return h.response(errorList).code(400);
                 }
                 else{
 
@@ -303,7 +302,7 @@ module.exports = {
                     ||errorList.message.pseudo
                     || errorList.message.invited
                     ||errorList.message.chat) {
-                      return errorList;
+                        return h.response(errorList).code(400);
                   }
                   else{
                   const pseudo= newInvited.rows[0].pseudo;
@@ -359,7 +358,7 @@ module.exports = {
                 }
                 if(errorList.message.notAllowed
                   ||errorList.message.chat) {
-                      return errorList;
+                    return h.response(errorList).code(400);
                   }
                 else{
                     await Chat.deleteChatRoom(chatID);
