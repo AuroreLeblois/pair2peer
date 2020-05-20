@@ -53,7 +53,7 @@ const Home = () => {
         <Columns className="main-right-image">
           <Columns.Column>
             <Heading className="main-paragraph-title" size={2}>Progresser seul</Heading>
-            <p className="main-paragraph-content">You think water moves fast? You should see ice. It moves like it has a mind. Like it knows it killed the world once and got a taste for murder. After the avalanche, it took us a week to climb out. Now, I don't know exactly when we turned on each other, but I know that seven of us survived the slide... and only five made it out. Now we took an oath, that I'm breaking now. We said we'd say it was the snow that killed the other two, but it wasn't. Nature is lethal but it doesn't hold a candle to man.</p>
+            <p className="main-paragraph-content">Il n'est pas toujours évident d'avancer seul. Beaucoup de gens tentent d'apprendre par eux-mêmes mais finissent bien souvent par abandonner par manque de compréhension, motivation ou encadrement. Pair2Peer vous offre une chance d'apprendre en échangant avec d'autres gens; professionnels désireux de partager leur savoir, débutants souhaitants coder en groupe, autodidactes perdus et plus encore.</p>
           </Columns.Column>
           <Columns.Column />
         </Columns>
