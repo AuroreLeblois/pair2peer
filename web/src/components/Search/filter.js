@@ -3,8 +3,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { firstLetterToUppercase } from 'src/store/utils';
-import { syncSearchInputs } from 'src/store/actions';
-import { Form, Columns, Container, Content } from 'react-bulma-components';
+import { syncSearchInputs, actions } from 'src/store/actions';
+import { Form, Columns, Container, Content, Button } from 'react-bulma-components';
 
 // == Import
 
@@ -115,62 +115,70 @@ const Filter = () => {
     dispatch(syncSearchInputs(target.name, target.value));
   };
 
+  const handleClickResetFilters = (evt) => {
+    dispatch({ type: actions.RESET_FILTERS });
+  };
+
   return (
-    <form>
-      <Form.Field>
-        <Form.Field.Body>
-          <Form.Field>
-            <Form.Control>
-              <Form.Label>Langue</Form.Label>
-              <Form.Select name="language" value={search.language} onChange={handleChange}>
-                <option value="">{null}</option>
-                <LangOptions />
-              </Form.Select>
-            </Form.Control>
-          </Form.Field>
-          <Form.Field>
-            <Form.Control>
-              <Form.Label>Technologie</Form.Label>
-              <Form.Select name="it_language" value={search.it_language} onChange={handleChange}>
-                <option value="">{null}</option>
-                <ItOptions />
-              </Form.Select>
-            </Form.Control>
-          </Form.Field>
-          <Form.Field>
-            <Form.Control>
-              <Form.Label>Niveau</Form.Label>
-              <Form.Select name="level" value={search.level} onChange={handleChange}>
-                <LvlOptions />
-              </Form.Select>
-            </Form.Control>
-          </Form.Field>
-          <Form.Field>
-            <Form.Control>
-              <Form.Label>Pays</Form.Label>
-              <Form.Select name="country" value={search.country} onChange={handleChange}>
-                <option value="">{null}</option>
-                <CountryOptions />
-              </Form.Select>
-            </Form.Control>
-          </Form.Field>
-          <Form.Field>
-            <Form.Control>
-              <Form.Label>Ville</Form.Label>
-              <Form.Input name="city" value={search.city} onChange={handleChange} />
-            </Form.Control>
-          </Form.Field>
-          <Form.Field>
-            <Form.Control>
-              <Form.Label>Mode de travail</Form.Label>
-              <Form.Select name="remote" value={search.remote} onChange={handleChange}>
-                <RemoteOptions />
-              </Form.Select>
-            </Form.Control>
-          </Form.Field>
-        </Form.Field.Body>
-      </Form.Field>
-    </form>
+    <>
+      <form>
+        <Form.Field>
+          <Form.Field.Body>
+            <Form.Field>
+              <Form.Control>
+                <Form.Label>Langue</Form.Label>
+                <Form.Select name="language" value={search.language} onChange={handleChange}>
+                  <option value="">{null}</option>
+                  <LangOptions />
+                </Form.Select>
+              </Form.Control>
+            </Form.Field>
+            <Form.Field>
+              <Form.Control>
+                <Form.Label>Technologie</Form.Label>
+                <Form.Select name="it_language" value={search.it_language} onChange={handleChange}>
+                  <option value="">{null}</option>
+                  <ItOptions />
+                </Form.Select>
+              </Form.Control>
+            </Form.Field>
+            <Form.Field>
+              <Form.Control>
+                <Form.Label>Niveau</Form.Label>
+                <Form.Select name="level" value={search.level} onChange={handleChange}>
+                  <LvlOptions />
+                </Form.Select>
+              </Form.Control>
+            </Form.Field>
+            <Form.Field>
+              <Form.Control>
+                <Form.Label>Pays</Form.Label>
+                <Form.Select name="country" value={search.country} onChange={handleChange}>
+                  <option value="">{null}</option>
+                  <CountryOptions />
+                </Form.Select>
+              </Form.Control>
+            </Form.Field>
+            <Form.Field>
+              <Form.Control>
+                <Form.Label>Ville</Form.Label>
+                <Form.Input name="city" value={search.city} onChange={handleChange} />
+              </Form.Control>
+            </Form.Field>
+            <Form.Field>
+              <Form.Control>
+                <Form.Label>Mode de travail</Form.Label>
+                <Form.Select name="remote" value={search.remote} onChange={handleChange}>
+                  <RemoteOptions />
+                </Form.Select>
+              </Form.Control>
+            </Form.Field>
+          </Form.Field.Body>
+        </Form.Field>
+      </form>
+      <Button className="button-reset" color="danger" onClick={handleClickResetFilters}>Reset</Button>
+    </>
+
   );
 };
 
