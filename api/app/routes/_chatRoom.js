@@ -138,7 +138,8 @@ module.exports = {
                     }
                     const chatName= `${invitedPseudo} + ${myPseudo}`;
                     //si la conversation existe déjà
-                    const alreadyChatting=await db.query(`SELECT * FROM chat WHERE "name"=$1`,[chatName]);
+                    const alreadyChatting=await db.query(`SELECT * FROM chat WHERE "name" LIKE '%${myPseudo}%'
+                                                          AND "name" LIKE '%${invited}%';`);
                     if(alreadyChatting.rows[0]){
                         error.push(`Vous discutez déjà avec cette personne`);
                         return h.response(error).code(400);
