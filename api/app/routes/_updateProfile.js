@@ -168,7 +168,7 @@ module.exports = {
                         });
                         const latitude= api.payload.items[0].position.lat;
                         const longitude= api.payload.items[0].position.lng;
-                        await Update.detailInsert(city, country, remote,latitude, longitude, disponibility, userID,description, disponibility, linkedin_link, facebook_link,github_link);
+                        await Update.detailInsert(city, country, remote,latitude, longitude, disponibility, userID,description, linkedin_link, facebook_link,github_link);
                         }         
                     }//sinon on update
                     else{
