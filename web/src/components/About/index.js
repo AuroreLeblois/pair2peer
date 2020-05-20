@@ -37,7 +37,7 @@ const About = () => {
                       <FontAwesomeIcon size="2x" icon={faGithub} />
                     </Icon>
                   </a>
-                  <a href="https://www.linkedin.com/in/victor-greiveldinger-0b21471a7/" target="_blank">
+                  <a href="https://www.linkedin.com/in/victor-greiveldinger/" target="_blank">
                     <Icon className="about-icons" color="dark">
                       <FontAwesomeIcon size="2x" icon={faLinkedin} />
                     </Icon>
@@ -83,7 +83,7 @@ const About = () => {
                       <FontAwesomeIcon size="2x" icon={faGithub} />
                     </Icon>
                   </a>
-                  <a href="https://www.linkedin.com/in/aurore-leblois-4909a0a9/" target="_blank">
+                  <a href="https://www.linkedin.com/in/aurore-leblois/" target="_blank">
                     <Icon className="about-icons" color="dark">
                       <FontAwesomeIcon size="2x" icon={faLinkedin} />
                     </Icon>
