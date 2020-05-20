@@ -70,6 +70,7 @@ const ProfileEdit = ({ handleClickPictureUpload, inputFile }) => {
       .then((res) => {
         console.log('coucou')
         dispatch(submitLogout(history));
+        dispatch({ type: actions.CLEAR_ERRORS_MSG });
       })
       .catch((err) => {
         console.log(err);

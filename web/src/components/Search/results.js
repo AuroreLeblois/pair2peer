@@ -8,7 +8,7 @@ import { Columns, Pagination } from 'react-bulma-components';
 
 // == import utils/actions
 import { API_URI } from 'src/store/utils';
-import { getUsersList } from 'src/store/actions';
+import { getUsersList, actions } from 'src/store/actions';
 
 // == Import component
 import Cards from './cards';
@@ -50,6 +50,7 @@ const Results = ({ setActiveModalDetails }) => {
         usersData.maxUsers = data.maxUser;
         usersData.users = data.users;
         dispatch(getUsersList(usersData));
+        dispatch({ type: actions.CLEAR_ERRORS_MSG });
       })
       .catch((err) => {
         console.log(err);
