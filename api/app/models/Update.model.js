@@ -62,10 +62,10 @@ module.exports = class Admin {
     // ####               ####
     // ##   detail method      ##
     // ####               ####
-    static async detailInsert(city, country, remote,latitude, longitude, disponibility, userID,description, disponibility, linkedin_link, facebook_link,github_link) {
+    static async detailInsert(city, country, remote,latitude, longitude, disponibility, userID,description, linkedin_link, facebook_link,github_link) {
             await db.query(`INSERT INTO usr_detail ("city", "country", "remote", latitude, longitude, usr_id,description,disponibility,linkedin_link,facebook_link, github_link )
             VALUES ($1 , $2 , $3 , $4 , $5,$6,$7,$8,$9,$10,$11);`
-            ,[city, country, remote,latitude, longitude, disponibility, userID,description, disponibility, linkedin_link, facebook_link,github_link]);
+            ,[city, country, remote,latitude, longitude, disponibility, userID,description, linkedin_link, facebook_link,github_link]);
 };
 
     // ####               ####
