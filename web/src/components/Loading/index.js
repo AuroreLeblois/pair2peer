@@ -7,7 +7,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 const Loading = () => (
   <Modal closeOnBlur={false} closeOnEsc={false} showClose={false} show onClose={() => {}}>
     <Modal.Content>
-      <Section className="container-loading" style={{ textAlign: 'center' }}>
+      <Section className="container-loading">
         <Icon color="light">
           <FontAwesomeIcon size="6x" icon={faSpinner} spin />
         </Icon>
