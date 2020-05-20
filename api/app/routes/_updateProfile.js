@@ -194,7 +194,7 @@ module.exports = {
                                 ||errorList.message.country
                                 ||errorList.message.remote
                                 ||errorList.message.pseudo) {
-                                return errorList;
+                                    return h.response(errorList).code(400);
                             }
                              await Update.detailUpdate(remote, description, disponibility,linkedin_link,facebook_link,github_link, picture,userID)
                         };
