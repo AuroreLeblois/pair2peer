@@ -104,3 +104,8 @@ textarea,
   background-color: #FF2B56 !important;
   border-color: #FF2B56 !important;
 }
+
+.button-reset {
+  align-self: flex-end;
+  margin-left: 1rem;
+}

@@ -96,6 +96,12 @@ export default (state = initialState, action = {}) => {
         selectedUser: action.user,
       };
     }
+    case actions.RESET_FILTERS: {
+      return {
+        ...state,
+        search: initialState.search,
+      };
+    }
     default: {
       return state;
     }
