@@ -15,6 +15,7 @@ module.exports = class Mail {
     // ####               ####
     static async mailer(email) {
 
+        // we are the transporter, we inform some informations to nodemailer
         let transporter = nodemailer.createTransport( {
             service: "Gmail",
             auth: {
@@ -26,6 +27,7 @@ module.exports = class Mail {
             }
         });
 
+        // we send an email through our information set earlier on transporter
         let info = await transporter.sendMail({
             from: 'Team Pair2peer <pair2peer.no.reply@gmail.com>',
             to: email,
@@ -43,6 +45,7 @@ module.exports = class Mail {
     // ####               ####
     static async activation(email) {
 
+        // it will activate the account
         await db.query(`UPDATE usr SET "status" = 'actif' WHERE email = $1`, [email]);
     };
 

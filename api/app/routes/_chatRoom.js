@@ -25,8 +25,8 @@ module.exports = {
                 const user = await User.findOne(request.state.cookie);
                 const chatRooms = await db.query(`
                     SELECT * FROM chat_message
-                    WHERE to_json(ARRAY(SELECT jsonb_array_elements(users) ->> 'pseudo'))::jsonb ? $1
-                `, [user.pseudo]);
+                    WHERE to_json(ARRAY(SELECT jsonb_array_elements(users) ->> 'pseudo'))::jsonb ? $1`,
+                [user.pseudo]);
                 
                 return chatRooms.rows;
             }

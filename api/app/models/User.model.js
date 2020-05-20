@@ -33,23 +33,29 @@ module.exports = class User {
             errorList.message.errorEmail = 'Cet email n\'existe pas';
             errorList.message.errorPassword = 'Mauvais mot de passe';
         };
+
         if (theUser && !await bcrypt.compare(password, theUser.password)) {
             errorList.message.errorPassword = 'Mauvais mot de passe';
         };
+
+        // if (theUser.status === 'inactif') {
+        //     errorList.message.inactive = "Le compte n'est pas activé, veuillez valider votre mail de confirmation";
+        // };
         
         // return error message if exists 
         if (errorList.message.errorEmail
-            || errorList.message.errorPassword) {
+            || errorList.message.errorPassword
+            /* || errorList.message.inactive */) {
             return errorList;
-        }
+        };
 
         // send all informations about the user logged for the front in react
         const userInfos = await db.query(`SELECT * FROM usr_profile WHERE email = $1`, [email]);
         // add chat message
         const chatInfos = await db.query(`
             SELECT * FROM chat_message
-            WHERE to_json(ARRAY(SELECT jsonb_array_elements(users) ->> 'pseudo'))::jsonb ? $1
-        `, [theUser.pseudo]);
+            WHERE to_json(ARRAY(SELECT jsonb_array_elements(users) ->> 'pseudo'))::jsonb ? $1`,
+        [theUser.pseudo]);
         
         // create user object who will contain 2 objects (informations about the user and his messages)
         const user = {

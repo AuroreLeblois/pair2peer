@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 const User = require('../models/User.model');
-const Mail = require('../models/Mail.model');
+// const Mail = require('../models/Mail.model');
 
 module.exports = {
     name: 'logs pages',
@@ -42,14 +42,9 @@ module.exports = {
                     // if error, send error messages
                     return h.response(info).code(400);
                 } else {
-                    // check if the account is activated
-                    if (info.info.status === 'actif') {
-                        // if success, set the cookie and send user informations
-                        request.cookieAuth.set({ email });
-                        return info;
-                    } else {
-                        return "Le compte n'est pas activé"
-                    }
+                    // if success, set the cookie and send user informations
+                    request.cookieAuth.set({ email });
+                    return info;
                 }
             }
         });
@@ -145,26 +140,31 @@ module.exports = {
                     return h.response(info).code(400);
                 } else {
                     // if success, send an email to verify the veracity of the account
-                    await Mail.mailer(email);
+                    // await Mail.mailer(email);
                     // and then send new user's informations
                     return info;
                 }
             }
         });
 
-        server.route({
-            method: 'GET',
-            path: '/activation/user/{email}',
-            config: {
-                description: 'Activation of the account',
-                tags: ['api', 'activation']
-            },
-            handler: async (request, h) => {
+        // server.route({
+        //     method: 'GET',
+        //     path: '/activation/user/{email}',
+        //     config: {
+        //         description: 'Activation of the account',
+        //         tags: ['api', 'activation'],
+        //         validate: {
+        //             params: Joi.object({
+        //                 email: Joi.string().email({ minDomainSegments: 2}).trim().required()
+        //             })
+        //         }
+        //     },
+        //     handler: async (request, h) => {
 
-                await Mail.activation(request.params.email);
-                return 'Compte validé !'
-            }
-        });
+        //         await Mail.activation(request.params.email);
+        //         return h.redirect('/login');
+        //     }
+        // });
 
     }
 }
