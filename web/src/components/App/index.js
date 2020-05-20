@@ -34,6 +34,10 @@ const App = () => {
   const history = useHistory();
   const { user, loading } = useSelector((state) => state);
 
+  BrowserRouter.listen((location) => {
+    console.log('browserhistory');
+  });
+
   const sessionUser = () => {
     if (!user) {
       const userInfo = JSON.parse(sessionStorage.getItem('user'));
