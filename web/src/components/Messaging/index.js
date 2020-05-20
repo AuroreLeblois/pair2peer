@@ -36,7 +36,6 @@ const Messaging = () => {
       });
   };
 
-  useEffect(refreshInbox);
   useInterval(refreshInbox, 6000 * 10);
 
   return (

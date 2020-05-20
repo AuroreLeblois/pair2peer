@@ -79,10 +79,16 @@ const App = () => {
   const switchClasses = () => {
     switch (location.pathname) {
       case '/': {
-        return 'container-home'
+        return 'container-home';
       }
       case '/login': {
-        return 'container-login'
+        return 'container-login';
+      }
+      case '/signup': {
+        return 'container-signup';
+      }
+      case '/about': {
+        return 'container-about';
       }
       default: {
         return null;

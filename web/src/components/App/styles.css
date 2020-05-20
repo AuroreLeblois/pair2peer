@@ -64,7 +64,7 @@ textarea,
 }
 
 .container-login {
-  background-image: url('../../assets/images/loading.png');
+  background-image: url('../../assets/images/shape3.png');
   background-position: center;
   background-repeat: no-repeat;
 }
@@ -80,6 +80,18 @@ textarea,
   height: 40vh;
 }
 
+.container-signup {
+  background-image: url('../../assets/images/shape5.png');
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.container-about {
+  background-image: url('../../assets/images/shape5.png');
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 .title.is-3 {
   padding-top: 1rem;
 }
@@ -88,6 +100,7 @@ textarea,
   background-color: #FF2B56 !important;
 }
 
-/* .modal-background {
-  background: rgba(255, 43, 86, 0.9) !important;
-} */
+.pagination-link.is-current {
+  background-color: #FF2B56 !important;
+  border-color: #FF2B56 !important;
+}

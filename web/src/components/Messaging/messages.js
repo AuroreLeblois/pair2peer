@@ -4,7 +4,7 @@ import React, { useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Columns, Media, Image, Container, Button, Content, Form, Box } from 'react-bulma-components';
 import useInputChange from 'src/store/hooks/useInputChange';
-import { submitMessage } from 'src/store/actions';
+import { submitMessage, actions } from 'src/store/actions';
 
 // == Import css
 import './style.scss';
