@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Route, Switch, Redirect, useHistory, useLocation } from 'react-router-dom';
-import { getFiltersList, getAuthentified, getUserInbox } from 'src/store/actions';
+import { getFiltersList, getAuthentified, getUserInbox, actions } from 'src/store/actions';
 import { API_URI } from 'src/store/utils';
 import { Container, Hero } from 'react-bulma-components';
 import axios from 'axios';
@@ -70,6 +70,7 @@ const App = () => {
         filtersList.localisation = data.localisation;
         usersData = data.maxUser;
         dispatch(getFiltersList(filtersList, usersData));
+        dispatch({ type: actions.CLEAR_ERRORS_MSG });
       })
       .catch((err) => {
         console.log(err);

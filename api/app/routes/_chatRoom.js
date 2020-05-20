@@ -159,13 +159,10 @@ module.exports = {
                     if(alreadyChatting.rows[0]){
                         errorList.message.doubleChat=`Vous discutez déjà avec cette personne. Vous pouvez trouver cette conversation dans votre messagerie.`;
                     }
-                    //maintenant que l'on trouve 2 utilisateurs
-                    //on créer la chat room
-                   
                     if(errorList.message.pseudo
                       ||errorList.message.psycho
                       ||errorList.message.doubleChat) {
-                        return errorList;
+                        return h.response(errorList).code(400);
                     }
                     else{
                         const newChat= await db.query(`INSERT INTO chat ("name")VALUES ($1) RETURNING *`,[chatName]);
@@ -178,7 +175,7 @@ module.exports = {
                         
                         return h.response(messages.rows[0].chat_serial).code(200);
                 }
-            // }
+            
         }
         
         });
@@ -211,7 +208,6 @@ module.exports = {
                 };
                 const chatSerial= request.params.chatSerial;
                const message= request.payload.message;
-                const email= request.state.cookie.email;
 
                 const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`,[chatSerial]);
 
@@ -230,7 +226,7 @@ module.exports = {
                 }
                 if(errorList.message.chat
                     ||errorList.message.invited) {
-                      return errorList;
+                        return h.response(errorList).code(400);
                 }
                 else{
 
@@ -306,7 +302,7 @@ module.exports = {
                     ||errorList.message.pseudo
                     || errorList.message.invited
                     ||errorList.message.chat) {
-                      return errorList;
+                        return h.response(errorList).code(400);
                   }
                   else{
                   const pseudo= newInvited.rows[0].pseudo;
@@ -362,7 +358,7 @@ module.exports = {
                 }
                 if(errorList.message.notAllowed
                   ||errorList.message.chat) {
-                      return errorList;
+                    return h.response(errorList).code(400);
                   }
                 else{
                     await Chat.deleteChatRoom(chatID);

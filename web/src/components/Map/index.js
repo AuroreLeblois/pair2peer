@@ -2,11 +2,12 @@
 /* eslint-disable max-len */
 // == Import npm
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import { Heading } from 'react-bulma-components';
 import axios from 'axios';
+import { actions } from 'src/store/actions';
 import { API_URI } from 'src/store/utils';
 
 // == Import css
@@ -21,6 +22,8 @@ const UserMap = () => {
   // La première variables stocke les données, la deuxième sert à définir les données qui seront stockées dans la première
   const [users, setUsers] = useState();
 
+  const dispatch = useDispatch();
+
   console.log(users);
 
   // Je définis une fonction pour faire la requête de mes users
@@ -29,6 +32,7 @@ const UserMap = () => {
       .then((res) => {
         // J'utilise mon state définit plus haut pour stocker les users que je reçois en réponse de la requête
         setUsers(res.data);
+        dispatch({ type: actions.CLEAR_ERRORS_MSG });
         console.log(res.data);
       })
       .catch((err) => {

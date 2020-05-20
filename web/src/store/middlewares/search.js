@@ -17,6 +17,7 @@ export default (store) => (next) => (action) => {
           users.maxPage = data.maxPage.count;
           users.maxUsers = data.maxUser.count;
           users.users = data.users;
+          store.dispatch({ type: actions.CLEAR_ERRORS_MSG });
           store.dispatch(submitFiltersSearch(users));
         })
         .catch((err) => {
