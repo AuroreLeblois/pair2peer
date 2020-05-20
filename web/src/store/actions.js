@@ -26,6 +26,7 @@ export const actions = {
   SELECTED_USER_DETAILS: 'actions/SELECTED_USER_DETAILS',
   DESELECT_USER_DETAILS: 'actions/DESELECT_USER_DETAILS',
   REDIRECT_LOGIN: 'actions/REDIRECT_LOGIN',
+  RESET_FILTERS: 'actions/RESET_FILTERS',
 };
 
 // == Actions creator
