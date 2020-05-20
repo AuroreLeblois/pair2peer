@@ -43,7 +43,7 @@ const Login = () => {
           <Columns>
             <Container>
               <Content style={{ textAlign: 'center' }}>
-                <Heading size={3}>Connexion</Heading>
+                <Heading style={{ color: '#F5F5F5' }} size={3}>Connexion</Heading>
                 <Heading subtitle size={6}>Et commencez à travailler</Heading>
               </Content>
             </Container>

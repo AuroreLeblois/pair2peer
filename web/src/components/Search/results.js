@@ -65,7 +65,7 @@ const Results = ({ setActiveModalDetails }) => {
       </Columns>
       <Columns>
         <Columns.Column>
-          <Pagination current={activePage} total={maxPage} onChange={handleChange} delta={maxPage} />
+          <Pagination color="danger" current={activePage} total={maxPage} onChange={handleChange} delta={maxPage} />
         </Columns.Column>
       </Columns>
       <ModalDetails modalUserDetails={modalUserDetails} setModalUserDetails={setModalUserDetails} />
