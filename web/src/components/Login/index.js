@@ -15,10 +15,6 @@ const Login = () => {
   const { errors, loading } = useSelector((state) => state);
   const [input, handleInputChange] = useInputChange();
 
-  const ErrorMessage = ({ message }) => (
-    <Form.Help color="danger">{message}</Form.Help>
-  );
-
   const handleSubmit = (evt) => {
     evt.preventDefault();
     dispatch(submitLogin(history, input));
