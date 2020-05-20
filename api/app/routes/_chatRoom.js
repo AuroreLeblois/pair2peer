@@ -141,7 +141,7 @@ module.exports = {
                     const alreadyChatting=await db.query(`SELECT * FROM chat WHERE "name" LIKE '%${myPseudo}%'
                                                           AND "name" LIKE '%${invited}%';`);
                     if(alreadyChatting.rows[0]){
-                        error.push(`Vous discutez déjà avec cette personne`);
+                        error.push(`Vous discutez déjà avec cette personne. Vous pouvez trouver cette conversation dans votre messagerie.`);
                         return h.response(error).code(400);
                     }
                     //maintenant que l'on trouve 2 utilisateurs
