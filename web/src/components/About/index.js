@@ -31,22 +31,19 @@ const About = () => {
               <Media>
                 <Media.Item>
                   <Heading size={4}>Victor Greiveldinger</Heading>
-                  <Heading subtitle size={6}>Technical Referent, Frontend Developer</Heading>
-                  <Link to="">
+                  <Heading subtitle size={6}>Technical Referent, <br/> Frontend Developer</Heading>
+                  <a href="https://www.github.com/VictorGreiveldingerHub" target="_blank">
                     <Icon className="about-icons" color="dark">
                       <FontAwesomeIcon size="2x" icon={faGithub} />
                     </Icon>
-                  </Link>
-                  <Link to="">
+                  </a>
+                  <a href="https://www.linkedin.com/in/victor-greiveldinger-0b21471a7/" target="_blank">
                     <Icon className="about-icons" color="dark">
                       <FontAwesomeIcon size="2x" icon={faLinkedin} />
                     </Icon>
-                  </Link>
+                  </a>
                 </Media.Item>
               </Media>
-              <Content>
-                Moi, prochaine bataille rangée je reste à Kaamelott. On plaisante, on plaisante… Ah, ben tourné vers là-bas c'est sûr, moi non plus je vois rien. La vache! Ca vous rend pas aimable en tout cas, hein!
-              </Content>
             </Card.Content>
           </Card>
         </Columns.Column>
@@ -57,22 +54,19 @@ const About = () => {
               <Media>
                 <Media.Item>
                   <Heading size={4}>Charles Phonepraseuth</Heading>
-                  <Heading subtitle size={6}>Product Owner, Lead Backend Developer</Heading>
-                  <Link to="">
+                  <Heading subtitle size={6}>Product Owner, <br/> Lead Backend Developer</Heading>
+                  <a href="https://github.com/CharlesPhonepraseuth" target="_blank">
                     <Icon className="about-icons" color="dark">
                       <FontAwesomeIcon size="2x" icon={faGithub} />
                     </Icon>
-                  </Link>
-                  <Link to="">
+                  </a>
+                  <a href="https://www.linkedin.com/in/charlesphonepraseuth/" target="_blank">
                     <Icon className="about-icons" color="dark">
                       <FontAwesomeIcon size="2x" icon={faLinkedin} />
                     </Icon>
-                  </Link>
+                  </a>
                 </Media.Item>
               </Media>
-              <Content>
-                Moi, prochaine bataille rangée je reste à Kaamelott. On plaisante, on plaisante… Ah, ben tourné vers là-bas c'est sûr, moi non plus je vois rien. La vache! Ca vous rend pas aimable en tout cas, hein!
-              </Content>
             </Card.Content>
           </Card>
         </Columns.Column>
@@ -83,22 +77,19 @@ const About = () => {
               <Media>
                 <Media.Item>
                   <Heading size={4}>Aurore Leblois</Heading>
-                  <Heading subtitle size={6}>SCRUM Master, Backend Developer</Heading>
-                  <Link to="">
+                  <Heading subtitle size={6}>SCRUM Master, <br/> Backend Developer</Heading>
+                  <a href="https://github.com/AuroreLeblois" target="_blank">
                     <Icon className="about-icons" color="dark">
                       <FontAwesomeIcon size="2x" icon={faGithub} />
                     </Icon>
-                  </Link>
-                  <Link to="https://www.linkedin.com/in/aurore-leblois-4909a0a9/">
+                  </a>
+                  <a href="https://www.linkedin.com/in/aurore-leblois-4909a0a9/" target="_blank">
                     <Icon className="about-icons" color="dark">
                       <FontAwesomeIcon size="2x" icon={faLinkedin} />
                     </Icon>
-                  </Link>
+                  </a>
                 </Media.Item>
               </Media>
-              <Content>
-                Moi, prochaine bataille rangée je reste à Kaamelott. On plaisante, on plaisante… Ah, ben tourné vers là-bas c'est sûr, moi non plus je vois rien. La vache! Ca vous rend pas aimable en tout cas, hein!
-              </Content>
             </Card.Content>
           </Card>
         </Columns.Column>
@@ -110,21 +101,18 @@ const About = () => {
                 <Media.Item>
                   <Heading size={4}>Maximilien Bec</Heading>
                   <Heading subtitle size={6}>Lead Frontend Developer</Heading>
-                  <Link to="">
+                  <a href="https://github.com/xooma" target="_blank">
                     <Icon className="about-icons" color="dark">
                       <FontAwesomeIcon size="2x" icon={faGithub} />
                     </Icon>
-                  </Link>
-                  <Link to="">
+                  </a>
+                  <a href="https://www.linkedin.com/in/mbec/" target="_blank">
                     <Icon className="about-icons" color="dark">
                       <FontAwesomeIcon size="2x" icon={faLinkedin} />
                     </Icon>
-                  </Link>
+                  </a>
                 </Media.Item>
               </Media>
-              <Content>
-                Moi, prochaine bataille rangée je reste à Kaamelott. On plaisante, on plaisante… Ah, ben tourné vers là-bas c'est sûr, moi non plus je vois rien. La vache! Ca vous rend pas aimable en tout cas, hein!
-              </Content>
             </Card.Content>
           </Card>
         </Columns.Column>
