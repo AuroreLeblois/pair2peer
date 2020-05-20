@@ -4,7 +4,8 @@ const db = require('../models/db');
 const bcrypt = require('bcrypt');
 const Joi = require('@hapi/joi');
 const Wreck= require('@hapi/wreck');
-const Update= require('../models/Update.model')
+const Update= require('../models/Update.model');
+const User= require('../models/User.model')
 const APIKEY= process.env.APIKEY;
 module.exports = {
     name: 'profile pages',
@@ -385,4 +386,3 @@ module.exports = {
                 
                 }
             }
-        
