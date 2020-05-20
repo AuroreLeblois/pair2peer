@@ -18,7 +18,7 @@ const UserProfile = ({ modalUserDetails, setModalUserDetails }) => {
   const dispatch = useDispatch();
   const [contactUser, setContactUser] = useState(false);
   const [selectedChat, setSelectedChat] = useState();
-  const { selectedUser, loading } = useSelector((state) => state);
+  const { selectedUser, loading, user } = useSelector((state) => state);
   let key = 1;
   console.log(selectedUser);
 
@@ -67,6 +67,17 @@ const UserProfile = ({ modalUserDetails, setModalUserDetails }) => {
     </Icon>
   );
 
+  const ContactFooter = () => {
+    if (selectedUser.pseudo !== user.pseudo) {
+      return (
+        <Modal.Card.Foot style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <Button onClick={() => setContactUser(true)} color="success">Contacter {selectedUser.pseudo}</Button>
+        </Modal.Card.Foot>
+      );
+    }
+    return null;
+  };
+
   if (selectedUser) {
     return (
       <>
@@ -114,9 +125,7 @@ const UserProfile = ({ modalUserDetails, setModalUserDetails }) => {
                 </Media.Item>
               </Media>
             </Modal.Card.Body>
-            <Modal.Card.Foot style={{ alignItems: 'center', justifyContent: 'center' }}>
-              <Button onClick={() => setContactUser(true)} color="success">Contacter {selectedUser.pseudo}</Button>
-            </Modal.Card.Foot>
+            <ContactFooter />
           </Modal.Card>
         </Modal>
         <ContactUser contactUser={contactUser} setContactUser={setContactUser} selectedUser={selectedUser} selectedChat={selectedChat} />
