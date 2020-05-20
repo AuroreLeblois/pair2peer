@@ -101,28 +101,24 @@ module.exports = {
             },
         
             handler: async (request, h) => {
-                //grosse fonction update en perspective=> tout ce dont on a besoin
-                //un tableau d'erreurs vide
-                //le cookie email pour retrouver l'user
-                const email= request.state.cookie.email;
                 //on retrouve l'user de suite pour ne pas avoir à le refaire plus tard
-                const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
-                const userID= result.rows[0].id;
+                const me= await User.findOne(request.state.cookie);
+                const userID= me.id;
                 const userDetails= await db.query(`SELECT * FROM usr_detail WHERE usr_id=$1`,[userID]);
                 const userCountry= userDetails.rows[0].country;
                 const userCity=userDetails.rows[0].city;
                 //les données du formulaire:
-                //les données utilisateur brutes
-                const {password, picture,country, city, remote, description, validatePassword, pseudo, linkedin_link, facebook_link, github_link,disponibility}= request.payload;
-
-                //on compare le mdp avec la validation si mdp changé
-                //déjà, est ce que le user a rentré un mdp?
+                const {password,picture,country, city, remote, 
+                    description, validatePassword, pseudo, linkedin_link, 
+                    facebook_link, github_link,disponibility} = request.payload;
+                    //notre list d'erreur
                 const errorList = {
                     statusCode: 400,
                     error: 'Bad Request',
                     message: {}
                 };
-
+                //on compare le mdp avec la validation si mdp changé
+                //déjà, est ce que le user a rentré un mdp?
                 if(password.length>0){
                     //est ce que le mdp fait bien 8 caractères au moins?
                     if(password.length>=8){
@@ -138,7 +134,7 @@ module.exports = {
                     else{ errorList.message.errorPassword=' Votre mot de passe doit faire 8 caractères minimum!'};
                 };
                //le pseudo si on désire le changer
-                if(pseudo.length>0 && pseudo!==result.rows[0].pseudo){
+                if(pseudo.length>0 && pseudo!==me.pseudo){
                     //oui mais le pseudo doit être unique
                     const pseudoExists= await db.query(`SELECT pseudo FROM usr WHERE pseudo= $1;` ,[pseudo]);
                     if(!pseudoExists.rows[0]){
