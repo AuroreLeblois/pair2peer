@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Modal, Form, Button, Section, Heading, Columns, Notification } from 'react-bulma-components';
 import useInputChange from 'src/store/hooks/useInputChange';
-import { actions, API_URI } from 'src/store/actions';
+import { actions, displayErrorsMessages, API_URI } from 'src/store/actions';
 import axios from 'axios';
 import { MessageContent } from 'semantic-ui-react';
 
@@ -14,7 +14,7 @@ const ContactUser = ({ contactUser, setContactUser, selectedUser, selectedChat }
   const dispatch = useDispatch();
   const [input, handleInputChange] = useInputChange();
   const [messageSent, setMessageSent] = useState(false);
-  const { loading } = useSelector((state) => state);
+  const { loading, errors } = useSelector((state) => state);
 
   const handleSubmitMessage = (evt) => {
     evt.preventDefault();
@@ -29,12 +29,14 @@ const ContactUser = ({ contactUser, setContactUser, selectedUser, selectedChat }
       { withCredentials: true },
     )
       .then((res) => {
-        console.log(res);
         setMessageSent(true);
         dispatch({ type: actions.SET_LOADER });
+        dispatch({ type: actions.CLEAR_ERRORS_MSG });
       })
-      .catch((res) => {
-        console.log(res.response);
+      .catch((err) => {
+        console.log(err.response);
+        const { message } = err.response.data;
+        dispatch(displayErrorsMessages(message));
         dispatch({ type: actions.SET_LOADER });
       });
   };
@@ -45,12 +47,24 @@ const ContactUser = ({ contactUser, setContactUser, selectedUser, selectedChat }
     setMessageSent(false);
   };
 
+  const ErrorsMessage = () => {
+    return (
+      <Notification color="danger">
+        {Object.keys(errors).map((objectKey, index) => (
+          <p>{errors[objectKey]}</p>
+        ))}
+      </Notification>
+    );
+  };
+
+
   return (
     <>
       <Modal closeOnBlur show={contactUser} onClose={closeModale}>
         <Modal.Content>
           <Section style={{ backgroundColor: 'white' }}>
             <Heading renderAs="p" size={5}>Contacter {selectedUser.pseudo}</Heading>
+            {(errors) ? <ErrorsMessage /> : null}
             <form onSubmit={handleSubmitMessage}>
               <Columns.Column>
                 <Form.Field>
