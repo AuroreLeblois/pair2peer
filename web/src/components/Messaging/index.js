@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-filename-extension */
 // == Import npm
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Columns, Box, Heading, Content, Button } from 'react-bulma-components';
 import axios from 'axios';
@@ -15,6 +15,7 @@ import './style.scss';
 
 const Messaging = () => {
   const dispatch = useDispatch();
+  const { inbox } = useSelector((state) => state);
   const [selectedChat, setSelectedChat] = useState('');
 
   const handleSelectChat = (evt, chatSerial) => {
@@ -36,6 +37,7 @@ const Messaging = () => {
       });
   };
 
+  useEffect(refreshInbox, [selectedChat]);
   useInterval(refreshInbox, 6000 * 10);
 
   return (

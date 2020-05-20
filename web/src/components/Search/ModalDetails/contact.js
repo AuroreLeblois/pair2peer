@@ -34,7 +34,7 @@ const ContactUser = ({ contactUser, setContactUser, selectedUser, selectedChat }
         dispatch({ type: actions.SET_LOADER });
       })
       .catch((res) => {
-        console.log(res);
+        console.log(res.response);
         dispatch({ type: actions.SET_LOADER });
       });
   };
