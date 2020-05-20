@@ -105,6 +105,22 @@ module.exports = {
                        invited:Joi.string().required(),
                        message:Joi.string().required()
                     }),
+                    failAction: (request, h, err) => {
+                        
+                        // errors object will be the object who contains all the error messages (in french)
+                        const errors = {};
+                        const details = err.details;
+                        // depend on each error, it will write a specific error message
+                        let path = details[0].path[0];
+                        let typeError = details[0].type;
+                            // no need to write a specific error message if the input is empty because the constraint is set on the front side
+                            if (path === 'message' && typeError === 'any.required') {
+                                errors[path] = `Merci d'écrire quelque chose pour votre premier message`;
+                            }
+                        
+                            err.output.payload.message = errors;
+                            throw err;
+                },
                 },
                 description: 'create a chat room',
                 tags: ['api', 'chatroom']
@@ -118,10 +134,6 @@ module.exports = {
                 const invited= request.payload.invited;
                 const message= request.payload.message;
                 error=[];
-                    if(message.lenght=0){
-                        errorList.message.message=`Merci d'écrire quelque chose pour votre premier message`;
-                       
-                    }
                     const invitedInfo= await db.query(`SELECT * FROM usr WHERE pseudo=$1`,[invited]);
                     if(!invitedInfo.rows[0]){
                         errorList.message.pseudo="Nom introuvable ou invalide";
@@ -150,15 +162,15 @@ module.exports = {
                     }
                     //maintenant que l'on trouve 2 utilisateurs
                     //on créer la chat room
-                    const newChat= await db.query(`INSERT INTO chat ("name")VALUES ($1) RETURNING *`,[chatName]);
-                    const ChatID= newChat.rows[0].id;
-                    if ( errorList.message.message
-                        ||errorList.message.pseudo
-                        ||errorList.message.psycho
-                        ||errorList.message.doubleChat) {
+                   
+                    if(errorList.message.pseudo
+                      ||errorList.message.psycho
+                      ||errorList.message.doubleChat) {
                         return errorList;
                     }
                     else{
+                        const newChat= await db.query(`INSERT INTO chat ("name")VALUES ($1) RETURNING *`,[chatName]);
+                        const ChatID= newChat.rows[0].id;
                         await Chat.insertMessage(invitedID,ChatID,myID,message);
                                 
                         const messages= await db.query(`SELECT * FROM all_my_message_in_chat 
