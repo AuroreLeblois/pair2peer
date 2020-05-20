@@ -70,6 +70,8 @@ const db = require('./app/models/db');
             plugin: require('./app/routes/admin.route')
          }, {
              plugin: require('./app/routes/mapping.route')
+         }, {
+             plugin: require('./app/routes/contact.route')
          }
     ]);
 
