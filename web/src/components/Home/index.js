@@ -49,8 +49,9 @@ const Home = () => {
           <Columns.Column>
             <Heading className="main-paragraph-title" size={2}>L'entraide</Heading>
             <p className="main-paragraph-content">
-              Pair2Peer vous offre la chance d'apprendre en échangant avec d'autres passionnés par le biais du pair-programming. <br/>
-              Si vous êtes un débutant désireux d'apprendre, un autodidacte perdu dans les méandres de la programmation ou un professionnel souhaitant faire sa veille technologique ou apprendre un nouveau langage, n'hésitez plus à sauter le pas !
+              Pair2Peer vous offre la chance d'apprendre en échangant avec d'autres passionnés par le biais du <strong>pair-programming</strong>. <br/>
+              Que vous soyez un débutant désireux d'apprendre, un autodidacte perdu dans les méandres de la programmation, un professionnel souhaitant faire sa veille technologique ou vous souhaitez simplement découvrir un nouveau langage. <br/>
+              N'hésitez plus à sauter le pas !
             </p>
           </Columns.Column>
         </Columns>
