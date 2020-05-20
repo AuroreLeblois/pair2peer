@@ -110,17 +110,22 @@ module.exports = {
                 tags: ['api', 'chatroom']
             },
             handler: async function (request, h) {
+                const errorList = {
+                    statusCode: 400,
+                    error: 'Bad Request',
+                    message: {}
+                };
                 const invited= request.payload.invited;
                 const message= request.payload.message;
                 error=[];
                     if(message.lenght=0){
-                        error.push(`Merci d'écrire quelque chose pour votre premier message`)
-                        return h.response(error)
+                        errorList.message.message=`Merci d'écrire quelque chose pour votre premier message`;
+                       
                     }
                     const invitedInfo= await db.query(`SELECT * FROM usr WHERE pseudo=$1`,[invited]);
                     if(!invitedInfo.rows[0]){
-                        error.push("invalid user name")
-                        return h.response(error).code(404)
+                        errorList.message.pseudo="Nom introuvable ou invalide";
+                       
                     }
                     const invitedID= invitedInfo.rows[0].id;
 
@@ -133,23 +138,26 @@ module.exports = {
                     const myPseudo= me.rows[0].pseudo;
                     //si on essaye de s'inviter nous-même...
                     if(invited===myPseudo){
-                       error.push(`Vous ne pouvez pas vous inviter vous-même`);
-                       return h.response(error).code(400) 
+                        errorList.message.psycho=`Vous ne pouvez pas vous inviter vous-même`;
+                       
                     }
                     const chatName= `${invitedPseudo} + ${myPseudo}`;
                     //si la conversation existe déjà
                     const alreadyChatting=await db.query(`SELECT * FROM chat WHERE "name" LIKE '%${myPseudo}%'
                                                           AND "name" LIKE '%${invited}%';`);
                     if(alreadyChatting.rows[0]){
-                        error.push(`Vous discutez déjà avec cette personne. Vous pouvez trouver cette conversation dans votre messagerie.`);
+                        errorList.message.doubleChat=`Vous discutez déjà avec cette personne. Vous pouvez trouver cette conversation dans votre messagerie.`;
                         return h.response(error).code(400);
                     }
                     //maintenant que l'on trouve 2 utilisateurs
                     //on créer la chat room
                     const newChat= await db.query(`INSERT INTO chat ("name")VALUES ($1) RETURNING *`,[chatName]);
                     const ChatID= newChat.rows[0].id;
-                    if(error.lenght>0){
-                        return h.response(error).code(400);
+                    if ( errorList.message.message
+                        ||errorList.message.pseudo
+                        ||errorList.message.psycho
+                        ||errorList.message.doubleChat) {
+                        return errorList;
                     }
                     else{
                         await Chat.insertMessage(invitedID,ChatID,myID,message);
