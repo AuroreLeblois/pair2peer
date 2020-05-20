@@ -273,15 +273,19 @@ module.exports = {
                 tags: ['api', 'chatroom','update']
             },
             handler: async function (request, h) {
-                const error=[];
+                const errorList = {
+                    statusCode: 400,
+                    error: 'Bad Request',
+                    message: {}
+                };
+              
                const chatSerial= request.params.chatSerial;
                const newChatter= request.payload.newChatter;
                const email= request.state.cookie.email;
 
                 const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`,[chatSerial]);
                 if(!chatExists.rows[0]){
-                    const error=`chat not found `
-                    return h.response(error).code(404);
+                    errorList.message.chat=`Conversation introuvable ou supprimée`
                 }
 
                 const chatID= chatExists.rows[0].id;
@@ -292,16 +296,14 @@ module.exports = {
                                                  WHERE usr_id=$1;`,[me.rows[0].id]);
                     
                     if(!usrInChat.rows[0]){
-                        error.push("Vous n'êtes pas invité sur cette chatroom!")
-                        return h.response(error).code(403);
+                        errorList.message.invited="Vous n'êtes pas invité sur cette conversation!"
                     }
 
                 const newInvited= await db.query(`SELECT * FROM usr WHERE pseudo=$1;`,[newChatter]);
                 if(!newInvited.rows[0]){
-                    error.push(`Cannot find user ${newChatter}`)
-                    return h.response(error).code(404);
+                    errorList.message.pseudo=`impossible de mettre la main sur ${newChatter}`;
                 }
-                else{
+               
                     //check if newchatter already in chat
 
                 const newChatterID= newInvited.rows[0].id;
@@ -309,19 +311,24 @@ module.exports = {
                                                 WHERE usr_id=$1
                                                 AND chat_serial=$2;`,[newChatterID, chatSerial]);
                 if(isInChat.rows[0]){
-                    error.push(`user already invited`)
-                    return h.response(error).code(200);   
+                    errorList.message.alreadyHere=`Utilisateur déjà dans la conversation`;
                 }
-                else{
+                if(errorList.message.alreadyHere
+                    ||errorList.message.pseudo
+                    || errorList.message.invited
+                    ||errorList.message.chat) {
+                      return errorList;
+                  }
+                  else{
                   const pseudo= newInvited.rows[0].pseudo;
                   await Chat.addNewChatter(chatName, chatID,pseudo,newChatterID);
                 const messages= await db.query(`SELECT * FROM all_my_message_in_chat
                                                 WHERE chat_id=$1`,[chatID]);
 
                 return h.response(messages.rows).code(200);
-                }
+                  }
             }
-        }
+        
         
         });
 
@@ -343,6 +350,11 @@ module.exports = {
                 tags: ['api', 'chatroom', 'delete']
             },
             handler: async (request, h) => {
+                const errorList = {
+                    statusCode: 400,
+                    error: 'Bad Request',
+                    message: {}
+                };
                 const chatSerial= request.params.chatSerial;
                 const email= request.state.cookie.email;
                 const me= await db.query(`SELECT * FROM usr 
@@ -350,17 +362,19 @@ module.exports = {
                 const chatExists= await db.query(`SELECT * FROM chat 
                                                   WHERE chat_serial=$1`,[chatSerial]);
                 if(!chatExists.rows[0]){
-                    const error=`chat not found `
-                    return h.response(error).code(404);
+                    errorList.message.chat=`Conversation introuvable`;
                 }
                 const chatID= chatExists.rows[0].id;
                 const isInChat=await db.query(`SELECT * FROM all_my_message_in_chat
                                                 WHERE usr_id=$1
                                                 AND chat_serial=$2;`,[me.rows[0].id, chatSerial]);
                 if(!isInChat.rows[0]){
-                    const error= `Vous n'êtes pas ce tchat... petit voyou`
-                    return h.response(error).code(403)
+                    errorList.message.notAllowed=`Vous n'êtes pas ce tchat... petit voyou`;
                 }
+                if(errorList.message.notAllowed
+                  ||errorList.message.chat) {
+                      return errorList;
+                  }
                 else{
                     await Chat.deleteChatRoom(chatID);
                     return `tchat supprimé`
