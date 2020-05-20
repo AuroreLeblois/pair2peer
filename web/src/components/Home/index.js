@@ -15,29 +15,6 @@ const Home = () => {
   const { user } = useSelector((state) => state);
 
   return (
-  //   <Container className="Container">
-  //     <Heading>
-  //       Pair2Peer
-  //     </Heading>
-  //     <Heading subtitle size={3}>
-  //       Le site de pair-programming entre pairs
-  //     </Heading>
-  //     <Heading subtitle size={4}>
-  //     Tous seul, on va plus vite, ensemble on va plus loin!
-  //    </Heading>
-  //     <p>Tel est notre credo!
-  //     Ce site met en avant les valeurs du partage et de l'entraide. </p>
-  //    <p>Vous pourrez rechercher des développeurs plus expérimentés pour coder avec vous sur un projet, un concept, une idée,
-  //      ou des élèves si vous souhaitez partager votre savoir...</p>
-  //  <br></br>
-  //      <Heading subtitle size={4}>
-  //       <em>Comment faire?</em>
-  //    </Heading>
-  //    <p>Très simple, il vous suffit de créer un compte et de vous connecter.</p>
-  //     <p> Rentrez votre niveau, dites-nous si vous souhaitez coder en remote ou en personne.
-  //     Et c'est parti pour la recherche de pairs!</p>
-  //   </Container>
-
     <Container className="main-page">
       <Content style={{ textAlign: 'center' }}>
         <Heading className="main-title" size={4}>{(user) ? `Ravi de vous revoir ${user.pseudo}` : 'Trouvez un coworker, echangez, et commencez à travailler' }</Heading>
@@ -53,7 +30,14 @@ const Home = () => {
         <Columns className="main-right-image">
           <Columns.Column>
             <Heading className="main-paragraph-title" size={2}>Progresser seul</Heading>
+<<<<<<< HEAD
             <p className="main-paragraph-content">Il n'est pas toujours évident d'avancer seul. Beaucoup de gens tentent d'apprendre par eux-mêmes mais finissent bien souvent par abandonner par manque de compréhension, motivation ou encadrement. Pair2Peer vous offre une chance d'apprendre en échangant avec d'autres gens; professionnels désireux de partager leur savoir, débutants souhaitants coder en groupe, autodidactes perdus et plus encore.</p>
+=======
+            <p className="main-paragraph-content">
+              Il n'est pas toujours évident d'avancer seul. <br/>
+              Beaucoup de personnes tentent d'apprendre par eux-mêmes mais finissent bien souvent par abandonner à cause d'une difficulté trop élevée, manque de motivation ou d'encadrement.
+            </p>
+>>>>>>> 5d4be1776edac7b5a89b3e107e0b30523d1c43c1
           </Columns.Column>
           <Columns.Column />
         </Columns>
@@ -68,7 +52,10 @@ const Home = () => {
           <Columns.Column />
           <Columns.Column>
             <Heading className="main-paragraph-title" size={2}>L'entraide</Heading>
-            <p className="main-paragraph-content">Now that there is the Tec-9, a crappy spray gun from South Miami. This gun is advertised as the most popular gun in American crime. Do you believe that shit? It actually says that in the little book that comes with it: the most popular gun in American crime. Like they're actually proud of that shit. </p>
+            <p className="main-paragraph-content">
+              Pair2Peer vous offre la chance d'apprendre en échangant avec d'autres passionnés par le biais du pair-programming. <br/>
+              Si vous êtes un débutant désireux d'apprendre, un autodidacte perdu dans les méandres de la programmation ou un professionnel souhaitant faire sa veille technologique ou apprendre un nouveau langage, n'hésitez plus à sauter le pas !
+            </p>
           </Columns.Column>
         </Columns>
       </Content>
