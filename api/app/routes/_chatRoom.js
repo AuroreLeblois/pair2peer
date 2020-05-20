@@ -147,7 +147,6 @@ module.exports = {
                                                           AND "name" LIKE '%${invited}%';`);
                     if(alreadyChatting.rows[0]){
                         errorList.message.doubleChat=`Vous discutez déjà avec cette personne. Vous pouvez trouver cette conversation dans votre messagerie.`;
-                        return h.response(error).code(400);
                     }
                     //maintenant que l'on trouve 2 utilisateurs
                     //on créer la chat room
