@@ -159,13 +159,10 @@ module.exports = {
                     if(alreadyChatting.rows[0]){
                         errorList.message.doubleChat=`Vous discutez déjà avec cette personne. Vous pouvez trouver cette conversation dans votre messagerie.`;
                     }
-                    //maintenant que l'on trouve 2 utilisateurs
-                    //on créer la chat room
-                   
                     if(errorList.message.pseudo
                       ||errorList.message.psycho
                       ||errorList.message.doubleChat) {
-                        return errorList;
+                        return h.response(errorList).code(400);
                     }
                     else{
                         const newChat= await db.query(`INSERT INTO chat ("name")VALUES ($1) RETURNING *`,[chatName]);
@@ -178,7 +175,7 @@ module.exports = {
                         
                         return h.response(messages.rows[0].chat_serial).code(200);
                 }
-            // }
+            
         }
         
         });
