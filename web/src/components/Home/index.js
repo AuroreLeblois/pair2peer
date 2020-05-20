@@ -30,14 +30,10 @@ const Home = () => {
         <Columns className="main-right-image">
           <Columns.Column>
             <Heading className="main-paragraph-title" size={2}>Progresser seul</Heading>
-<<<<<<< HEAD
-            <p className="main-paragraph-content">Il n'est pas toujours évident d'avancer seul. Beaucoup de gens tentent d'apprendre par eux-mêmes mais finissent bien souvent par abandonner par manque de compréhension, motivation ou encadrement. Pair2Peer vous offre une chance d'apprendre en échangant avec d'autres gens; professionnels désireux de partager leur savoir, débutants souhaitants coder en groupe, autodidactes perdus et plus encore.</p>
-=======
             <p className="main-paragraph-content">
               Il n'est pas toujours évident d'avancer seul. <br/>
               Beaucoup de personnes tentent d'apprendre par eux-mêmes mais finissent bien souvent par abandonner à cause d'une difficulté trop élevée, manque de motivation ou d'encadrement.
             </p>
->>>>>>> 5d4be1776edac7b5a89b3e107e0b30523d1c43c1
           </Columns.Column>
           <Columns.Column />
         </Columns>
