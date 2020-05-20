@@ -58,8 +58,8 @@ module.exports = {
                     message: {}
                 };
                
-                const myEmail= request.state.cookie.email;
-                const me= await db.query(`SELECT * FROM usr WHERE email=$1`,[myEmail]);
+                // const myEmail= request.state.cookie.email;
+                const me= await User.findOne(request.state.cookie);
                 const chatCode= request.params.chatSerial;
                 const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`, [chatCode]);
                     if(!chatExists.rows[0]){
@@ -70,7 +70,7 @@ module.exports = {
                          //on verifie que le user soit dans la chatroom pour éviter les indésirables
                          const usrInChat= await db.query(`SELECT * FROM all_my_message_in_chat
                                                             WHERE usr_id=$1
-                                                            AND chat_id=$2`,[me.rows[0].id, chatExists.rows[0].id]);
+                                                            AND chat_id=$2`,[me.id, chatID]);
                         if(!usrInChat.rows[0]){
                             errorList.message.invited="Vous n'êtes pas invité sur cette chatroom!";  
                         }
@@ -139,29 +139,22 @@ module.exports = {
                 };
                 const invited= request.payload.invited;
                 const message= request.payload.message;
-                error=[];
                     const invitedInfo= await db.query(`SELECT * FROM usr WHERE pseudo=$1`,[invited]);
                     if(!invitedInfo.rows[0]){
                         errorList.message.pseudo="Nom introuvable ou invalide";
                        
                     }
                     const invitedID= invitedInfo.rows[0].id;
-
                     const invitedPseudo= invitedInfo.rows[0].pseudo;
-                    const myEmail= request.state.cookie.email;
-                   
-                    const me= await db.query(`SELECT * FROM usr WHERE email=$1`,[myEmail]);
+                    const me= await User.findOne(request.state.cookie);
 
-                    const myID= me.rows[0].id;
-                    const myPseudo= me.rows[0].pseudo;
                     //si on essaye de s'inviter nous-même...
-                    if(invited===myPseudo){
+                    if(invited===me.pseudo){
                         errorList.message.psycho=`Vous ne pouvez pas vous inviter vous-même`;
-                       
                     }
-                    const chatName= `${invitedPseudo} + ${myPseudo}`;
+                    const chatName= `${invitedPseudo} + ${me.pseudo}`;
                     //si la conversation existe déjà
-                    const alreadyChatting=await db.query(`SELECT * FROM chat WHERE "name" LIKE '%${myPseudo}%'
+                    const alreadyChatting=await db.query(`SELECT * FROM chat WHERE "name" LIKE '%${me.pseudo}%'
                                                           AND "name" LIKE '%${invited}%';`);
                     if(alreadyChatting.rows[0]){
                         errorList.message.doubleChat=`Vous discutez déjà avec cette personne. Vous pouvez trouver cette conversation dans votre messagerie.`;
@@ -177,7 +170,7 @@ module.exports = {
                     else{
                         const newChat= await db.query(`INSERT INTO chat ("name")VALUES ($1) RETURNING *`,[chatName]);
                         const ChatID= newChat.rows[0].id;
-                        await Chat.insertMessage(invitedID,ChatID,myID,message);
+                        await Chat.insertMessage(invitedID,ChatID,me.id,message);
                                 
                         const messages= await db.query(`SELECT * FROM all_my_message_in_chat 
                                                         WHERE chat_id=$1 
@@ -228,24 +221,23 @@ module.exports = {
                 }
                 chatID= chatExists.rows[0].id;
              
-               const me= await db.query(`SELECT * FROM usr WHERE email=$1`,[email]);
-                const myID= me.rows[0].id;
+                const me= await User.findOne(request.state.cookie);
                 const usrInChat= await db.query(`SELECT * FROM all_my_message_in_chat
                                                 WHERE usr_id=$1
-                                                AND chat_id=$2`,[myID, chatID]);
+                                                AND chat_id=$2`,[me.id, chatID]);
                 if(!usrInChat.rows[0]){
                     errorList.message.invited="Vous n'êtes pas invité sur cette conversation!";
                 }
                 if(errorList.message.chat
                     ||errorList.message.invited) {
                       return errorList;
-                  }
+                }
                 else{
 
-                await Chat.insertNewMessage(message, chatID,myID);
+                await Chat.insertNewMessage(message, chatID,me.id);
                 const conv= await db.query(`SELECT * FROM chat_message
                                             WHERE to_json(ARRAY(SELECT jsonb_array_elements(users) ->> 'pseudo'))::jsonb ? $1
-                                            `,[me.rows[0].pseudo]);
+                                            `,[me.pseudo]);
                 return h.response(conv.rows).code(200);
                   }
             }
@@ -281,7 +273,6 @@ module.exports = {
               
                const chatSerial= request.params.chatSerial;
                const newChatter= request.payload.newChatter;
-               const email= request.state.cookie.email;
 
                 const chatExists= await db.query(`SELECT * FROM chat WHERE chat_serial=$1`,[chatSerial]);
                 if(!chatExists.rows[0]){
@@ -290,15 +281,13 @@ module.exports = {
 
                 const chatID= chatExists.rows[0].id;
                 const chatName= chatExists.rows[0].name;
-                const me= await db.query(`SELECT * FROM usr 
-                                            WHERE email=$1`,[email]);
+                const me= await User.findOne(request.state.cookie);
                 const usrInChat= await db.query(`SELECT * FROM all_my_message_in_chat
-                                                 WHERE usr_id=$1;`,[me.rows[0].id]);
+                                                 WHERE usr_id=$1;`,[me.id]);
                     
                     if(!usrInChat.rows[0]){
                         errorList.message.invited="Vous n'êtes pas invité sur cette conversation!"
                     }
-
                 const newInvited= await db.query(`SELECT * FROM usr WHERE pseudo=$1;`,[newChatter]);
                 if(!newInvited.rows[0]){
                     errorList.message.pseudo=`impossible de mettre la main sur ${newChatter}`;
