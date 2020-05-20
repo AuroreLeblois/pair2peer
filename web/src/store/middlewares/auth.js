@@ -8,7 +8,7 @@ export default (store) => (next) => (action) => {
   switch (action.type) {
     case actions.SUBMIT_LOGIN: {
       // Assign values from submitted form
-      const { data } = action;
+      const { data, history } = action;
       axios.post(
         `${API_URI}/login`,
         data,
@@ -18,8 +18,9 @@ export default (store) => (next) => (action) => {
           // Redirection to '/', object { user } from reponse to reducer state
           const { data } = res;
           console.log(res);
-          store.dispatch(getAuthentified(action.history, data.info));
+          store.dispatch(getAuthentified(data.info));
           store.dispatch(getUserInbox(data.inbox));
+          store.dispatch({ type: actions.REDIRECT_HOME, history });
           store.dispatch({ type: actions.SET_LOADER });
           store.dispatch({ type: actions.CLEAR_ERRORS_MSG });
           sessionStorage.user = JSON.stringify(data.info);

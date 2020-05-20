@@ -20,9 +20,10 @@ const ChatsList = ({ handleSelectChat }) => {
             <Container>
               <Media>
                 <Media.Item renderAs="figure" position="left">
-                  <Image size={32} alt="xooma-picture" src={
+                  <Image size={32} alt="user-picture" src={
                     chatroom.users.map((users) => {
                       if (users.pseudo !== user.pseudo) {
+                        console.log(users.picture);
                         return users.picture;
                       }
                     })
