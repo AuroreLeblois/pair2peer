@@ -5,11 +5,20 @@ import React from 'react'; // couche 1
 import { render } from 'react-dom'; // couche 2
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { getAuthentified, getUserInbox } from 'src/store/actions';
 
 // == Import : local
 // Composants
 import App from 'src/components/App';
 import store from 'src/store';
+
+const userSession = JSON.parse(sessionStorage.getItem('user'));
+const inboxUserInfo = JSON.parse(sessionStorage.getItem('inbox'));
+
+if (userSession) {
+  store.dispatch(getAuthentified(userSession));
+  store.dispatch(getUserInbox(inboxUserInfo));
+}
 
 // == Render
 // 1. Élément React racine (celui qui contient l'ensemble de l'app)

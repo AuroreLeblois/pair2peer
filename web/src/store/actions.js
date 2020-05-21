@@ -4,6 +4,7 @@ export const API_URI = 'http://localhost:3000';
 // == Actions types
 export const actions = {
   SUBMIT_LOGIN: 'actions/SUBMIT_LOGIN',
+  REDIRECT_HOME: 'actions/REDIRECT_HOME',
   SUBMIT_LOGOUT: 'actions/SUBMIT_LOGOUT',
   GET_LOGOUT: 'actions/GET_LOGOUT',
   GET_AUTHENTIFIED: 'actions/GET_AUTHENTIFIED',
@@ -42,8 +43,8 @@ export const getLogout = (history) => (
   { type: actions.GET_LOGOUT, history }
 );
 
-export const getAuthentified = (history, data) => (
-  { type: actions.GET_AUTHENTIFIED, history, data }
+export const getAuthentified = (data) => (
+  { type: actions.GET_AUTHENTIFIED, data }
 );
 
 export const getUsersList = (users) => (
