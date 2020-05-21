@@ -18,10 +18,12 @@ export default (store) => (next) => (action) => {
           console.log(res);
           store.dispatch(getUserInbox(res.data));
           store.dispatch({ type: actions.CLEAR_ERRORS_MSG });
+          store.dispatch({ type: actions.SET_LOADER });
           sessionStorage.inbox = JSON.stringify(res.data);
         })
         .catch((err) => {
           console.log(err.response);
+          store.dispatch({ type: actions.SET_LOADER });
         });
       return;
     }

@@ -6,6 +6,9 @@ import { Link } from 'react-router-dom';
 import { Card, Media, Content, Heading, Form, Tag, Image, Columns, Hero, Container, Button } from 'react-bulma-components';
 import { selectedUserDetails } from 'src/store/actions';
 
+// == import components
+import Loading from 'src/components/Loading';
+
 
 const Cards = ({ users, setModalUserDetails }) => {
   const dispatch = useDispatch();
@@ -41,7 +44,7 @@ const Cards = ({ users, setModalUserDetails }) => {
   };
 
   if (!users) {
-    return null;
+    return <Loading />;
   }
 
   return users.map((user) => (

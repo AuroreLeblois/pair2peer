@@ -1,10 +1,11 @@
 /* eslint-disable react/jsx-filename-extension */
 // == Import npm
-import React, { useCallback, useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Columns, Media, Image, Container, Button, Content, Form, Box } from 'react-bulma-components';
+import { Columns, Media, Image, Container, Button, Hero, Heading, Form, Box } from 'react-bulma-components';
 import useInputChange from 'src/store/hooks/useInputChange';
 import { submitMessage, actions } from 'src/store/actions';
+import AutoScroll from '@brianmcallister/react-auto-scroll';
 
 // == Import css
 import './style.scss';
@@ -13,7 +14,7 @@ const Messages = ({ refreshInbox, selectedChat }) => {
   const dispatch = useDispatch();
 
   let key = 1;
-  const { inbox, user } = useSelector((state) => state);
+  const { inbox, user, loading } = useSelector((state) => state);
   const [input, handleInputChange] = useInputChange();
 
   const goodChat = inbox.filter((chatroom) => chatroom.chat_serial === selectedChat)[0];
@@ -25,6 +26,7 @@ const Messages = ({ refreshInbox, selectedChat }) => {
   };
 
   const handleSubmit = (evt) => {
+    dispatch({ type: actions.SET_LOADER });
     evt.preventDefault();
     const data = {};
     data.message = input[selectedChat];
@@ -37,7 +39,7 @@ const Messages = ({ refreshInbox, selectedChat }) => {
       if (chatuser.pseudo !== user.pseudo) {
         return chatuser.pseudo;
       }
-    });
+    }).join('');
   };
 
   const goodPicture = () => {
@@ -45,83 +47,95 @@ const Messages = ({ refreshInbox, selectedChat }) => {
       if (chatuser.pseudo !== user.pseudo) {
         return chatuser.picture;
       }
-    });
+    }).join('');
   };
 
-  useCallback(refreshInbox);
+  const onEnterPress = (evt) => {
+    if (evt.keyCode === 13 && evt.shiftKey === false) {
+      evt.preventDefault();
+      handleSubmit(evt);
+    }
+  };
+
+  const MessagesJSX = () => (
+    goodChatMessages().map((message) => {
+      if (message.pseudo === user.pseudo) {
+        return (
+          <Box>
+            <Media key={key++}>
+              <Media.Item renderAs="figure" position="left">
+                <Image size={32} alt={`${message.pseudo}-picture`} src={user.picture} />
+              </Media.Item>
+              <Media.Item>
+                <Media.Content>
+                  <h6 className="chatlist-content-title">
+                    {message.pseudo}
+                  </h6>
+                  <p className="chatlist-content-msg">{message.date}</p>
+                  <p className="chatlist-content-msg">{message.content}</p>
+                </Media.Content>
+              </Media.Item>
+            </Media>
+          </Box>
+        );
+      }
+      return (
+        <Box className="inbox-messages-user">
+          <Media key={key++}>
+            <Media.Item renderAs="figure" position="left">
+              <Image size={32} alt={`${message.pseudo}-picture`} src={goodPicture()} />
+            </Media.Item>
+            <Media.Item>
+              <Media.Content>
+                <h6 className="chatlist-content-title">
+                  {message.pseudo}
+                </h6>
+                <p className="chatlist-content-msg">{message.date}</p>
+                <p className="chatlist-content-msg">{message.content}</p>
+              </Media.Content>
+            </Media.Item>
+          </Media>
+        </Box>
+      );
+    })
+  );
 
   const Message = () => {
     return (
       <>
-        <Columns>
-          <Columns.Column className="chatlist-content">
-            <Container>
-              <Media>
-                <Media.Item renderAs="figure" position="left">
-                  <Image size={32} alt={`${goodNickname()}-picture`} src={goodPicture()} />
-                </Media.Item>
-                <Media.Item>
-                  <Media.Content>
-                    <h6 className="chatlist-content-title">
-                      {goodNickname()}
-                    </h6>
-                  </Media.Content>
-                </Media.Item>
-              </Media>
-            </Container>
-          </Columns.Column>
-        </Columns>
-        <Columns.Column className="inbox-messages-content">
-          <Content>
-            {goodChatMessages().map((message) => {
-              if (message.pseudo === user.pseudo) {
-                return (
-                  <Box>
-                    <Media key={key++}>
-                      <Media.Item renderAs="figure" position="left">
-                        <Image size={32} alt={`${message.pseudo}-picture`} src={user.picture} />
-                      </Media.Item>
-                      <Media.Item>
-                        <Media.Content>
-                          <h6 className="chatlist-content-title">
-                            {message.pseudo}
-                          </h6>
-                          <p className="chatlist-content-msg">{message.date}</p>
-                          <p className="chatlist-content-msg">{message.content}</p>
-                        </Media.Content>
-                      </Media.Item>
-                    </Media>
-                  </Box>
-                );
-              }
-              {console.log(message)}
-              return (
-                <Box className="inbox-messages-user">
-                  <Media key={key++}>
-                    <Media.Item renderAs="figure" position="left">
-                      <Image size={32} alt={`${message.pseudo}-picture`} src={goodPicture()} />
-                    </Media.Item>
-                    <Media.Item>
-                      <Media.Content>
-                        <h6 className="chatlist-content-title">
-                          {message.pseudo}
-                        </h6>
-                        <p className="chatlist-content-msg">{message.date}</p>
-                        <p className="chatlist-content-msg">{message.content}</p>
-                      </Media.Content>
-                    </Media.Item>
-                  </Media>
-                </Box>
-              );
-            })}
-          </Content>
+        <Columns.Column className="chatlist-title">
+          <Container className="chatlist-content">
+            <Media>
+              <Media.Item>
+                <Image size={64} alt={`${goodNickname()}-picture`} src={goodPicture()} />
+              </Media.Item>
+              <Media.Content>
+                <Hero>
+                  <Hero.Body>
+                    <Container>
+                      <Heading renderAs="p" size={5}>{goodNickname()}</Heading>
+                    </Container>
+                  </Hero.Body>
+                </Hero>
+              </Media.Content>
+            </Media>
+          </Container>
+        </Columns.Column>
+        <Columns.Column>
+          <AutoScroll checkBoxId="false" className="auto-first-div">
+            <MessagesJSX />
+          </AutoScroll>
         </Columns.Column>
       </>
     );
   };
 
   if (!selectedChat) {
-    return <h1>Bienvenue</h1>;
+    return (
+      <div className="inbox-home">
+        <h1>Bienvenue</h1>
+      </div>
+    );
   }
 
   return (
@@ -131,10 +145,10 @@ const Messages = ({ refreshInbox, selectedChat }) => {
         <Form.Field>
           <Form.Label>Message</Form.Label>
           <Form.Control className="inbox-messages-form">
-            <Form.Input rows="3" placeholder="Tapez votre message ..." name={selectedChat} onChange={handleInputChange} value={input[selectedChat]} />
+            <Form.Textarea disabled={loading} onKeyDown={(evt) => onEnterPress(evt)} type="submit" rows="3" placeholder="Tapez votre message ..." name={selectedChat} onChange={handleInputChange} value={input[selectedChat]} />
           </Form.Control>
         </Form.Field>
-        <Button fullwidth color="success" type="submit">Envoyer</Button>
+        <Button loading={loading} fullwidth color="success" type="submit">Envoyer</Button>
       </form>
     </>
   );

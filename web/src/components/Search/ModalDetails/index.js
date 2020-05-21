@@ -20,7 +20,6 @@ const UserProfile = ({ modalUserDetails, setModalUserDetails }) => {
   const [selectedChat, setSelectedChat] = useState();
   const { selectedUser, loading, user } = useSelector((state) => state);
   let key = 1;
-  console.log(selectedUser);
 
   const ItLabels = () => {
     if (selectedUser.it_language[0].name !== null) {
