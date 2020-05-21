@@ -101,6 +101,9 @@ const App = () => {
       case '/map': {
         return 'container-map';
       }
+      case '/inbox': {
+        return 'container-inbox';
+      }
       default: {
         return null;
       }

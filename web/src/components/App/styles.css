@@ -112,6 +112,12 @@ textarea,
   background-repeat: no-repeat;
 }
 
+.container-inbox {
+  background-image: url('../../assets/images/shape-corner5.png');
+  background-position: top left;
+  background-repeat: no-repeat;
+}
+
 .navbar.is-danger {
   background-color: rgba(0,0,0,0) !important;
 }

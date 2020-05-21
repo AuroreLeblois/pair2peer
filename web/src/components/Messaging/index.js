@@ -47,14 +47,12 @@ const Messaging = () => {
         <Heading size={3}>Messagerie</Heading>
         <Heading subtitle size={6}>Contactez vos pairs facilement</Heading>
       </Content>
-      <Columns>
+      <Columns className="inbox">
         <Columns.Column size={3} className="inbox-chatlist">
           <ChatsList handleSelectChat={handleSelectChat} colorButton={colorButton} />
         </Columns.Column>
         <Columns.Column className="inbox-messages">
-          <Box className="inbox">
-            <Messages refreshInbox={refreshInbox} selectedChat={selectedChat} />
-          </Box>
+          <Messages refreshInbox={refreshInbox} selectedChat={selectedChat} />
         </Columns.Column>
       </Columns>
       <Columns>

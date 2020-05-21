@@ -16,7 +16,7 @@ const ChatsList = ({ handleSelectChat, colorButton }) => {
     <Button.Group size="medium">
       {inbox.map((chatroom) => {
         return (
-              <Button color={colorButton} fullwidth onClick={(evt) => handleSelectChat(evt, chatroom.chat_serial)} className="chatlist-content">
+              <div onClick={(evt) => handleSelectChat(evt, chatroom.chat_serial)} className="chatlist-content">
                 <Media className="chatlist-item">
                   <Media.Item renderAs="figure" position="left">
                     <Image size={32}
@@ -49,7 +49,7 @@ const ChatsList = ({ handleSelectChat, colorButton }) => {
                     </Media.Content>
                   </Media.Item>
                 </Media>
-              </Button>
+              </div>
         );
       })}
     </Button.Group>

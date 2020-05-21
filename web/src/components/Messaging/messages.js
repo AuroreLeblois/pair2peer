@@ -103,11 +103,11 @@ const Messages = ({ refreshInbox, selectedChat }) => {
   const Message = () => {
     return (
       <>
-        <Columns.Column>
+        <Columns.Column className="chatlist-title">
           <Container className="chatlist-content">
             <Media>
               <Media.Item>
-                <Image size={96} alt={`${goodNickname()}-picture`} src={goodPicture()} />
+                <Image size={64} alt={`${goodNickname()}-picture`} src={goodPicture()} />
               </Media.Item>
               <Media.Content>
                 <Hero>
