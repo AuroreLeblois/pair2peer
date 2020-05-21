@@ -11,6 +11,7 @@ import { API_URI } from 'src/store/utils';
 import { getUsersList, actions } from 'src/store/actions';
 
 // == Import component
+import Loading from 'src/components/Loading';
 import Cards from './cards';
 import ModalDetails from './ModalDetails';
 
@@ -21,7 +22,7 @@ const Results = ({ setActiveModalDetails }) => {
   const [pendingMaxPage, setPendingMaxPage] = useState(10);
   const [modalUserDetails, setModalUserDetails] = useState(false);
 
-  const { usersData, search } = useSelector((state) => state);
+  const { usersData, search, loading } = useSelector((state) => state);
 
   const maxPage = useSelector((state) => {
     if (!state.usersData.maxPage) {
@@ -38,6 +39,7 @@ const Results = ({ setActiveModalDetails }) => {
   };
 
   const getUsersData = () => {
+    dispatch({ type: actions.SET_LOADER });
     axios.post(
       `${API_URI}/search?page_nb=${activePage}&user_nb=12`,
       search,
@@ -50,6 +52,7 @@ const Results = ({ setActiveModalDetails }) => {
         usersData.maxUsers = data.maxUser;
         usersData.users = data.users;
         dispatch(getUsersList(usersData));
+        dispatch({ type: actions.SET_LOADER });
         dispatch({ type: actions.CLEAR_ERRORS_MSG });
       })
       .catch((err) => {
@@ -58,6 +61,10 @@ const Results = ({ setActiveModalDetails }) => {
   };
 
   useEffect(getUsersData, [activePage, search]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <>

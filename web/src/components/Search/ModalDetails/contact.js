@@ -7,22 +7,22 @@ import { Modal, Form, Button, Section, Heading, Columns, Notification } from 're
 import useInputChange from 'src/store/hooks/useInputChange';
 import { actions, displayErrorsMessages, API_URI } from 'src/store/actions';
 import axios from 'axios';
-import { MessageContent } from 'semantic-ui-react';
 
 // == Composant
 const ContactUser = ({ contactUser, setContactUser, selectedUser, selectedChat }) => {
   const dispatch = useDispatch();
   const [input, handleInputChange] = useInputChange();
   const [messageSent, setMessageSent] = useState(false);
-  const { loading, errors } = useSelector((state) => state);
+  const [loader, setLoader] = useState(false);
+  const { errors } = useSelector((state) => state);
 
   const handleSubmitMessage = (evt) => {
     evt.preventDefault();
+    setLoader(true);
     const data = {};
     data.invited = selectedUser.pseudo;
     data.message = input.message;
     console.log(data);
-    dispatch({ type: actions.SET_LOADER });
     axios.post(
       `${API_URI}/chatroom`,
       data,
@@ -30,14 +30,14 @@ const ContactUser = ({ contactUser, setContactUser, selectedUser, selectedChat }
     )
       .then((res) => {
         setMessageSent(true);
-        dispatch({ type: actions.SET_LOADER });
+        setLoader(false);
         dispatch({ type: actions.CLEAR_ERRORS_MSG });
       })
       .catch((err) => {
         console.log(err.response);
+        setLoader(false);
         const { message } = err.response.data;
         dispatch(displayErrorsMessages(message));
-        dispatch({ type: actions.SET_LOADER });
       });
   };
 
@@ -86,7 +86,7 @@ const ContactUser = ({ contactUser, setContactUser, selectedUser, selectedChat }
               </Columns.Column>
               <Button.Group position="right">
                 <Button type="button" onClick={closeModale} color="danger">Annuler</Button>
-                <Button loading={loading} type="submit" color="success">Valider</Button>
+                <Button loading={loader} type="submit" color="success">Valider</Button>
               </Button.Group>
             </form>
           </Section>

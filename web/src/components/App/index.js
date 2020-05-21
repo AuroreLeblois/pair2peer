@@ -22,6 +22,7 @@ import UserMap from 'src/components/Map';
 import About from 'src/components/About';
 import UserProfile from 'src/components/Search/ModalDetails';
 import Loading from 'src/components/Loading';
+import Contact from 'src/components/Contact';
 
 import './styles.css';
 
@@ -34,18 +35,16 @@ const App = () => {
   const history = useHistory();
   const { user, selectedUser } = useSelector((state) => state);
 
-  console.log(user)
-
-  const sessionUser = () => {
-    if (!user) {
-      const userInfo = JSON.parse(sessionStorage.getItem('user'));
-      const inboxUserInfo = JSON.parse(sessionStorage.getItem('inbox'));
-      if (userInfo) {
-        dispatch(getAuthentified(userInfo));
-        dispatch(getUserInbox(inboxUserInfo));
-      }
-    }
-  };
+  // const sessionUser = () => {
+  //   if (!user) {
+  //     const userInfo = JSON.parse(sessionStorage.getItem('user'));
+  //     const inboxUserInfo = JSON.parse(sessionStorage.getItem('inbox'));
+  //     if (userInfo) {
+  //       dispatch(getAuthentified(userInfo));
+  //       dispatch(getUserInbox(inboxUserInfo));
+  //     }
+  //   }
+  // };
 
   const loginCheck = useCallback((component) => {
     if (!user) {
@@ -54,7 +53,7 @@ const App = () => {
     return component;
   }, [user]);
 
-  useEffect(sessionUser, [user]);
+  // useEffect(sessionUser, [user]);
 
   // Req to get filters list
   const getFilters = () => {
@@ -124,6 +123,7 @@ const App = () => {
               <Route exact path="/login" component={Login} />
               <Route exact path="/signup" component={Signup} />
               <Route exact path="/map" component={UserMap} />
+              <Route exact path="/contact" component={Contact} />
               <Route exact path="/profile" render={() => loginCheck(<Profile />)} />
               <Route exact path="/profile/:pseudo" render={() => loginCheck(<UserProfile />)} />
               <Route exact path="/search" render={() => loginCheck(<Search />)} />

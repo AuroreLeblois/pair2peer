@@ -112,7 +112,7 @@ textarea,
   background-repeat: no-repeat;
 }
 
-.navbar.is-light {
+.navbar.is-danger {
   background-color: rgba(0,0,0,0) !important;
 }
 

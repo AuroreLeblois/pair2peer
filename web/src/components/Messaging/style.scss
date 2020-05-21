@@ -1,7 +1,10 @@
 .chatlist {
-
+  &-item {
+    align-items: center;
+  }
   &-content {
-  
+    display: flex;
+    justify-content: flex-start;
     &-msg {
       font-size: .8rem
     }
@@ -12,20 +15,34 @@
   }
 }
 .inbox {
-  min-height: 50vh;
-
+  &-home {
+    min-height: 50vh;
+  }
   &-messages {
-    &-content {
-      max-height: 5vw;
-      min-height: 50vh;
-      overflow-y: auto;
-    }
-
     &-user {
       background-color: rgb(245, 245, 245) !important;
     }
   }
   &-chatlist {
-    overflow-y: auto;
+      max-height: 5vw;
+      min-height: 90vh;
+      overflow-y: auto;
+  }
+}
+
+.auto-first-div {
+  height: calc(70vh -50px -64px -7vh -27px) !important;
+  .react-auto-scroll__scroll-container {
+    height: calc(70vh -50px -64px -7vh -27px) !important;
+  }
+}
+
+.react-auto-scroll__option-input, .react-auto-scroll__option-text {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .inbox-chatlist {
+    border-bottom: 3px solid #ccc;
   }
 }
