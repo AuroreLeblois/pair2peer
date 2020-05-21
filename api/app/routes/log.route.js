@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 const User = require('../models/User.model');
-// const Mail = require('../models/Mail.model');
+const Mail = require('../models/Mail.model');
 
 module.exports = {
     name: 'logs pages',

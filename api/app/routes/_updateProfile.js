@@ -1,7 +1,7 @@
 const vision = require('@hapi/vision');
 const inert = require('@hapi/inert');
 const db = require('../models/db');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const Joi = require('@hapi/joi');
 const Wreck= require('@hapi/wreck');
 const Update= require('../models/Update.model');

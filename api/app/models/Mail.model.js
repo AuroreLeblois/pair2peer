@@ -35,7 +35,7 @@ module.exports = class Mail {
             html: `
                 <h2> Bienvenue chez Pair2peer </h2>
                 <p>Il ne vous reste plus qu'à activer votre compte pour profiter pleinement du site.</p>
-                <p>Cliquez <a href="http://localhost:3000/activation/user/${email}">ici</a> pour activer votre compte.</p>`
+                <p>Cliquez <a href="http://ec2-100-25-41-105.compute-1.amazonaws.com:3000/activation/user/${email}">ici</a> pour activer votre compte.</p>`
         });
 
         console.log("Message sent to visitor: %s ", sendToVisitor.messageId);
