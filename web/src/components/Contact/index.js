@@ -3,11 +3,9 @@ import { Button } from 'react-bulma-components';
 
 
 const Contact = () => {
-
-  const [email, setEmail] = React.useState('');
-  const [message, setMessage] = React.useState('');
-  const [name, setName] = React.useState('');
-
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [name, setName] = useState('');
   const handleSubmit = (evt) => {
     evt.preventDefault();
     const newMessage = {
@@ -15,7 +13,6 @@ const Contact = () => {
       email,
       message,
     };
-
     axios.post(`${API_URI}`)
     .then((res) => {
       if (res.data.status === 'success'){
@@ -26,15 +23,17 @@ const Contact = () => {
     }
   })
 };
-
 	return (
   	<div>
       Pour toute question, demande de récupération de mot de passe ou autre <br/>
-      <textarea class="form-control" placeholder="Message"></textarea>
-      <Button  type="submit" color="success">Envoyer</Button>
+      <div class="field">
+        <div class="control">
+          <textarea class="textarea is-primary" placeholder="Votre message"></textarea>
+        </div>
+      </div>
+      <Button style={{ margin: "10px 600px" }} type="submit" color="success">Envoyer</Button>
     </div>
 	);
   
 };
-
 export default Contact;

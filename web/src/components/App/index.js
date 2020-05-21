@@ -24,6 +24,7 @@ import UserProfile from 'src/components/Search/ModalDetails';
 import Loading from 'src/components/Loading';
 import Contact from 'src/components/Contact';
 
+// == Import css
 import './styles.css';
 
 // Ajout d'une route /signup
@@ -133,6 +134,7 @@ const App = () => {
               <Route exact path="/inbox" render={() => loginCheck(<Messaging />)} />
               <Route exact path="/about" render={About} />
               <Route exact path="/logout" render={Loading} />
+              <Route exact path="/contact" component={Contact} />
               <Route component={NotFound} />
             </Switch>
           </Container>

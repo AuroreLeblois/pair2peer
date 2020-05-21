@@ -4,8 +4,10 @@ const db = require('../models/db');
 const bcrypt = require('bcrypt');
 const Joi = require('@hapi/joi');
 const Wreck= require('@hapi/wreck');
-const Update= require('../models/Update.model')
+const Update= require('../models/Update.model');
+const User= require('../models/User.model')
 const APIKEY= process.env.APIKEY;
+
 module.exports = {
     name: 'profile pages',
     register: async (server) => {
@@ -31,7 +33,6 @@ module.exports = {
                 const Lang= Langs.rows;
                 const result = await db.query(`SELECT * FROM usr_profile WHERE email = $1`, [email]);
                 const user= result.rows[0];
-                console.log(email);
                return  {user, itLang, Lang};
             }
         });
@@ -73,7 +74,6 @@ module.exports = {
                     // errors object will be the object who contains all the error messages (in french)
                     const errors = {};
                     const details = err.details;
-                    console.log(err.details)
                     // depend on each error, it will write a specific error message
                     let path = details[0].path[0];
                     let typeError = details[0].type;
@@ -194,7 +194,7 @@ module.exports = {
                                 ||errorList.message.country
                                 ||errorList.message.remote
                                 ||errorList.message.pseudo) {
-                                return errorList;
+                                    return h.response(errorList).code(400);
                             }
                              await Update.detailUpdate(remote, description, disponibility,linkedin_link,facebook_link,github_link, picture,userID)
                         };
@@ -233,9 +233,8 @@ module.exports = {
             },
                     handler: async (request, h) => {
                         //les langues
-                        const email= request.state.cookie.email;
-                        const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
-                        const userID= result.rows[0].id;
+                        const me= await User.findOne(request.state.cookie);
+                        const userID= me.id;
                         const language=request.payload.language;
                         const langExists= await db.query(`SELECT * 
                                                           FROM lang
@@ -272,13 +271,12 @@ module.exports = {
                         tags: ['api', 'profile', 'delete']
                     },
                         handler: async (request, h) => {
-                            const email= request.state.cookie.email;
-                            const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
-                            const userID= result.rows[0].id;
+                            const me= await User.findOne(request.state.cookie);
+                            const userID= me.id;
                             const language=request.params.language;
                                 const langExists= await db.query(`SELECT * 
-                                                        FROM lang
-                                                        WHERE "name" =$1;`, [language]);
+                                                                FROM lang
+                                                                WHERE "name" =$1;`, [language]);
                             const langID= langExists.rows[0].id;
                             await Update.deleteLang(userID,langID);
                             const newUser=await db.query(`SELECT * FROM usr_profile 
@@ -312,9 +310,8 @@ module.exports = {
                 tags: ['api', 'profile', 'validation']
             },
             handler: async (request, h) => {
-                const email= request.state.cookie.email;
-                const result = await db.query(`SELECT * FROM usr WHERE email = $1`,[email] );
-                const userID= result.rows[0].id;
+                const me= await User.findOne(request.state.cookie);
+                const userID= me.id;
                 const it_language= request.payload.it_language;      
                 const itLangExists = await db.query(`SELECT *
                                                     FROM it_lang
@@ -332,14 +329,12 @@ module.exports = {
                 }
                 else{
                     await Update.updateIT(it_language[0].level, it_language[0].search,userID, itLangID)
-                }
-                    
+                }  
                 const newUser=await db.query(`SELECT * FROM usr_profile WHERE id=$1`,[userID]);
                 return newUser.rows;
                 }
            
                 });
-
 
                 server.route({
                     method: 'DELETE',
@@ -360,14 +355,9 @@ module.exports = {
                     },
 
                         handler: async (request, h) => {
-                            const email= request.state.cookie.email;
                             const it_language= request.params.it_language;
-                            const result = await db.query(`SELECT * FROM usr 
-                                                            WHERE email = $1`,
-                                                            [email] );
-
-                            const userID= result.rows[0].id;
-                    
+                            const me= await User.findOne(request.state.cookie);
+                            const userID= me.id;
                             const itLangExists = await db.query(`SELECT *
                                                                 FROM it_lang
                                                                 WHERE "name" = $1`, 
@@ -385,4 +375,3 @@ module.exports = {
                 
                 }
             }
-        
