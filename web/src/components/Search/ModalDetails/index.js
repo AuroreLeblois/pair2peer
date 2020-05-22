@@ -7,7 +7,8 @@ import { Content, Modal, Media, Image, Level, Button, Container, Tag, Heading, I
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faLinkedin, faFacebook } from '@fortawesome/free-brands-svg-icons';
 import { faColumns } from '@fortawesome/free-solid-svg-icons';
-import { API_URI, actions } from 'src/store/actions';
+import { actions } from 'src/store/actions';
+import { API_URI } from 'src/store/utils'
 import axios from 'axios';
 
 // == import components

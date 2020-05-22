@@ -5,7 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Modal, Form, Button, Section, Heading, Columns, Notification } from 'react-bulma-components';
 import useInputChange from 'src/store/hooks/useInputChange';
-import { actions, displayErrorsMessages, API_URI } from 'src/store/actions';
+import { actions, displayErrorsMessages } from 'src/store/actions';
+import { API_URI } from 'src/store/utils';
 import axios from 'axios';
 
 // == Composant

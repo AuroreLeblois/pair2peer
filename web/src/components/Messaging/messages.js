@@ -103,20 +103,16 @@ const Messages = ({ refreshInbox, selectedChat }) => {
   const Message = () => {
     return (
       <>
-        <Columns.Column className="chatlist-title">
-          <Container className="chatlist-content">
+        <Columns.Column>
+          <Container className="chatlist-title">
             <Media>
               <Media.Item>
                 <Image size={64} alt={`${goodNickname()}-picture`} src={goodPicture()} />
               </Media.Item>
               <Media.Content>
-                <Hero>
-                  <Hero.Body>
-                    <Container>
-                      <Heading renderAs="p" size={5}>{goodNickname()}</Heading>
-                    </Container>
-                  </Hero.Body>
-                </Hero>
+                <Container className="chatlist-heading">
+                  <Heading size={5}>{goodNickname()}</Heading>
+                </Container>
               </Media.Content>
             </Media>
           </Container>
@@ -145,7 +141,7 @@ const Messages = ({ refreshInbox, selectedChat }) => {
         <Form.Field>
           <Form.Label>Message</Form.Label>
           <Form.Control className="inbox-messages-form">
-            <Form.Textarea disabled={loading} onKeyDown={(evt) => onEnterPress(evt)} type="submit" rows="3" placeholder="Tapez votre message ..." name={selectedChat} onChange={handleInputChange} value={input[selectedChat]} />
+            <Form.Textarea onKeyDown={(evt) => onEnterPress(evt)} type="submit" rows="3" placeholder="Tapez votre message ..." name={selectedChat} onChange={handleInputChange} value={input[selectedChat]} />
           </Form.Control>
         </Form.Field>
         <Button loading={loading} fullwidth color="success" type="submit">Envoyer</Button>

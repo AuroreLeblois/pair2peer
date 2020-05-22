@@ -9,14 +9,14 @@ import { cutStringToNCharacter } from 'src/store/utils';
 import './style.scss';
 
 
-const ChatsList = ({ handleSelectChat, colorButton }) => {
+const ChatsList = ({ handleSelectChat, setItemStyle }) => {
   const { inbox, user } = useSelector((state) => state);
 
   return (
     <Button.Group size="medium">
-      {inbox.map((chatroom) => {
+      {inbox.map((chatroom, index) => {
         return (
-              <div onClick={(evt) => handleSelectChat(evt, chatroom.chat_serial)} className="chatlist-content">
+              <div onClick={(evt) => handleSelectChat(evt, chatroom.chat_serial, index)} className={setItemStyle(index)}>
                 <Media className="chatlist-item">
                   <Media.Item renderAs="figure" position="left">
                     <Image size={32}
