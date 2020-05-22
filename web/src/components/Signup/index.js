@@ -12,16 +12,16 @@ import ReCAPTCHA from 'react-google-recaptcha';
 const Signup = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { usersData, loading, errors } = useSelector((state) => state)
+  const { usersData, loading, errors } = useSelector((state) => state);
   console.log(usersData);
 
   // Les hooks
-  const [pseudo, setPseudo] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [passwordConfirm, setPasswordConfirm] = React.useState('');
-  const [country, setCountry] = React.useState('');
-  const [city, setCity] = React.useState('');
+  const [pseudo, setPseudo] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [country, setCountry] = useState('');
+  const [city, setCity] = useState('');
   const [remote, setRemote] = useState('');
   const [captchaValue, setCaptchaValue] = useState('');
 

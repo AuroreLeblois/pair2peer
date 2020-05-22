@@ -1,70 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { Columns, Form, Button, Box, Container, Content, Heading, Notification } from 'react-bulma-components';
-import { useSelector, useDispatch } from 'react-redux';
-import { actions } from 'src/store/actions';
-import { API_URI } from 'src/store/utils';
-import axios from 'axios';
+import { submitContact, actions } from 'src/store/actions';
 
 const Contact = () => {
-  const { usersData, loading, errors } = useSelector((state) => state)
+
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const { usersData, loading, errors } = useSelector((state) => state);
   console.log(usersData);
 
-  const [mail, setMail] = useState('');
-  const [message, setMessage] = useState('');
-  const [name, setName] = useState('');
-  const [users, setUsers] = useState();
-  const dispatch = useDispatch();
+  // Les hooks
 
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  
   const handleSubmit = (evt) => {
     evt.preventDefault();
     const newMessage = {
       name,
-      mail,
+      email,
       message,
     };
-
-    axios.post(`${API_URI}`)
-    .then((res) => {
-      if (res.data.status === 'success'){
-        alert("Message Envoyer."); 
-        this.resetForm()
-      }else if(res.data.status === 'fail'){
-        alert("Réésayer.")
-      }
-    });
-
+    dispatch(submitContact(history, newMessage));
     dispatch({ type: actions.SET_LOADER });
+    
   };
-
-const getUsersData = () => {
-  axios.get(`${API_URI}/contact`)
-  .then((res) => {
-    setUsers(res.data);
-    dispatch({ type: actions.CLEAR_ERRORS_MSG });
-    console.log(res.data);
-  })
-  .catch((err) => {
-    // Au cas où erreur avec le serveur, renvoie un console.log
-    console.log(err);
-  });
-};
-
-  useEffect(getUsersData, []);
   
-// const usersMail = ({ userData }) => {
-//   console.log(userData)
-//   if (user) {
-//     return (
-//       <div class="form-group">
-//         <div class="col-sm-10" style={{ textAlign: 'center' }}>
-//           <input type="email" name="email" id="email" class="form-control" value={user.mail}/>
-//         </div>
-//       </div>
-//     );
-//   }
-//     return null;
-//   };
-  
+  // const ErrorsMessage = () => {
+  //   return (
+  //     <Notification color="danger">
+  //       {Object.keys(errors).map((objectKey, index) => (
+  //         <p>{errors[objectKey]}</p>
+  //       ))}
+  //     </Notification>
+  //   );
+  // };
 	return (
     <Columns>
       <Columns.Column />
@@ -78,40 +52,36 @@ const getUsersData = () => {
         </Columns>
         <Columns.Column />
         <Box style={{ width: "500px" }}>
-          {(errors) ? <ErrorsMessage /> : null}
+        {/* {(errors) ? <ErrorsMessage /> : null} */}
           <form onSubmit={handleSubmit}>
             <Form.Field>
+            <Form.Field>
+                <Form.Control>
+                  <Form.Label>Nom :</Form.Label>
+                  <Form.Input required type="text" className="input is-primary" value={name} onChange={(e) => setName(e.target.value)}/>
+                </Form.Control>
+              </Form.Field>
               <Form.Field>
                 <Form.Control>
                   <Form.Label>Mail :</Form.Label>
-                  <Form.Input required type="email" name="email" id="email" class="input is-primary" value={mail} onChange={(e) => setMail(e.target.value)}/>
-                </Form.Control>
-              </Form.Field>
-
-              <Form.Field>
-                <Form.Control>
-                  <Form.Label>To :</Form.Label>
-                  <Form.Input required type="email" name="destination" id="destination" class="input is-primary" value="pair2peer@gmail.com" placeholder="pair2peer@gmail.com" />
+                  <Form.Input required type="email" className="input is-primary" value={email} onChange={(e) => setEmail(e.target.value)}/>
                 </Form.Control>
               </Form.Field>
             </Form.Field>
-
             <Form.Field>
               <Form.Field>
                 <Form.Control>
                   <Form.Label>Message :</Form.Label>
-                  <div class="field">
-                    <div class="control">
-                      <textarea required class="textarea is-primary" placeholder="Votre message" value={message} onChange={(e) => setMessage(e.target.value)}></textarea>
+                  <div className="field">
+                    <div className="control">
+                      <textarea required className="textarea is-primary" placeholder="Votre message" value={message} onChange={(e) => setMessage(e.target.value)}></textarea>
                     </div>
                   </div>
                 </Form.Control>
               </Form.Field>
             </Form.Field>
-            
-
             <Columns.Column />
-            <Button loading={loading} style={{ margin: "10px 180px" }} type="submit" color="success">Envoyer</Button>
+            <Button style={{ margin: "10px 180px" }} type="submit" color="success">Envoyer</Button>
             <Columns.Column />
           </form>
           <Columns.Column />
@@ -122,8 +92,4 @@ const getUsersData = () => {
     </Columns>
 	);
 };
-<<<<<<< HEAD
 export default Contact;
-=======
-export default Contact;
->>>>>>> b801eb7f4f4e487d205ce52be03c5b491f309d3b

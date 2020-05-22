@@ -90,6 +90,9 @@ const App = () => {
       case '/signup': {
         return 'container-signup';
       }
+      case '/contact' : {
+        return 'container-contact';
+      }
       case '/about': {
         return 'container-about';
       }
