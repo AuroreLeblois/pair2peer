@@ -114,14 +114,14 @@ const Signup = () => {
             <Form.Field>
               <Form.Field>
                 <Form.Control>
-                  <Form.Label>Pays</Form.Label>
-                  <Form.Input required name="country" type="text" value={country} onChange={(e) => setCountry(e.target.value)} />
+                  <Form.Label>Ville</Form.Label>
+                  <Form.Input required name="city" type="text" value={city} onChange={(e) => setCity(e.target.value)} />
                 </Form.Control>
               </Form.Field>
               <Form.Field>
                 <Form.Control>
-                  <Form.Label>Ville</Form.Label>
-                  <Form.Input required name="city" type="text" value={city} onChange={(e) => setCity(e.target.value)} />
+                  <Form.Label>Pays</Form.Label>
+                  <Form.Input required name="country" type="text" value={country} onChange={(e) => setCountry(e.target.value)} />
                 </Form.Control>
               </Form.Field>
             </Form.Field>

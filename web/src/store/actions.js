@@ -1,6 +1,3 @@
-// == URI from server
-export const API_URI = 'http://localhost:3000';
-
 // == Actions types
 export const actions = {
   SUBMIT_LOGIN: 'actions/SUBMIT_LOGIN',

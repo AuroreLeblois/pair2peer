@@ -3,10 +3,10 @@
     align-items: center;
   }
   &-content {
-    display: flex;
-    justify-content: flex-start;
     width: 100%;
     padding: .5rem 0;
+    cursor: pointer;
+
     &-msg {
       font-size: .8rem
     }
@@ -16,10 +16,12 @@
       color: #F5F5F5;
     }
   }
-
   &-title {
-    height: 8vh;
-    margin-bottom: 3rem;
+    display: flex;
+    justify-content: flex-start;
+  }
+  &-heading {
+    padding: 1.2rem;
   }
 }
 .inbox {
@@ -43,6 +45,13 @@
   }
 }
 
+.selected-div {
+  background-color: rgb(255, 43, 86, 0.1);
+  border-radius: .5rem;
+  border-right: 5px solid #FF2B56;
+  padding-left: .5rem;
+}
+
 .auto-first-div {
   height: calc(60vh -50px -64px -7vh -27px) !important;
   .react-auto-scroll__scroll-container {
@@ -57,7 +66,7 @@
 
 @media (max-width: 800px) {
   .inbox-chatlist {
-    border-bottom: 3px solid #FF2B56;
+    border-bottom: 5px solid #FF2B56;
     min-height: 30vh;
     overflow-y: auto;
   }
