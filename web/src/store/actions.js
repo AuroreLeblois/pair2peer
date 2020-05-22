@@ -1,6 +1,3 @@
-// == URI from server
-export const API_URI = 'http://ec2-100-25-41-105.compute-1.amazonaws.com:3000';
-
 // == Actions types
 export const actions = {
   SUBMIT_LOGIN: 'actions/SUBMIT_LOGIN',

@@ -16,11 +16,18 @@ import './style.scss';
 const Messaging = () => {
   const dispatch = useDispatch();
   const [selectedChat, setSelectedChat] = useState('');
-  const [colorButton, setColorButton] = useState('');
+  const [selectedClass, setSelectedClass] = useState({});
 
-  const handleSelectChat = (evt, chatSerial) => {
+  const handleSelectChat = (evt, chatSerial, index) => {
     setSelectedChat(chatSerial);
-    setColorButton('danger');
+    setSelectedClass(index);
+  };
+
+  console.log(selectedClass);
+
+  const setItemStyle = (index) => {
+    const isItemSelected = selectedClass === index;
+    return isItemSelected ? "chatlist-content selected-div" : "chatlist-content";
   };
 
   const refreshInbox = () => {
@@ -49,7 +56,7 @@ const Messaging = () => {
       </Content>
       <Columns className="inbox">
         <Columns.Column size={3} className="inbox-chatlist">
-          <ChatsList handleSelectChat={handleSelectChat} colorButton={colorButton} />
+          <ChatsList handleSelectChat={handleSelectChat} setItemStyle={setItemStyle} />
         </Columns.Column>
         <Columns.Column className="inbox-messages">
           <Messages refreshInbox={refreshInbox} selectedChat={selectedChat} />
