@@ -106,6 +106,11 @@ module.exports = class User {
             errorList.message.emailUsed = 'Cet email existe déjà';
         };
 
+        if (pseudo.includes('\'')) {
+            errorList.message.syntaxNotValid = "Nous n'acceptons pas le caractère spécial ' pour le pseudo";
+        };
+
+
         for (let registered of nameRegistered.rows) {
             if (pseudo.toLowerCase() === registered.pseudo.toLowerCase()) {
                 errorList.message.usernameUsed = 'Ce nom d\'utilisateur existe déjà';
@@ -115,7 +120,8 @@ module.exports = class User {
         if (errorList.message.usernameUsed
             || errorList.message.emailUsed
             || errorList.message.wrongAddress
-            || errorList.message.wrongCaptcha) {
+            || errorList.message.wrongCaptcha
+            || errorList.message.syntaxNotValid) {
             return errorList;
         };
 
