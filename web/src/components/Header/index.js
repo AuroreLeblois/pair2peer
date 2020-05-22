@@ -69,7 +69,7 @@ const Header = () => {
   );
 
   return (
-    <Navbar color={(location.pathname === '/') ? 'danger' : 'light'} active={activeNavbar}>
+    <Navbar active={activeNavbar}>
       <Container>
         <Navbar.Brand className="logo">
           <Navbar.Item renderAs="div">

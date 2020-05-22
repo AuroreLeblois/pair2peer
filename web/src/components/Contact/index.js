@@ -122,4 +122,8 @@ const getUsersData = () => {
     </Columns>
 	);
 };
+<<<<<<< HEAD
 export default Contact;
+=======
+export default Contact;
+>>>>>>> b801eb7f4f4e487d205ce52be03c5b491f309d3b

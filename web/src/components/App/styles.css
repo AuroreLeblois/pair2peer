@@ -24,7 +24,7 @@ input[type=radio] {
 };
 
 .navbar-link:not(.is-arrowless):after {
-  border-color: #FF2B56;
+  border-color: rgba(54,54,54,.9);
 };
 
 
@@ -87,9 +87,39 @@ textarea,
 }
 
 .container-about {
-  background-image: url('../../assets/images/shape5.png');
-  background-position: center;
+  background-image: url('../../assets/images/shape-corner4.png');
+  background-position: top left;
   background-repeat: no-repeat;
+}
+
+.container-profile {
+  background-image: url('../../assets/images/shape-corner1.png');
+  background-position: top right;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.container-search {
+  background-image: url('../../assets/images/shape-corner2.png');
+  background-position: top left;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.container-map {
+  background-image: url('../../assets/images/shape-corner3.png');
+  background-position: bottom left;
+  background-repeat: no-repeat;
+}
+
+.container-inbox {
+  background-image: url('../../assets/images/shape-corner5.png');
+  background-position: top left;
+  background-repeat: no-repeat;
+}
+
+.navbar.is-danger {
+  background-color: rgba(0,0,0,0) !important;
 }
 
 .title.is-3 {
@@ -101,11 +131,16 @@ textarea,
 }
 
 .pagination-link.is-current {
-  background-color: #FF2B56 !important;
-  border-color: #FF2B56 !important;
+  background-color: #f5f5f5 !important;
+  color: #363738 !important;
+  border-color: #f5f5f5 !important;
 }
 
 .button-reset {
   align-self: flex-end;
   margin-left: 1rem;
+}
+
+.modal-background {
+  background-color: rgba(0,0,0,0.4) !important;
 }

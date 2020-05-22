@@ -5,12 +5,13 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import MarkerClusterGroup from "react-leaflet-markercluster";
-import { Heading } from 'react-bulma-components';
+import { Heading, Content } from 'react-bulma-components';
 import axios from 'axios';
 import { actions } from 'src/store/actions';
 import { API_URI } from 'src/store/utils';
 
-// == Import css
+// == Import
+import Loading from 'src/components/Loading';
 import './style.css';
 import 'react-leaflet-markercluster/dist/styles.min.css';
 
@@ -46,7 +47,7 @@ const UserMap = () => {
   useEffect(getUsersData, []);
 
   const UsersPopup = ({ userData }) => {
-    console.log(userData)
+    console.log(userData);
     if (user) {
       return (
         <Popup>
@@ -67,27 +68,32 @@ const UserMap = () => {
   // Pour éviter une erreur de rendu on fait un "conditionnal rendering"
   // Si users est vide
   if (!users) {
-    return null;
+    return <Loading />;
   }
 
   return (
-    <Map className="map" center={[46.84664340683584, 2.4333]} zoom={6}>
-      <TileLayer
-        attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <MarkerClusterGroup>
-        {users.map((userData) => (
-          <Marker
-            position={userData.localisation}
-            key={userData.pseudo}
-          >
-            <UsersPopup userData={userData} />
-          </Marker>
-        ))}
-      </MarkerClusterGroup>
-    </Map>
-
+    <>
+      <Content style={{ textAlign: 'center' }}>
+        <Heading size={3}>Découvrez où sont éparpillez nos membres</Heading>
+        <Heading subtitle size={6}>Mais où est Charlie ?</Heading>
+      </Content>
+      <Map className="map" center={[46.84664340683584, 2.4333]} zoom={6}>
+        <TileLayer
+          attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <MarkerClusterGroup>
+          {users.map((userData) => (
+            <Marker
+              position={userData.localisation}
+              key={userData.pseudo}
+            >
+              <UsersPopup userData={userData} />
+            </Marker>
+          ))}
+        </MarkerClusterGroup>
+      </Map>
+    </>
   );
 };
 

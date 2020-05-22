@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 const User = require('../models/User.model');
-// const Mail = require('../models/Mail.model');
+const Mail = require('../models/Mail.model');
 
 module.exports = {
     name: 'logs pages',
@@ -147,24 +147,24 @@ module.exports = {
             }
         });
 
-        // server.route({
-        //     method: 'GET',
-        //     path: '/activation/user/{email}',
-        //     config: {
-        //         description: 'Activation of the account',
-        //         tags: ['api', 'activation'],
-        //         validate: {
-        //             params: Joi.object({
-        //                 email: Joi.string().email({ minDomainSegments: 2}).trim().required()
-        //             })
-        //         }
-        //     },
-        //     handler: async (request, h) => {
+        server.route({
+            method: 'GET',
+            path: '/activation/user/{email}',
+            config: {
+                description: 'Account activation',
+                tags: ['api', 'activation'],
+                validate: {
+                    params: Joi.object({
+                        email: Joi.string().email({ minDomainSegments: 2}).trim().required()
+                    })
+                }
+            },
+            handler: async (request, h) => {
 
-        //         await Mail.activation(request.params.email);
-        //         return h.redirect('/login');
-        //     }
-        // });
+                await Mail.activation(request.params.email);
+                return h.redirect('/login');
+            }
+        });
 
     }
 }

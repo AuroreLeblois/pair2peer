@@ -23,6 +23,8 @@ import About from 'src/components/About';
 import UserProfile from 'src/components/Search/ModalDetails';
 import Loading from 'src/components/Loading';
 import Contact from 'src/components/Contact';
+
+// == Import css
 import './styles.css';
 
 // Ajout d'une route /signup
@@ -32,18 +34,18 @@ const App = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const history = useHistory();
-  const { user, loading } = useSelector((state) => state);
+  const { user, selectedUser } = useSelector((state) => state);
 
-  const sessionUser = () => {
-    if (!user) {
-      const userInfo = JSON.parse(sessionStorage.getItem('user'));
-      const inbuxUserInfo = JSON.parse(sessionStorage.getItem('inbox'));
-      if (userInfo) {
-        dispatch(getAuthentified(history, userInfo));
-        dispatch(getUserInbox(inbuxUserInfo));
-      }
-    }
-  };
+  // const sessionUser = () => {
+  //   if (!user) {
+  //     const userInfo = JSON.parse(sessionStorage.getItem('user'));
+  //     const inboxUserInfo = JSON.parse(sessionStorage.getItem('inbox'));
+  //     if (userInfo) {
+  //       dispatch(getAuthentified(userInfo));
+  //       dispatch(getUserInbox(inboxUserInfo));
+  //     }
+  //   }
+  // };
 
   const loginCheck = useCallback((component) => {
     if (!user) {
@@ -52,7 +54,7 @@ const App = () => {
     return component;
   }, [user]);
 
-  useEffect(sessionUser, [user]);
+  // useEffect(sessionUser, [user]);
 
   // Req to get filters list
   const getFilters = () => {
@@ -91,6 +93,18 @@ const App = () => {
       case '/about': {
         return 'container-about';
       }
+      case '/profile': {
+        return 'container-profile';
+      }
+      case '/search': {
+        return 'container-search';
+      }
+      case '/map': {
+        return 'container-map';
+      }
+      case '/inbox': {
+        return 'container-inbox';
+      }
       default: {
         return null;
       }
@@ -101,18 +115,19 @@ const App = () => {
 
   return (
     <div className="app">
-      <Hero color="light" size="fullheight">
+      <Hero className={switchClasses()} color="light" size="fullheight">
         <Hero.Head>
           <Header />
         </Hero.Head>
 
-        <Hero.Body className={switchClasses()} color="primary">
+        <Hero.Body color="primary">
           <Container>
             <Switch>
               <Route exact path="/" component={Home} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/signup" component={Signup} />
               <Route exact path="/map" component={UserMap} />
+              <Route exact path="/contact" component={Contact} />
               <Route exact path="/profile" render={() => loginCheck(<Profile />)} />
               <Route exact path="/profile/:pseudo" render={() => loginCheck(<UserProfile />)} />
               <Route exact path="/search" render={() => loginCheck(<Search />)} />
