@@ -23,6 +23,7 @@ import About from 'src/components/About';
 import UserProfile from 'src/components/Search/ModalDetails';
 import Loading from 'src/components/Loading';
 import Contact from 'src/components/Contact';
+import EmailConfirm from 'src/components/EmailConfirm';
 
 // == Import css
 import './styles.css';
@@ -138,11 +139,12 @@ const App = () => {
               <Route exact path="/about" render={About} />
               <Route exact path="/logout" render={Loading} />
               <Route exact path="/contact" component={Contact} />
+              {/* <Route exact path="/activation/user/:name%40:service%dot%:domain" component={EmailConfirm} /> */}
               <Route component={NotFound} />
             </Switch>
           </Container>
         </Hero.Body>
-
+        https://forums.aws.amazon.com/thread.jspa?threadID=306949
         <Hero.Footer>
           <Footer />
         </Hero.Footer>

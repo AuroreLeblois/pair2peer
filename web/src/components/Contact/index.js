@@ -28,7 +28,6 @@ const Contact = () => {
     axios.post(
       `${API_URI}/contact`,
       newMessage,
-      { withCredentials: true },
     )
       .then((res) => {
         console.log(res);
@@ -54,10 +53,16 @@ const Contact = () => {
   // };
   if (messageSent) {
     return (
-      <Notification color="success">
-        Merci pour votre message.
-        Notre équipe y répondra dès que possible.
-      </Notification>
+      <Columns>
+        <Columns.Column />
+        <Columns.Column size={7}>
+          <Notification color="success">
+            <p>Merci pour votre message.</p>
+            <p>Notre équipe y répondra dès que possible.</p>
+          </Notification>
+        </Columns.Column>
+        <Columns.Column />
+      </Columns>
     );
   }
 
