@@ -6,11 +6,19 @@ import { Columns, Media, Image, Container, Button, Hero, Heading, Form, Box } fr
 import useInputChange from 'src/store/hooks/useInputChange';
 import { submitMessage, actions } from 'src/store/actions';
 import AutoScroll from '@brianmcallister/react-auto-scroll';
+import Moment from 'react-moment';
+import moment from 'moment/min/moment-with-locales';
 
 // == Import css
 import './style.scss';
 
 const Messages = ({ refreshInbox, selectedChat }) => {
+  Moment.globalMoment = moment;
+  Moment.globalLocale = 'fr';
+  Moment.globalFormat = 'D MMM YYYY | HH:mm';
+  Moment.globalLocal = true;
+
+
   const dispatch = useDispatch();
 
   let key = 1;
@@ -71,7 +79,11 @@ const Messages = ({ refreshInbox, selectedChat }) => {
                   <h6 className="chatlist-content-title">
                     {message.pseudo}
                   </h6>
-                  <p className="chatlist-content-msg">{message.date}</p>
+                  <p className="chatlist-content-msg">
+                    <Moment>
+                      {message.date}
+                    </Moment>
+                  </p>
                   <p className="chatlist-content-msg">{message.content}</p>
                 </Media.Content>
               </Media.Item>

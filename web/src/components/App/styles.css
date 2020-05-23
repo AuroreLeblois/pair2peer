@@ -51,6 +51,11 @@ textarea,
 .about-icons {
   padding-left: 1rem;
   margin-right: 1.5rem;
+  color: #363636;
+}
+
+.about-icons:hover {
+  color: #FF2B56;
 }
 
 .is-multiline, .media-content {

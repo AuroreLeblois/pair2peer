@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-filename-extension */
-import React from 'react';
+import React, { useState } from 'react';
 import { Columns, Card, Media, Heading, Content, Icon } from 'react-bulma-components';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,6 +13,7 @@ import Charles from 'src/assets/images/charles.jpg';
 
 // == Composant
 const About = () => {
+
   return (
     <>
       <Columns>
@@ -33,12 +34,12 @@ const About = () => {
                   <Heading size={4}>Victor Greiveldinger</Heading>
                   <Heading subtitle size={6}>Technical Referent, <br/> Frontend Developer</Heading>
                   <a href="https://www.github.com/VictorGreiveldingerHub" target="_blank">
-                    <Icon className="about-icons" color="dark">
+                    <Icon className="about-icons">
                       <FontAwesomeIcon size="2x" icon={faGithub} />
                     </Icon>
                   </a>
                   <a href="https://www.linkedin.com/in/victor-greiveldinger/" target="_blank">
-                    <Icon className="about-icons" color="dark">
+                    <Icon className="about-icons">
                       <FontAwesomeIcon size="2x" icon={faLinkedin} />
                     </Icon>
                   </a>
@@ -56,12 +57,12 @@ const About = () => {
                   <Heading size={4}>Charles Phonepraseuth</Heading>
                   <Heading subtitle size={6}>Product Owner, <br/> Lead Backend Developer</Heading>
                   <a href="https://github.com/CharlesPhonepraseuth" target="_blank">
-                    <Icon className="about-icons" color="dark">
+                    <Icon className="about-icons">
                       <FontAwesomeIcon size="2x" icon={faGithub} />
                     </Icon>
                   </a>
                   <a href="https://www.linkedin.com/in/charlesphonepraseuth/" target="_blank">
-                    <Icon className="about-icons" color="dark">
+                    <Icon className="about-icons">
                       <FontAwesomeIcon size="2x" icon={faLinkedin} />
                     </Icon>
                   </a>
@@ -79,12 +80,12 @@ const About = () => {
                   <Heading size={4}>Aurore Leblois</Heading>
                   <Heading subtitle size={6}>SCRUM Master, <br/> Backend Developer</Heading>
                   <a href="https://github.com/AuroreLeblois" target="_blank">
-                    <Icon className="about-icons" color="dark">
+                    <Icon className="about-icons">
                       <FontAwesomeIcon size="2x" icon={faGithub} />
                     </Icon>
                   </a>
                   <a href="https://www.linkedin.com/in/aurore-leblois/" target="_blank">
-                    <Icon className="about-icons" color="dark">
+                    <Icon className="about-icons">
                       <FontAwesomeIcon size="2x" icon={faLinkedin} />
                     </Icon>
                   </a>
@@ -102,12 +103,12 @@ const About = () => {
                   <Heading size={4}>Maximilien Bec</Heading>
                   <Heading subtitle size={6}>Lead Frontend Developer</Heading>
                   <a href="https://github.com/xooma" target="_blank">
-                    <Icon className="about-icons" color="dark">
+                    <Icon className="about-icons">
                       <FontAwesomeIcon size="2x" icon={faGithub} />
                     </Icon>
                   </a>
                   <a href="https://www.linkedin.com/in/mbec/" target="_blank">
-                    <Icon className="about-icons" color="dark">
+                    <Icon className="about-icons">
                       <FontAwesomeIcon size="2x" icon={faLinkedin} />
                     </Icon>
                   </a>
