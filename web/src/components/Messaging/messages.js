@@ -99,10 +99,14 @@ const Messages = ({ refreshInbox, selectedChat }) => {
             </Media.Item>
             <Media.Item>
               <Media.Content>
-                <h6 className="chatlist-content-title">
+                <h6 className="chatlist-content-title" style={{ color: '#f5f5f5' }}>
                   {message.pseudo}
                 </h6>
-                <p className="chatlist-content-msg">{message.date}</p>
+                <p className="chatlist-content-msg">
+                  <Moment>
+                    {message.date}
+                  </Moment>
+                </p>
                 <p className="chatlist-content-msg">{message.content}</p>
               </Media.Content>
             </Media.Item>

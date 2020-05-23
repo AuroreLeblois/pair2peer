@@ -123,6 +123,12 @@ textarea,
   background-repeat: no-repeat;
 }
 
+.container-contact {
+  background-image: url('../../assets/images/shape4.png');
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 .navbar.is-danger {
   background-color: rgba(0,0,0,0) !important;
 }

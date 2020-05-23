@@ -13,7 +13,6 @@ export const actions = {
   CLEAR_ERRORS_MSG: 'actions/CLEAR_ERRORS_MSG',
   UPDATE_PROFILE: 'actions/UPDATE_PROFILE',
   SUBMIT_SIGNUP: 'actions/SUBMIT_SIGNUP',
-  SUBMIT_CONTACT: 'actions/SUBMIT_CONTACT',
   SUBMIT_UPDATE_LANG: 'actions/SUBMIT_UPDATE_LANG',
   UPDATE_USER: 'actions/UPDATE_USER',
   SET_LOADER: 'actions/SET_LOADER',
@@ -71,10 +70,6 @@ export const updateProfile = (data) => (
 
 export const submitSignup = (history, data) => (
   { type: actions.SUBMIT_SIGNUP, history, data }
-);
-
-export const submitContact = (data) => (
-  { type: actions.SUBMIT_CONTACT, data }
 );
 
 export const redirectLogin = (history) => (
