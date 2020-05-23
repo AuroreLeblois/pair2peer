@@ -2,37 +2,15 @@ import React, { useState } from 'react';
 import { Button } from 'react-bulma-components';
 
 const EmailConfirm = () => {
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [name, setName] = useState('');
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    const newMessage = {
-      name,
-      email,
-      message,
-    };
-    axios.post(`${API_URI}`)
-    .then((res) => {
-      if (res.data.status === 'success'){
-        alert("Message Sent."); 
-        this.resetForm()
-    }else if(res.data.status === 'fail'){
-        alert("Message failed to send.")
-    }
-  })
+  const path = window.location.pathname; // recupérer l'url
+  const pathArray = path.split(new RegExp('/')); // cut l'url en un tableau
+  console.log(pathArray);
+  const categoryFolder = pathArray[2]; // après t'as juste a récup l'index qui va bien
+  const subCategoryFolder = pathArray[3];
+
+  return (
+    <h1>Confirmation</h1>
+  );
 };
-	return (
-  	<div>
-      Pour toute question, demande de récupération de mot de passe ou autre <br/>
-      <div class="field">
-        <div class="control">
-          <textarea class="textarea is-primary" placeholder="Votre message"></textarea>
-        </div>
-      </div>
-      <Button style={{ margin: "10px 600px" }} type="submit" color="success">Envoyer</Button>
-    </div>
-	);
-  
-};
-export default Contact;
+
+export default EmailConfirm;

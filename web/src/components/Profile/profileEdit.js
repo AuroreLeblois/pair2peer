@@ -18,6 +18,7 @@ const ProfileEdit = ({ handleClickPictureUpload, inputFile }) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { user, loading, errors } = useSelector((state) => state);
+  const [deleteLoader, setDeleteLoader] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [userInfos, setUserInfos] = useState({
@@ -63,12 +64,14 @@ const ProfileEdit = ({ handleClickPictureUpload, inputFile }) => {
   };
 
   const handleDeleteProfile = (evt) => {
+    setDeleteLoader(true);
     axios.delete(
       `${API_URI}/profile`,
       { withCredentials: true },
     )
       .then((res) => {
         console.log('coucou')
+        setDeleteLoader(false);
         dispatch(submitLogout(history));
         dispatch({ type: actions.CLEAR_ERRORS_MSG });
       })
@@ -221,7 +224,7 @@ const ProfileEdit = ({ handleClickPictureUpload, inputFile }) => {
                   <Heading renderAs="p" subtitle size={6}>Attention, aucun retour en arrière possible, cette action est irrémédiable</Heading>
                   <Button.Group position="right">
                     <Button onClick={() => setOpenModalDelete(false)}>Annuler</Button>
-                    <Button onClick={handleDeleteProfile} color="danger">Supprimer mon profil</Button>
+                    <Button onClick={handleDeleteProfile} loading={deleteLoader} color="danger">Supprimer mon profil</Button>
                   </Button.Group>
                 </Section>
               </Modal.Content>

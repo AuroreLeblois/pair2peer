@@ -140,17 +140,17 @@ const Signup = () => {
             <Columns.Column />
             <Columns>
               <Columns.Column />
-                <Form.Field>
-                  <Container>
-                    <Content style={{ textAlign: 'center' }}>
-                      <ReCAPTCHA
-                        required
-                        sitekey="6LdCMPYUAAAAAN5j6Bxfdy1BlFpNwY5gVApE-5b3"
-                        onChange={handleChange}
-                      />
-                    </Content>
-                  </Container>
-                </Form.Field>
+              <Form.Field>
+                <Container>
+                  <Content style={{ textAlign: 'center' }}>
+                    <ReCAPTCHA
+                      required
+                      sitekey="6LdCMPYUAAAAAN5j6Bxfdy1BlFpNwY5gVApE-5b3"
+                      onChange={handleChange}
+                    />
+                  </Content>
+                </Container>
+              </Form.Field>
               <Columns.Column />
             </Columns>
             <Button loading={loading} fullwidth type="submit" color="success">Valider</Button>
