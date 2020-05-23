@@ -6,6 +6,7 @@ import searchMW from './search';
 import signupMW from './signup';
 import updateMW from './update';
 import inboxMW from './inbox';
+import contactMW from './contact';
 
 export default applyMiddleware(
   authMW,
@@ -14,4 +15,5 @@ export default applyMiddleware(
   signupMW,
   updateMW,
   inboxMW,
+  contactMW,
 );
