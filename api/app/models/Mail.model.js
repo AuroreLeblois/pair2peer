@@ -4,6 +4,8 @@ const nodemailer = require('nodemailer');
 // we are the transporter, we inform some informations to nodemailer
 const transporter = nodemailer.createTransport( {
     service: "Gmail",
+    port: 465,
+    secure: true,
     auth: {
         user: process.env.MAIL,
         pass: process.env.MAIL_PASSWORD
@@ -25,7 +27,7 @@ module.exports = class Mail {
     // ####               ####
     // ##   Mailer method   ##
     // ####               ####
-    static async mailer(email) {
+    static async mailer(email, pseudo) {
 
         // we send an email through our information set earlier on transporter
         const sendToVisitor = await transporter.sendMail({
@@ -35,7 +37,7 @@ module.exports = class Mail {
             html: `
                 <h2> Bienvenue chez Pair2peer </h2>
                 <p>Il ne vous reste plus qu'à activer votre compte pour profiter pleinement du site.</p>
-                <p>Cliquez <a href="http://ec2-100-25-41-105.compute-1.amazonaws.com:3000/activation/user/${email}">ici</a> pour activer votre compte.</p>`
+                <p>Cliquez <a href="http://ec2-100-25-41-105.compute-1.amazonaws.com:3000/activation/user/${pseudo}">ici</a> pour activer votre compte.</p>`
         });
 
         console.log("Message sent to visitor: %s ", sendToVisitor.messageId);
@@ -45,10 +47,10 @@ module.exports = class Mail {
     // ####               ####
     // ## Activation method ##
     // ####               ####
-    static async activation(email) {
+    static async activation(pseudo) {
 
         // it will activate the account
-        await db.query(`UPDATE usr SET "status" = 'actif' WHERE email = $1`, [email]);
+        await db.query(`UPDATE usr SET "status" = 'actif' WHERE pseudo = $1`, [pseudo]);
     };
 
     // ####               ####

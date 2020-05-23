@@ -140,7 +140,7 @@ module.exports = {
                     return h.response(info).code(400);
                 } else {
                     // if success, send an email to verify the veracity of the account
-                    // await Mail.mailer(email);
+                    // await Mail.mailer(email, pseudo);
                     // and then send new user's informations
                     return info;
                 }
@@ -149,19 +149,19 @@ module.exports = {
 
         server.route({
             method: 'GET',
-            path: '/activation/user/{email}',
+            path: '/activation/user/{pseudo}',
             config: {
                 description: 'Account activation',
                 tags: ['api', 'activation'],
                 validate: {
                     params: Joi.object({
-                        email: Joi.string().email({ minDomainSegments: 2}).trim().required()
+                        pseudo: Joi.string().required()
                     })
                 }
             },
             handler: async (request, h) => {
 
-                await Mail.activation(request.params.email);
+                await Mail.activation(request.params.pseudo);
                 return h.redirect('/login');
             }
         });
