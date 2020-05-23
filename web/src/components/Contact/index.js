@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -5,19 +6,15 @@ import { Columns, Form, Button, Box, Container, Content, Heading, Notification }
 import { submitContact, actions } from 'src/store/actions';
 
 const Contact = () => {
-
-  const history = useHistory();
   const dispatch = useDispatch();
-  const { usersData, loading, errors } = useSelector((state) => state);
-  console.log(usersData);
+  const { loading, errors } = useSelector((state) => state);
 
   // Les hooks
-
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
-  
+
   const handleSubmit = (evt) => {
     evt.preventDefault();
     const newMessage = {
@@ -25,11 +22,11 @@ const Contact = () => {
       email,
       message,
     };
-    dispatch(submitContact(history, newMessage));
+    console.log(newMessage);
+    dispatch(submitContact(newMessage));
     dispatch({ type: actions.SET_LOADER });
-    
   };
-  
+
   // const ErrorsMessage = () => {
   //   return (
   //     <Notification color="danger">
@@ -39,7 +36,7 @@ const Contact = () => {
   //     </Notification>
   //   );
   // };
-	return (
+  return (
     <Columns>
       <Columns.Column />
       <Columns.Column>
@@ -52,19 +49,18 @@ const Contact = () => {
         </Columns>
         <Columns.Column />
         <Box style={{ width: "500px" }}>
-        {/* {(errors) ? <ErrorsMessage /> : null} */}
           <form onSubmit={handleSubmit}>
             <Form.Field>
-            <Form.Field>
+              <Form.Field>
                 <Form.Control>
                   <Form.Label>Nom :</Form.Label>
-                  <Form.Input required type="text" className="input is-primary" value={name} onChange={(e) => setName(e.target.value)}/>
+                  <Form.Input required type="text" className="input is-primary" value={name} onChange={(e) => setName(e.target.value)} />
                 </Form.Control>
               </Form.Field>
               <Form.Field>
                 <Form.Control>
                   <Form.Label>Mail :</Form.Label>
-                  <Form.Input required type="email" className="input is-primary" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                  <Form.Input required type="email" className="input is-primary" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </Form.Control>
               </Form.Field>
             </Form.Field>
@@ -72,16 +68,16 @@ const Contact = () => {
               <Form.Field>
                 <Form.Control>
                   <Form.Label>Message :</Form.Label>
-                  <div className="field">
-                    <div className="control">
-                      <textarea required className="textarea is-primary" placeholder="Votre message" value={message} onChange={(e) => setMessage(e.target.value)}></textarea>
-                    </div>
-                  </div>
+                  <Form.Field>
+                    <Form.Control>
+                      <Form.Textarea required className="textarea is-primary" placeholder="Votre message" value={message} onChange={(e) => setMessage(e.target.value)} />
+                    </Form.Control>
+                  </Form.Field>
                 </Form.Control>
               </Form.Field>
             </Form.Field>
             <Columns.Column />
-            <Button style={{ margin: "10px 180px" }} type="submit" color="success">Envoyer</Button>
+            <Button type="submit" color="success">Envoyer</Button>
             <Columns.Column />
           </form>
           <Columns.Column />
@@ -90,6 +86,7 @@ const Contact = () => {
       </Columns.Column>
       <Columns.Column />
     </Columns>
-	);
+  );
 };
+
 export default Contact;
