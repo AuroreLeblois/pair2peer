@@ -1,13 +1,15 @@
 /* eslint-disable react/jsx-filename-extension */
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { Columns, Form, Button, Box, Container, Content, Heading, Notification } from 'react-bulma-components';
-import { submitContact, actions } from 'src/store/actions';
+import { actions } from 'src/store/actions';
+import { API_URI } from 'src/store/utils';
+import axios from 'axios';
 
 const Contact = () => {
   const dispatch = useDispatch();
-  const { loading, errors } = useSelector((state) => state);
+  const { user, loading, errors } = useSelector((state) => state);
+  const [messageSent, setMessageSent] = useState(false);
 
   // Les hooks
   const [name, setName] = useState('');
@@ -17,14 +19,28 @@ const Contact = () => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
+    dispatch({ type: actions.SET_LOADER });
     const newMessage = {
       name,
       email,
       message,
     };
-    console.log(newMessage);
-    dispatch(submitContact(newMessage));
-    dispatch({ type: actions.SET_LOADER });
+    axios.post(
+      `${API_URI}/contact`,
+      newMessage,
+      { withCredentials: true },
+    )
+      .then((res) => {
+        console.log(res);
+        setMessageSent(true);
+        dispatch({ type: actions.SET_LOADER });
+        dispatch({ type: actions.CLEAR_ERRORS_MSG });
+      })
+      .catch((err) => {
+        // Au cas où erreur avec le serveur, renvoie un console.log
+        console.log(err.response);
+        dispatch({ type: actions.SET_LOADER });
+      });
   };
 
   // const ErrorsMessage = () => {
@@ -36,31 +52,41 @@ const Contact = () => {
   //     </Notification>
   //   );
   // };
+  if (messageSent) {
+    return (
+      <Notification color="success">
+        Merci pour votre message.
+        Notre équipe y répondra dès que possible.
+      </Notification>
+    );
+  }
+
   return (
     <Columns>
       <Columns.Column />
-      <Columns.Column>
+      <Columns.Column size={7}>
         <Columns>
           <Container>
             <Content style={{ textAlign: 'center' }}>
               <Heading size={3}>Nous contacter</Heading>
+              <Heading subtitle size={6}>Pour toute remarque ou question</Heading>
             </Content>
           </Container>
         </Columns>
         <Columns.Column />
-        <Box style={{ width: "500px" }}>
+        <Box>
           <form onSubmit={handleSubmit}>
             <Form.Field>
               <Form.Field>
                 <Form.Control>
                   <Form.Label>Nom :</Form.Label>
-                  <Form.Input required type="text" className="input is-primary" value={name} onChange={(e) => setName(e.target.value)} />
+                  <Form.Input required type="text" value={name} onChange={(e) => setName(e.target.value)} />
                 </Form.Control>
               </Form.Field>
               <Form.Field>
                 <Form.Control>
                   <Form.Label>Mail :</Form.Label>
-                  <Form.Input required type="email" className="input is-primary" value={email} onChange={(e) => setEmail(e.target.value)} />
+                  <Form.Input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </Form.Control>
               </Form.Field>
             </Form.Field>
@@ -70,18 +96,14 @@ const Contact = () => {
                   <Form.Label>Message :</Form.Label>
                   <Form.Field>
                     <Form.Control>
-                      <Form.Textarea required className="textarea is-primary" placeholder="Votre message" value={message} onChange={(e) => setMessage(e.target.value)} />
+                      <Form.Textarea required placeholder="Votre message" value={message} onChange={(e) => setMessage(e.target.value)} />
                     </Form.Control>
                   </Form.Field>
                 </Form.Control>
               </Form.Field>
             </Form.Field>
-            <Columns.Column />
-            <Button type="submit" color="success">Envoyer</Button>
-            <Columns.Column />
+            <Button fullwidth loading={loading} type="submit" color="success">Envoyer</Button>
           </form>
-          <Columns.Column />
-          <Columns.Column />
         </Box>
       </Columns.Column>
       <Columns.Column />
