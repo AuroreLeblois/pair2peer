@@ -1,37 +1,100 @@
-import React from 'react';
-import { Card, Icon, Image, Label } from 'semantic-ui-react';
+/* eslint-disable react/jsx-filename-extension */
+import React, { Fragment, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { firstLetterToUppercase } from 'src/store/utils';
+import { Link } from 'react-router-dom';
+import { Card, Media, Content, Heading, Form, Tag, Image, Columns, Hero, Container, Button } from 'react-bulma-components';
+import { selectedUserDetails } from 'src/store/actions';
 
-const Cards = ({ users }) => {
-  if (!users) {
+// == import components
+import Loading from 'src/components/Loading';
+
+
+const Cards = ({ users, setModalUserDetails }) => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state);
+
+  let key = 1;
+
+  const ItLabels = ({ user }) => {
+    if (user.it_language[0].name !== null) {
+      return user.it_language.map((label) => (
+        <Fragment key={key++}>
+          <Form.Control>
+            <Tag color="danger">{label.name}</Tag>
+          </Form.Control>
+        </Fragment>
+      ));
+    }
     return null;
+  };
+
+  const LanguagesLabels = ({ user }) => {
+    if (user.language[0] !== null) {
+      return user.language.map((language) => (
+        <Tag key={key++}>{language}</Tag>
+      ));
+    }
+    return null;
+  };
+
+  const handleClickUserDetails = (evt, user) => {
+    dispatch(selectedUserDetails(user));
+    setModalUserDetails(true);
+  };
+
+  if (!users) {
+    return <Loading />;
   }
 
   return users.map((user) => (
-    <Card fluid color="yellow" key={user.id}>
-      <Image src={user.picture} />
-      <Card.Content>
-        <Card.Header>{firstLetterToUppercase(user.pseudo)}</Card.Header>
-        <Card.Meta>
-          <span className="date"><Icon name="map marker" />{firstLetterToUppercase(user.city)}, {firstLetterToUppercase(user.country)}</span>
-        </Card.Meta>
-        <Card.Description>{user.description}</Card.Description>
-      </Card.Content>
-      <Card.Content extra>
-        <Label.Group size="mini">
-          {user.it_language.map((label) => (
-            <Label key={label.name} size="mini">{label.name}</Label>
-          ))}
-        </Label.Group>
-      </Card.Content>
-      <Card.Content extra>
-        <Label.Group size="mini">
-          {user.language.map((language) => (
-            <Label key={language} size="mini">{language}</Label>
-          ))}
-        </Label.Group>
-      </Card.Content>
-    </Card>
+    <>
+      <Columns.Column key={key++} size={4}>
+        <Card>
+          <Card.Content>
+            <Media>
+              <Media.Item renderAs="figure" position="left">
+                <Image size={128} src={user.picture} />
+              </Media.Item>
+              <Media.Content>
+                <Hero>
+                  <Hero.Body>
+                    <Container>
+                      <Heading renderAs="p" size={4}>{user.pseudo}</Heading>
+                      <Heading renderAs="p" subtitle size={6}>{user.city}, {user.country}</Heading>
+                    </Container>
+                  </Hero.Body>
+                </Hero>
+              </Media.Content>
+            </Media>
+            <Media>
+              <Media.Item>
+                <Tag.Group>
+                  <LanguagesLabels user={user} />
+                </Tag.Group>
+              </Media.Item>
+            </Media>
+            <Content>
+              {(user.description) ? user.description : null}
+            </Content>
+            <Media>
+              <Media.Item>
+                <Form.Field multiline kind="group">
+                  <ItLabels user={user} />
+                </Form.Field>
+              </Media.Item>
+            </Media>
+            <Media>
+              <Media.Item>
+                <Button.Group position="right">
+                  <Button onClick={(evt) => handleClickUserDetails(evt, user)}>Détails ...</Button>
+                </Button.Group>
+              </Media.Item>
+            </Media>
+          </Card.Content>
+        </Card>
+      </Columns.Column>
+    </>
   ));
 };
 

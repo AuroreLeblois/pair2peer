@@ -1,23 +1,28 @@
+/* eslint-disable react/jsx-filename-extension */
 // == Import npm
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { Grid, Card, Pagination, Message } from 'semantic-ui-react';
+import { Columns, Pagination } from 'react-bulma-components';
 
 // == import utils/actions
 import { API_URI } from 'src/store/utils';
-import { getUsersList } from 'src/store/actions';
+import { getUsersList, actions } from 'src/store/actions';
 
 // == Import component
+import Loading from 'src/components/Loading';
 import Cards from './cards';
+import ModalDetails from './ModalDetails';
 
 // == Composant
-const Results = () => {
+const Results = ({ setActiveModalDetails }) => {
   const [activePage, setActivePage] = useState(1);
   // pending MaxPage waiting from axios
   const [pendingMaxPage, setPendingMaxPage] = useState(10);
+  const [modalUserDetails, setModalUserDetails] = useState(false);
 
-  const { usersData, search } = useSelector((state) => state);
+  const { usersData, search, loading } = useSelector((state) => state);
 
   const maxPage = useSelector((state) => {
     if (!state.usersData.maxPage) {
@@ -26,13 +31,15 @@ const Results = () => {
     return state.usersData.maxPage;
   });
 
+  const history = useHistory()
   const dispatch = useDispatch();
 
-  const onChange = (evt, pageInfo) => {
-    setActivePage(pageInfo.activePage);
+  const handleChange = (page) => {
+    setActivePage(page);
   };
 
   const getUsersData = () => {
+    dispatch({ type: actions.SET_LOADER });
     axios.post(
       `${API_URI}/search?page_nb=${activePage}&user_nb=12`,
       search,
@@ -45,6 +52,8 @@ const Results = () => {
         usersData.maxUsers = data.maxUser;
         usersData.users = data.users;
         dispatch(getUsersList(usersData));
+        dispatch({ type: actions.SET_LOADER });
+        dispatch({ type: actions.CLEAR_ERRORS_MSG });
       })
       .catch((err) => {
         console.log(err);
@@ -53,35 +62,22 @@ const Results = () => {
 
   useEffect(getUsersData, [activePage, search]);
 
-  const PaginationComponent = () => (
-    <Pagination
-      activePage={activePage}
-      onPageChange={onChange}
-      boundaryRange={0}
-      ellipsisItem={null}
-      firstItem={null}
-      lastItem={null}
-      siblingRange={1}
-      totalPages={maxPage}
-    />
-  );
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
-    <Grid>
-      <Grid.Row centered>
-        <Message attached color="black">{usersData.maxUsers} développeurs disponibles</Message>
-      </Grid.Row>
-      <Grid.Row>
-        <Card.Group itemsPerRow={4}>
-          <Cards users={usersData.users} />
-        </Card.Group>
-      </Grid.Row>
-      <Grid.Row textAlign="right">
-        <Grid.Column>
-          <PaginationComponent />
-        </Grid.Column>
-      </Grid.Row>
-    </Grid>
+    <>
+      <Columns>
+        <Cards users={usersData.users} setModalUserDetails={setModalUserDetails} />
+      </Columns>
+      <Columns>
+        <Columns.Column>
+          <Pagination color="danger" current={activePage} total={maxPage} onChange={handleChange} delta={maxPage} />
+        </Columns.Column>
+      </Columns>
+      <ModalDetails modalUserDetails={modalUserDetails} setModalUserDetails={setModalUserDetails} />
+    </>
   );
 };
 

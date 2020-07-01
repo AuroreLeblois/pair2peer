@@ -2,6 +2,7 @@ const vision = require('@hapi/vision');
 const inert = require('@hapi/inert');
 const db = require('../models/db');
 const Joi = require('@hapi/joi');
+const Admin= require('../models/Admin.model');
 
 module.exports = {
     name: 'admin handle profile',
@@ -10,7 +11,7 @@ module.exports = {
            
         server.route({
                 method: 'GET',
-                path: '/update/profile/{speudo}',
+                path: '/update/profile/{pseudo}',
                 options: {
                     auth: {
                         strategy: 'base',
@@ -22,10 +23,10 @@ module.exports = {
                 },
                 handler: async (request, h) => {
                    
-                    const pseudo= request.params.speudo;
+                    const pseudo= request.params.pseudo;
                     const result = await db.query(`SELECT * FROM usr WHERE pseudo = $1`, [pseudo]);
                     if(!result.rows[0]){
-                        return h.responde.code(400);
+                        return h.response.code(400);
                     }
                     const user= result.rows[0];
                     return  user;
@@ -35,51 +36,34 @@ module.exports = {
             });
             server.route({
                 method: 'PATCH',
-                path: '/update/profile/{speudo}',
+                path: '/update/profile/{pseudo}',
                 options: {
                     auth: {
                         strategy: 'base',
                         mode: 'required',
                         scope: ['admin']
                     },
+                    validate: {
+                        params: Joi.object({
+                            pseudo: Joi.string().required()
+                        }),
+                        payload: Joi.object({
+                            setRole: Joi.string().required()
+                        })
+                    },
                     description: ' Handle User\'s profile update page for admin',
                     tags: ['api', 'profile', 'patch profile']
                 },
                 handler: async (request, h) => {
+                    const pseudo= request.params.pseudo;
+                    const result = await db.query(`SELECT * FROM usr 
+                                                    WHERE pseudo = $1`, [pseudo]);
+                    const userID= result.rows[0].id;
+                    const changeRole= request.payload.setRole;
                     
-                        const pseudo= request.params.speudo;
-                        const result = await db.query(`SELECT * FROM usr 
-                                                        WHERE pseudo = $1`, [pseudo]);
-                        const userID= result.rows[0].id;
-                        const userRole= result.rows[0].role;
-                        const changeRole= request.payload.setRole;
-                        //on a l'utilisateur maintenant on change son role
-                        //si le payload dit user
-                        if(changeRole==='user'){
-                            if(userRole!=='user'){
-                                await db.query(`UPDATE usr
-                                                SET role= 'user'
-                                                WHERE "id"=$1`,[userID])
-                            }
-                        }
-                        //si le payload dit admin
-                        else if(changeRole==='admin'){
-                            if(userRole!=='admin'){
-                                await db.query(`UPDATE usr
-                                                SET role= 'admin'
-                                                WHERE "id"=$1`,[userID])
-                            }
-                        }
-                        //si on veux bannir quelqu'un
-                        else if(changeRole==='ban'){
-                            if(userRole!=='banned'){
-                                await db.query(`UPDATE usr
-                                                SET role= 'banned'
-                                                WHERE "id"=$1`,[userID])
-                            }
-                        }
-                        user= await db.query(`SELECT * FROM usr WHERE "id"=$1`,[userID]);
-                        return  user;
+                     await Admin.setRole(changeRole,userID);   
+                     const user= await db.query(`SELECT * FROM usr WHERE "id"=$1`,[userID]);
+                    return  user.rows[0];
                         }
       
                 
@@ -87,30 +71,25 @@ module.exports = {
 
             server.route({
                 method: 'DELETE',
-                path: '/delete/profile/{speudo}',
+                path: '/delete/profile/{pseudo}',
                 options: {
                     auth: {
                         strategy: 'base',
                         mode: 'required',
                         scope: ['admin']
                     },
+                    validate: {
+                        params: Joi.object({
+                            pseudo: Joi.string().required()
+                        }),
+                    },
                     description: 'DELETE User\'s profile update page for admin',
                     tags: ['api', 'profile', 'delete profile']
                 },
                 handler: async (request, h) => {
                 const pseudo= request.params.pseudo;
-                const result = await db.query(`SELECT * FROM usr 
-                                                        WHERE pseudo = $1`, [pseudo]);
-                const user= result.rows[0];
-                const userID= result.rows[0].id;
-                if(!user){
-                    return h.response.code(400);
-                }
-                else{
-                    await db.query(`DELETE FROM usr
-                                    WHERE "id"=$1`, [userID]);
-                    return `Profil de ${pseudo} supprimé`
-                }
+                  const info= await Admin.deleteProfile(pseudo);
+                  return h.response(info).code(200);
                 }
             });
         }

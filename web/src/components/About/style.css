@@ -1,0 +1,33 @@
+#presentation{
+  height: 100%;
+}
+.take-all-space{
+  width: 95%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.card-of-team{
+max-width: 250px;
+margin-bottom: 2em;
+
+}
+.is-in-center{
+ text-align: center;
+}
+.fixed-long{
+  height: 300px;
+}
+.contouring{
+  border-radius: 10px;
+  -webkit-box-shadow: 1px 2px 5px 3px #363636;
+  box-shadow: 1px 2px 5px 3px #363636
+}
+.card-of-team img{
+  border-radius: 10px;
+  max-height: 200px;
+}
+.victor{
+  height: 120%;
+}

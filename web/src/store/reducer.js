@@ -1,8 +1,7 @@
+import omit from 'object.omit';
 import { actions } from 'src/store/actions';
 
 const initialState = {
-  email: 'tony0@gmail.com',
-  password: 'azertyui',
   search: {
     remote: '',
     language: '',
@@ -17,22 +16,20 @@ const initialState = {
     localisation: [],
   },
   usersData: {},
+  loading: false,
 };
 
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
-    case actions.SYNC_LOGIN: {
-      return {
-        ...state,
-        [action.name]: action.value,
-      };
-    }
     case actions.GET_AUTHENTIFIED: {
       return {
         ...state,
         user: action.data,
       };
+    }
+    case actions.GET_LOGOUT: {
+      return omit({ ...state }, 'user');
     }
     case actions.GET_USERS_LIST: {
       return {
@@ -44,6 +41,10 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         filters: action.filters,
+        usersData: {
+          ...state.usersData,
+          maxUser: action.maxUser,
+        },
       };
     }
     case actions.SUBMIT_FILTERS_SEARCH: {
@@ -65,6 +66,40 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         errors: action.errors,
+      };
+    }
+    case actions.CLEAR_ERRORS_MSG: {
+      return omit({ ...state }, 'errors');
+    }
+    case actions.UPDATE_USER: {
+      return {
+        ...state,
+        user: action.data,
+        loading: false,
+      };
+    }
+    case actions.SET_LOADER: {
+      return {
+        ...state,
+        loading: !state.loading,
+      };
+    }
+    case actions.GET_USER_INBOX: {
+      return {
+        ...state,
+        inbox: action.data,
+      };
+    }
+    case actions.SELECTED_USER_DETAILS: {
+      return {
+        ...state,
+        selectedUser: action.user,
+      };
+    }
+    case actions.RESET_FILTERS: {
+      return {
+        ...state,
+        search: initialState.search,
       };
     }
     default: {

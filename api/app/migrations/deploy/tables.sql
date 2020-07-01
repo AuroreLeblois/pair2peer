@@ -13,8 +13,7 @@ CREATE TABLE usr (
 
 CREATE TABLE usr_detail (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    picture TEXT,
-    birthyear DATE,
+    picture TEXT DEFAULT 'https://i.imgur.com/XaJAGxg.jpg',
     country TEXT NOT NULL,
     city TEXT NOT NULL,
     latitude DOUBLE PRECISION,
@@ -22,8 +21,11 @@ CREATE TABLE usr_detail (
     "remote" BOOLEAN NOT NULL,
     experience TEXT,
     "description" TEXT,
-    usr_id INT NOT NULL REFERENCES usr(id)
-    ON DELETE CASCADE
+    disponibility INT DEFAULT 0,
+    facebook_link TEXT,
+    github_link TEXT,
+    linkedin_link TEXT,
+    usr_id INT NOT NULL REFERENCES usr(id) ON DELETE CASCADE
 );
 
 CREATE TABLE lang (
@@ -69,9 +71,10 @@ CREATE TABLE chat (
 CREATE TABLE usr_message_chat (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     script TEXT,
-    "date" TIMESTAMPTZ NOT NULL,
+    "date" TIMESTAMPTZ DEFAULT NOW(),
     usr_id INT NOT NULL REFERENCES usr(id) ON DELETE CASCADE,
     chat_id INT NOT NULL REFERENCES chat(id) ON DELETE CASCADE
 );
+
 
 COMMIT;

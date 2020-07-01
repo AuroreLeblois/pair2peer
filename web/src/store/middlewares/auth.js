@@ -1,29 +1,56 @@
 /* eslint-disable no-fallthrough */
 import axios from 'axios';
-import { actions, getAuthentified, syncLogin, displayErrorsMessages } from 'src/store/actions';
+import { actions, getAuthentified, getUserInbox, displayErrorsMessages, getLogout } from 'src/store/actions';
 import { API_URI } from 'src/store/utils';
+
 
 export default (store) => (next) => (action) => {
   switch (action.type) {
     case actions.SUBMIT_LOGIN: {
+      // Assign values from submitted form
+      const { data, history } = action;
       axios.post(
-        `${API_URI}/login`, {
-          email: store.getState().email,
-          password: store.getState().password,
-        }, { withCredentials: true },
+        `${API_URI}/login`,
+        data,
+        { withCredentials: true },
       )
         .then((res) => {
-          store.dispatch(getAuthentified(action.history, res.data));
-          store.dispatch(syncLogin('password', ''));
-          store.dispatch(displayErrorsMessages(''));
+          // Redirection to '/', object { user } from reponse to reducer state
+          const { data } = res;
+          console.log(res);
+          store.dispatch(getAuthentified(data.info));
+          store.dispatch(getUserInbox(data.inbox));
+          store.dispatch({ type: actions.REDIRECT_HOME, history });
+          store.dispatch({ type: actions.SET_LOADER });
+          store.dispatch({ type: actions.CLEAR_ERRORS_MSG });
+          sessionStorage.user = JSON.stringify(data.info);
+          sessionStorage.inbox = JSON.stringify(data.inbox);
         })
         .catch((err) => {
-          const data = err.response.data
-          store.dispatch(displayErrorsMessages(data.message));
+          console.log(err.response);
+          store.dispatch({ type: actions.SET_LOADER });
+          const { message } = err.response.data;
+          store.dispatch(displayErrorsMessages(message));
+        });
+      return;
+    }
+    case actions.SUBMIT_LOGOUT: {
+      axios.get(
+        `${API_URI}/logout`,
+        { withCredentials: true },
+      )
+        .then((res) => {
+          window.sessionStorage.clear();
+          store.dispatch({ type: actions.SET_LOADER });
+          store.dispatch(getLogout(action.history));
+          store.dispatch({ type: actions.CLEAR_ERRORS_MSG });
+        })
+        .catch((err) => {
           console.log(err);
         });
       return;
     }
+
     default: {
       next(action);
     }

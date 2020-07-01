@@ -1,7 +1,8 @@
 // == Import npm
 import React from 'react';
-import { Segment, Container, Grid, Header, List, Icon } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Hero, Container, Content } from 'react-bulma-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCodeBranch } from '@fortawesome/free-solid-svg-icons';
 
 // == Import
 import './styles.scss';
@@ -9,25 +10,17 @@ import './styles.scss';
 // == Composant
 const Footer = () => {
   return (
-    <Segment className="footer" basic>
-      <Container>
-        <Grid padded="horizontally" verticalAlign="middle" stackable>
-          <Grid.Column textAlign="left" width={7}>
-            <Icon name="code branch" />
+    <Hero size="small" color="dark">
+      <Hero.Body>
+        <Container>
+          <Content size="small" style={{ textAlign: 'center' }}>
+            <p>Projet de fin d'étude réalisé par 4 étudiants with ❤️</p>
+            <FontAwesomeIcon icon={faCodeBranch} />
             <span className="logo">Pair2Peer</span>
-          </Grid.Column>
-          <Grid.Column width={3}>
-            <Header as="h4" content="Group 1" />
-          </Grid.Column>
-          <Grid.Column width={3}>
-            <Header as="h4" content="Group 2" />
-          </Grid.Column>
-          <Grid.Column width={3}>
-            <Header as="h4" content="Group 3" />
-          </Grid.Column>
-        </Grid>
-      </Container>
-    </Segment>
+          </Content>
+        </Container>
+      </Hero.Body>
+    </Hero>
   );
 };
 

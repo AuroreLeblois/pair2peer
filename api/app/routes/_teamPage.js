@@ -9,18 +9,14 @@ module.exports = {
 
         server.route({
             method: 'GET',
-            path: '/who-are-we',
+            path: '/about',
             config: {
                 description: 'Team Page',
                 tags: ['api', 'team'] 
             },
             handler: async (request, h) => {
-            
-                return `la fine équipe:
-                -Charles
-                -Maximilen
-                -Victor
-                -Aurore`;
+                const team=["Charles","Aurore","Victor","Max"];
+                return team;
             }
         });
     }

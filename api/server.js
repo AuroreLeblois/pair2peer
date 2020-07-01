@@ -1,9 +1,8 @@
 require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 const HapiAuthCookie = require('@hapi/cookie');
-const package = require('../api/package');
+const package = require('./package');
 const db = require('./app/models/db');
-require('dotenv').config();
 
 (async () => {
     const server = Hapi.server({
@@ -23,9 +22,9 @@ require('dotenv').config();
     server.auth.strategy('base', 'cookie', {
         cookie: {
             name: 'cookie',
-            password : 'Td2sXhE4Eghk8MBA3X96hgMqd66k8r2P',
+            password : process.env.COOKIEPASSWORD,
             isSecure: false,
-            ttl: 1000*60*20
+            ttl: 1000*60*60*24 // 24 hours
         },
         redirectTo: '/login',
         validateFunc: async (request, cookie) => {
@@ -33,11 +32,11 @@ require('dotenv').config();
 
             const user = visitor.rows[0];
             
-            // if (user.role === 'user') { 
-            //     return { valid: user !== undefined, credentials: {scope: 'user'} };
-            // } else if (user.role === 'admin') {
-            //     return { valid: user !== undefined, credentials: {scope: 'admin'} };
-            // };
+            if (user.role === 'user') { 
+                return { valid: user !== undefined, credentials: {scope: 'user'} };
+            } else if (user.role === 'admin') {
+                return { valid: user !== undefined, credentials: {scope: 'admin'} };
+            };
         }
     });
 
@@ -52,27 +51,28 @@ require('dotenv').config();
                 }
             }
         }, {
-            plugin: require('./app/routes/_homePage')
+            plugin: require('./app/routes/home.route')
         }, {
-            plugin: require('./app/routes/_loginPage')
-        },
-        //  {
-        //     plugin: require('./app/routes/_profilePage')
-        // },
-         {
-            plugin: require('./app/routes/_filtredPage')
+            plugin: require('./app/routes/log.route')
+        }, {
+            plugin: require('./app/routes/profile.route')
+        }, {
+            plugin: require('./app/routes/search.route')
         }, {
             plugin: require('./app/routes/_updateProfile')
-         },
-         {
+         }, {
             plugin: require('./app/routes/_teamPage')
-        },
-        {
+        }, {
             plugin: require('./app/routes/_adminUpdate')
-         },
-         {
+         }, {
             plugin: require('./app/routes/_chatRoom')
-         },
+         }, {
+            plugin: require('./app/routes/admin.route')
+         }, {
+             plugin: require('./app/routes/mapping.route')
+         }, {
+             plugin: require('./app/routes/contact.route')
+         }
     ]);
 
     server.auth.default({ strategy: 'base', mode: 'try' });

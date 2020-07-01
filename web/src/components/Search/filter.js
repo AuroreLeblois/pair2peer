@@ -1,139 +1,184 @@
 /* eslint-disable no-plusplus */
 // == Import npm
-import React, { useEffect } from 'react';
-import { Button, Form, Input, Select, Grid } from 'semantic-ui-react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
-import { firstLetterToUppercase, API_URI } from 'src/store/utils';
-import { syncSearchInputs, actions, getFiltersList } from 'src/store/actions';
+import { firstLetterToUppercase } from 'src/store/utils';
+import { syncSearchInputs, actions } from 'src/store/actions';
+import { Form, Columns, Container, Content, Button } from 'react-bulma-components';
 
 // == Import
 
 // == Composant
 const Filter = () => {
   const dispatch = useDispatch();
-
-  // Req to get filters list
-  const getFilters = () => {
-    axios.get(
-      `${API_URI}/search?page_nb=1&user_nb=12`,
-      { withCredentials: true },
-    )
-      .then((res) => {
-        const data = res.data;
-        const filtersList = {};
-        filtersList.it_language = data.it_language;
-        filtersList.language = data.language;
-        filtersList.localisation = data.localisation;
-        dispatch(getFiltersList(filtersList));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  useEffect(getFilters, []);
+  // const [countryValue, setCountryValue] = useState();
+  // const [cityOptions, setCityOptions] = useState([]);
+  // const [itOptions, setItOptions] = useState();
 
   // Key to increment for select inputs
-  let key = 1;
+  const { filters, search } = useSelector((state) => state);
 
-  const { filters } = useSelector((state) => state);
+  // const handleCountryChange = (evt) => {
+  //   evt.preventDefault();
+  //   const target = evt.target
+  //   setCountryValue(target.value);
+  // };
+
+  // const handleItChange = (evt) => {
+  //   evt.preventDefault();
+  //   const target = evt.target
+  //   setItOptions(target.value);
+  // };
+
+  // const getArrayFromLocalisation = useCallback(() => {
+  //   const cityArray = [];
+  //   if (search.country) {
+  //     const country = filters.localisation.filter((localisation) => (
+  //       localisation.country === search.country
+  //     ));
+  //     const city = country.map((obj) => obj.city.map((city) => cityArray.push(city)));
+  //     setCityOptions(cityArray);
+  //   }
+  //   return null;
+  // }, [search.country, filters.localisation]);
+
+  // useEffect(() => {
+  //   setCityOptions(getArrayFromLocalisation);
+  // }, [getArrayFromLocalisation]);
+
+  // Object for city select input options
+  // const CityOptions = () => {
+  //   return filters.localisation.map((city) => (
+  //     <option key={city} name={city} value={city}>{firstLetterToUppercase(city)}</option>
+  //   ));
+  // };
+
+  // Object for country select input options
+  const CountryOptions = () => {
+    if (filters.localisation) {
+      return filters.localisation.map((localisation) => (
+        <option key={localisation.country} name={localisation.country} value={localisation.country}>{firstLetterToUppercase(localisation.country)}</option>
+      ));
+    }
+    return null;
+  };
 
   // Object for it_language select input options
-  const itOptions = () => (filters.it_language.map((language) => ({
-    key: key++,
-    text: firstLetterToUppercase(language),
-    value: language,
-  })));
+  const ItOptions = () => {
+    if (filters.it_language) {
+      return filters.it_language.map((language) => (
+        <option key={language} value={language}>{firstLetterToUppercase(language)}</option>
+      ));
+    }
+    return null;
+  };
 
   // Object for language select input options
-  const langOptions = () => (filters.language.map((language) => ({
-    key: key++,
-    text: firstLetterToUppercase(language),
-    value: language,
-  })));
-
-  // Object for level select input options
-  const lvlOptions = [
-    { key: '1', text: '1', value: '1' },
-    { key: '2', text: '2', value: '2' },
-    { key: '3', text: '3', value: '3' },
-    { key: '4', text: '4', value: '4' },
-    { key: '5', text: '5', value: '5' },
-    { key: '6', text: '6', value: '6' },
-    { key: '7', text: '7', value: '7' },
-    { key: '8', text: '8', value: '8' },
-    { key: '9', text: '9', value: '9' },
-    { key: '10', text: '10', value: '10' },
-  ];
+  const LangOptions = () => {
+    if (filters.language) {
+      return filters.language.map((language) => (
+        <option key={language} value={language}>{firstLetterToUppercase(language)}</option>
+      ));
+    }
+    return null;
+  };
+  const LvlOptions = () => {
+    return (
+      <>
+        <option key="1" value="">{null}</option>
+        <option key="2" value="1">1</option>
+        <option key="3" value="2">2</option>
+        <option key="4" value="3">3</option>
+        <option key="5" value="4">4</option>
+        <option key="6" value="5">5</option>
+        <option key="7" value="6">6</option>
+        <option key="8" value="7">7</option>
+        <option key="9" value="8">8</option>
+        <option key="10" value="9">9</option>
+        <option key="11" value="10">10</option>
+      </>
+    );
+  };
 
 
   // Object for remote select input options
-  const remoteOptions = [
-    { key: '1', text: 'Remote', value: 'true' },
-    { key: '2', text: 'Rencontre', value: 'false' },
-  ];
+  const RemoteOptions = () => (
+    <>
+      <option value="">{null}</option>
+      <option value="true">Remote</option>
+      <option value="false">Rencontre</option>
+    </>
+  );
 
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    dispatch({ type: actions.SUBMIT_FILTERS_SEARCH });
+  const handleChange = (evt) => {
+    const target = evt.target;
+    dispatch(syncSearchInputs(target.name, target.value));
   };
 
-  const handleChange = (evt, { name, value }) => {
-    dispatch(syncSearchInputs(name, value));
+  const handleClickResetFilters = (evt) => {
+    dispatch({ type: actions.RESET_FILTERS });
   };
 
   return (
-    <Form size="mini" inverted onSubmit={handleSubmit}>
-      <Form.Group widths='equal'>
+    <>
+      <form>
         <Form.Field>
-          <Select
-            name="language"
-            options={langOptions()}
-            placeholder="Langue"
-            onChange={handleChange}
-          />
+          <Form.Field.Body>
+            <Form.Field>
+              <Form.Control>
+                <Form.Label>Langue</Form.Label>
+                <Form.Select name="language" value={search.language} onChange={handleChange}>
+                  <option value="">{null}</option>
+                  <LangOptions />
+                </Form.Select>
+              </Form.Control>
+            </Form.Field>
+            <Form.Field>
+              <Form.Control>
+                <Form.Label>Technologie</Form.Label>
+                <Form.Select name="it_language" value={search.it_language} onChange={handleChange}>
+                  <option value="">{null}</option>
+                  <ItOptions />
+                </Form.Select>
+              </Form.Control>
+            </Form.Field>
+            <Form.Field>
+              <Form.Control>
+                <Form.Label>Niveau</Form.Label>
+                <Form.Select name="level" value={search.level} onChange={handleChange}>
+                  <LvlOptions />
+                </Form.Select>
+              </Form.Control>
+            </Form.Field>
+            <Form.Field>
+              <Form.Control>
+                <Form.Label>Pays</Form.Label>
+                <Form.Select name="country" value={search.country} onChange={handleChange}>
+                  <option value="">{null}</option>
+                  <CountryOptions />
+                </Form.Select>
+              </Form.Control>
+            </Form.Field>
+            <Form.Field>
+              <Form.Control>
+                <Form.Label>Ville</Form.Label>
+                <Form.Input name="city" value={search.city} onChange={handleChange} />
+              </Form.Control>
+            </Form.Field>
+            <Form.Field>
+              <Form.Control>
+                <Form.Label>Mode de travail</Form.Label>
+                <Form.Select name="remote" value={search.remote} onChange={handleChange}>
+                  <RemoteOptions />
+                </Form.Select>
+              </Form.Control>
+            </Form.Field>
+          </Form.Field.Body>
         </Form.Field>
-        <Form.Field>
-          <Select
-            name="it_language"
-            options={itOptions()}
-            placeholder="Technologie"
-            onChange={handleChange}
-          />
-        </Form.Field>
-        <Form.Field>
-          <Select
-            name="level"
-            options={lvlOptions}
-            placeholder="Niveau"
-            onChange={handleChange}
-          />
-        </Form.Field>
-        <Form.Field>
-          <Input
-            name="country"
-            placeholder="Pays"
-            onChange={handleChange}
-          />
-        </Form.Field>
-        <Form.Field>
-          <Input
-            name="city"
-            placeholder="Ville"
-            onChange={handleChange}
-          />
-        </Form.Field>
-        <Form.Field>
-          <Select
-            name="remote"
-            options={remoteOptions}
-            placeholder="Remote"
-            onChange={handleChange}
-          />
-        </Form.Field>
-      </Form.Group>
-    </Form>
+      </form>
+      <Button className="button-reset" color="danger" onClick={handleClickResetFilters}>Reset</Button>
+    </>
+
   );
 };
 
