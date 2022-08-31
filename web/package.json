@@ -59,7 +59,7 @@
     "formik": "^2.1.4",
     "leaflet": "^1.6.0",
     "moment": "^2.26.0",
-    "moment-timezone": "^0.5.31",
+    "moment-timezone": "^0.5.35",
     "object.omit": "^3.0.0",
     "omit": "^1.0.1",
     "prop-types": "^15.7.2",
